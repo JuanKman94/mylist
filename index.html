@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My List</title>
+
+  <link rel=stylesheet href=styles.css>
+  <!--
+  <script src=dexie.min.js></script>
+  <script src=db.js></script>
+  -->
+  <script src=components.js></script>
+  <script src=main.js></script>
+  <script src=sortable.min.js></script>
+</head>
+<body>
+  <header>
+    <h1>mylist</h1>
+  </header>
+
+  <nav>
+    <ul class="flex justify-end">
+      <li><a href="#">despensa</a></li>
+      <li><a href="#">jardineria</a></li>
+    </ul>
+  </nav>
+
+  <section id="lists">
+    <section class="list">
+      <h2 class="list--name">mylist</h2>
+
+      <article class="category">
+        <h3 class="category--name">js</h3>
+
+        <ul>
+          <li is="task-item" name="dispatch custom event when checkbox changes"></li>
+          <li is="task-item" name="add event listener for said event"></li>
+          <li is="task-item" name="listener: reset sortable instances"></li>
+          <li is="task-item" name="listener: readState & store it in local storage"></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="list">
+      <h2>despensa</h2>
+
+      <article class="category" data-color="color-10">
+        <h3>verduras</h3>
+
+        <ul>
+          <li>
+            <span class="icon grabber">=</span>
+            <label>
+              <input type=checkbox />
+              tomate
+            </label>
+          </li>
+          <li>
+            <span class="icon grabber">=</span>
+            <label>
+              <input type=checkbox />
+              morron
+            </label>
+          </li>
+          <li>
+            <span class="icon grabber">=</span>
+            <label>
+              <input type=checkbox />
+              manzanas
+            </label>
+          </li>
+          <li>
+            <span class="icon grabber">=</span>
+            <label>
+              <input type=checkbox />
+              cebolla
+            </label>
+          </li>
+          <li is="task-item" name="fresas" done>
+          </li>
+          <li is="task-control">
+          </li>
+        </ul>
+      </article>
+
+      <article class="category" data-color="color-15">
+        <h3>refrigerados</h3>
+
+        <ul>
+          <li>
+            <span class="icon grabber">=</span>
+            <label>
+              <input type=checkbox />
+              queso mozarella
+            </label>
+          </li>
+          <li>
+            <span class="icon grabber">=</span>
+            <label>
+              <input type=checkbox />
+              queso oaxaca
+            </label>
+          </li>
+          <li>
+            <span class="icon grabber">=</span>
+            <label>
+              <input type=checkbox />
+              jamon
+            </label>
+          </li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="list">
+      <h2>jardineria</h2>
+    </section>
+  </section>
+
+  <footer id=debug_controls class=hidden>
+    <button type=button id=print_state_btn>
+      print state
+    </button>
+
+    <ul id=log_messages></ul>
+  </footer>
+
+  <template id="newcategory-template">
+    <aside class="new-category">
+      <h4>New category</h4>
+
+      <form action="#" class="new-category--form">
+        <label for="name">
+          <span class="icon mr-1">+</span>
+          <span class="sr-only">Name</span>
+
+          <input
+            name="name"
+            class="text-field"
+            type="text"
+          />
+        </label>
+      </form>
+    </aside>
+  </template>
+
+  <template id="category-template">
+    <article class="category">
+      <h3 class="category--name"></h3>
+
+      <ul>
+        <li is="task-control"></li>
+      </ul>
+    </article>
+  </template>
+
+  <template id="taskitem-template">
+    <span class="icon grabber">=</span>
+    <label>
+      <input type=checkbox />
+      <span class="task-item--name"></span>
+    </label>
+  </template>
+
+  <template id="newtask-template">
+    <form action="#" class="new-task--form">
+      <label for="task">
+        <span class="icon">+</span>
+        <span class="sr-only">Task</span>
+
+        <input
+          name="task"
+          class="text-field"
+          type="text"
+        />
+      </label>
+
+      <input class="sr-only" type="submit" value="submit" />
+    </form>
+  </template>
+</body>
+</html>
