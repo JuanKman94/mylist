@@ -123,29 +123,29 @@ task-control {
 
 #lists {}
 
-.list:not(:first-child) {
+.task-list:not(:first-child) {
   border-top: 2px solid var(--border-color-dark, #bbb);
   margin-top: 2rem;
   padding-top: 2rem;
 }
 
-.list {}
+.task-list {}
 
-list-category:not(:first-child),
-.category:not(:first-child) {
+task-category:not(:first-child),
+.task-category:not(:first-child) {
   margin-top: 1rem;
 }
-.category {
+.task-category {
   border: 2px solid var(--border-color, #ccc);
   border-radius: 10px;
   padding: 0.75rem;
 }
 
-.category input[type=checkbox] { margin-right: 0; }
+.task-category input[type=checkbox] { margin-right: 0; }
 
-.category ul { list-style-type: none; }
+.task-category ul { list-style-type: none; }
 
-.category ul li {
+.task-category ul li {
   display: flex;
   flex-flow: row wrap;
   margin: 0.5rem 0;
@@ -165,6 +165,8 @@ list-category:not(:first-child),
   padding: 0;
 }
 
+task-category-form,
+.task-category-form,
 .new-category {
   border: 2px solid var(--border-color, #ccc);
   border-radius: 10px;

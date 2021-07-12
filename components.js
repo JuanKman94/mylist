@@ -1,8 +1,29 @@
 window.addEventListener('DOMContentLoaded', defineComponents)
 
-class TaskElement extends HTMLLIElement {
+window.TASK_EVENTS = {
+  CHANGE: 'task:change',
+}
+
+function dispatchTaskEvent(eventName, task, isDone) {
+  const taskChangeEvent = new CustomEvent(eventName, { detail: { task, isDone } })
+
+  document.dispatchEvent(taskChangeEvent)
+}
+
+class CustomElement extends HTMLElement {
+  static EXTENDED_ELEMENT = ''
+  static TAG = ''
   static TEMPLATE_ID = ''
-  static EXTENDED_ELEMENT = 'li'
+
+  static create(attrs = {}) {
+    const elem = document.createElement(this.EXTENDED_ELEMENT, { is: this.TAG })
+
+    for (let attrName in attrs) {
+      elem.setAttribute(attrName, attrs[attrName])
+    }
+
+    return elem
+  }
 
   constructor() {
     super()
@@ -16,16 +37,49 @@ class TaskElement extends HTMLLIElement {
   attach() {
     if (this.template) {
       this.appendChild(this.template.content.cloneNode(true))
+      this.classList.add(this.constructor.TAG)
+    } else {
+      console.error(`Could not attach ${this.constructor}: template with id '${this.constructor.TEMPLATE_ID}' not found`)
+    }
+  }
+
+  get template() { return document.getElementById(this.constructor.TEMPLATE_ID) }
+}
+
+class TaskElement extends HTMLLIElement {
+  static EXTENDED_ELEMENT = 'li'
+  static TAG = ''
+  static TEMPLATE_ID = ''
+
+  static create(attrs = {}) {
+    const elem = document.createElement(this.EXTENDED_ELEMENT, { is: this.TAG })
+
+    for (let attrName in attrs) {
+      elem.setAttribute(attrName, attrs[attrName])
+    }
+
+    return elem
+  }
+
+  constructor() {
+    super()
+  }
+
+  connectedCallback() {
+    if (this.attach) this.attach()
+    if (this.setup) this.setup()
+  }
+
+  attach() {
+    if (this.template) {
+      this.appendChild(this.template.content.cloneNode(true))
+      this.classList.add(this.constructor.TAG)
     } else {
       console.error(`Could not attach ${this.constructor}: template not found`)
     }
   }
 
-  get template() {
-    if (!this.constructor.TEMPLATE_ID) return null
-
-    return document.getElementById(this.constructor.TEMPLATE_ID)
-  }
+  get template() { return document.getElementById(this.constructor.TEMPLATE_ID) }
 }
 
 /**
@@ -39,14 +93,12 @@ class TaskElement extends HTMLLIElement {
  * @typedef {HTMLElement} TaskControl
  */
 class TaskControl extends TaskElement {
+  static TAG = 'task-control'
   static TEMPLATE_ID = 'newtask-template'
 
-  get form() {
-    if (!this._form)
-      this._form = this.querySelector('form')
+  get form() { return this.querySelector('form') }
 
-    return this._form
-  }
+  get taskCategory() { return Sortable.utils.closest(this, `.${TaskCategory.TAG}`) }
 
   setup() {
     this.form.addEventListener('submit', (ev) => {
@@ -54,52 +106,36 @@ class TaskControl extends TaskElement {
       ev.stopPropagation()
       const task = ev.target.elements['task']
 
-      if (task.value?.trim().length > 0) {
-        this.addTask(task.value)
+      if (task.value.trim().length > 0) {
+        this.createTask(task.value)
         task.value = ''
       }
     })
   }
 
-  addTask(task) {
-    const category = Sortable.utils.closest(this, '.category ul')
-
-    if (!category)
+  createTask(task) {
+    if (!this.taskCategory)
       return
 
-    const li = document.createElement('li', { is: 'task-item' })
-    const taskItem = document.createElement('task-item')
+    let taskItem = TaskItem.create({ name: task })
 
-    li.setAttribute('name', task)
-    //li.appendChild(taskItem)
+    taskItem = this.taskCategory.addTask(taskItem)
+    dispatchTaskEvent(TASK_EVENTS.CHANGE, task, false)
 
-    return category.insertBefore(li, this)
+    return taskItem
   }
 }
 
 class TaskItem extends TaskElement {
+  static TAG = 'task-item'
   static TEMPLATE_ID = 'taskitem-template'
 
-  static get observedAttributes() {
-    return ['done', 'name']
-  }
-
-  get checkbox() {
-    if (!this._checkbox)
-      this._checkbox = this.querySelector('input[type=checkbox]')
-
-    return this._checkbox
-  }
+  get checkbox() { return this.querySelector('input[type=checkbox]') }
 
   get done() { return this.getAttribute('done') }
   set done(isDone) { if (isDone) { this.setAttribute('done', '') } else { this.removeAttribute('done') } }
 
-  get label() {
-    if (!this._label)
-      this._label = this.querySelector('.task-item--name')
-
-    return this._label
-  }
+  get label() { return this.querySelector('.task-item--name') }
 
   get name() { return this.getAttribute('name') }
 
@@ -111,22 +147,95 @@ class TaskItem extends TaskElement {
       this.task = this.label.textContent = this.getAttribute('name')
     }
 
-    this.checkbox?.addEventListener('change', (ev) => {
-      const checked = ev.target.value
+    this.checkbox.addEventListener('change', (ev) => {
+      const checked = ev.target.checked
 
-      if (checked) {
-        this.setAttribute('done', '')
-      } else {
-        this.removeAttribute('done')
-      }
+      this.done = checked
+      dispatchTaskEvent(TASK_EVENTS.CHANGE, this.name, checked)
     })
-  }
-
-  attributeChangedCallback(attrName, oldVal, newVal) {
   }
 }
 
+class TaskCategory extends CustomElement {
+  static TAG = 'task-category'
+  static EXTENDED_ELEMENT = 'article'
+  static TEMPLATE_ID = 'category-template'
+
+  get name() { return this.getAttribute('name').trim() }
+
+  get nameLabel() { return this.querySelector('.category--name') }
+
+  get taskControl() { return this.querySelector('.task-control') }
+
+  get ul() { return this.querySelector('ul') }
+
+  setup() {
+    this.nameLabel.textContent = this.name
+  }
+
+  addTask(taskItem) {
+    this.ul.insertBefore(taskItem, this.taskControl)
+  }
+}
+
+class TaskCategoryForm extends CustomElement {
+  static EXTENDED_ELEMENT = 'article'
+  static TAG = 'task-category-form'
+  static TEMPLATE_ID = 'task-category-form-template'
+
+  get form() { return this.querySelector('form') }
+
+  get name() { return this.querySelector('form input[name=name]') }
+  set name(newName) { this.querySelector('form input[name=name]').value = newName }
+
+  get taskList() { return Sortable.utils.closest(this, `.${TaskList.TAG}`) }
+
+  setup() {
+    this.form.addEventListener('submit', (ev) => {
+      ev.preventDefault()
+      ev.stopPropagation()
+      const name = ev.target.elements['name']
+
+      if (name.value?.length > 0) {
+        const taskCategory = TaskCategory.create({ name: name.value })
+        this.taskList.addCategory(taskCategory)
+        name.value = ''
+      }
+    })
+  }
+}
+
+class TaskList extends CustomElement {
+  static TAG = 'task-list'
+  static EXTENDED_ELEMENT = 'section'
+  static TEMPLATE_ID = 'tasklist-template'
+
+  get name() { return this.getAttribute('name').trim() }
+
+  get nameLabel() { return this.querySelector('.list--name') }
+
+  get taskCategoryForm() { return this.querySelector(`.${TaskCategoryForm.TAG}`) }
+
+  setup() {
+    this.nameLabel.textContent = this.name
+  }
+
+  addCategory(taskCategory) {
+    this.insertBefore(taskCategory, this.taskCategoryForm)
+  }
+}
+
+
 function defineComponents() {
-  customElements.define('task-item', TaskItem, { extends: TaskElement.EXTENDED_ELEMENT })
-  customElements.define('task-control', TaskControl, { extends: TaskElement.EXTENDED_ELEMENT })
+  const components = [
+    TaskCategoryForm,
+    TaskCategory,
+    TaskControl,
+    TaskItem,
+    TaskList,
+  ]
+
+  for (let component of components) {
+    customElements.define(component.TAG, component, { extends: component.EXTENDED_ELEMENT })
+  }
 }
