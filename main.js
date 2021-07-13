@@ -12,6 +12,12 @@ window.addEventListener('DOMContentLoaded', init)
 window.DEBUG_MODE = true
 window.SORTABLE_INSTANCES = []
 window.STORAGE_NAME = 'todoState'
+window.DEFAULT_SORTABLE_CONFIG = {
+  animation: 150,
+  ghostClass: 'zoom-in-out',
+  chosenClass: 'dragging',
+  handle: '.grabber',
+}
 window.DEBUG_DATA = {
   lists: [
     {
@@ -70,15 +76,11 @@ function cleanUpSortable() {
 
 function setupSortable() {
   cleanUpSortable()
-
-  document.querySelectorAll(`.${TaskCategory.TAG} ul`).forEach(ul => {
-    SORTABLE_INSTANCES.push(new Sortable(ul, {
-      animation: 150,
-      ghostClass: 'zoom-in-out',
-      chosenClass: 'dragging',
-      group: 'mylist',
-      handle: '.grabber',
-    }))
+  document.querySelectorAll(`.${TaskList.TAG}`).forEach(list => {
+    list.querySelectorAll(`.${TaskCategory.TAG} ul`).forEach(tasksContainer => {
+      SORTABLE_INSTANCES.push(new Sortable(tasksContainer, Object.assign({ group: 'tasks' }, DEFAULT_SORTABLE_CONFIG)))
+    })
+    SORTABLE_INSTANCES.push(new Sortable(list, Object.assign({ group: 'categories' }, DEFAULT_SORTABLE_CONFIG)))
   })
 }
 
@@ -93,7 +95,7 @@ function init(ev) {
     //console.debug(`[${TASK_EVENTS.CHANGE}] isDone = ${isDone}, task = ${task}`)
     //persistState(newState)
     domLog(`state = ${JSON.stringify(newState, null, 2)}`)
-    //setupSortable()
+    setupSortable()
   })
 
   loadState()

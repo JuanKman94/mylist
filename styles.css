@@ -120,6 +120,7 @@ input[type="datetime-local"],
 select:focus,
 textarea {
   font-size: 16px;
+  color: var(--fg, initial);
 }
 
 .text-left { text-align: left; }
@@ -128,6 +129,7 @@ textarea {
 
 .flex { display: flex; }
 .justify-end { justify-content: end; }
+.flex-grow-1 { flex-grow: 1; }
 
 .hidden { display: none; }
 .sr-only {
