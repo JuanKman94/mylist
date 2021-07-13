@@ -150,18 +150,30 @@ class TaskItem extends TaskElement {
   get checkbox() { return this.querySelector('input[type=checkbox]') }
 
   get done() { return this.getAttribute('done') }
-  set done(isDone) { if (!!isDone) { this.setAttribute('done', '') } else { this.removeAttribute('done') } }
+  set done(isDone) {
+    if (isDone) {
+      this.checkbox.setAttribute('checked', true)
+      this.checkbox.checked = true
+      this.setAttribute('done', true)
+    } else {
+      this.checkbox.removeAttribute('checked')
+      this.checkbox.checked = false
+      this.removeAttribute('done')
+    }
+  }
 
   get label() { return this.querySelector('.task-item--name') }
 
   get name() { return this.getAttribute('name') }
 
+  get task() { return this.getAttribute('name') }
+
   setup() {
     if (this.hasAttribute('done') && this.getAttribute('done') !== 'false') {
-      this.done = this.checkbox.checked = true
+      this.done = true
     }
     if (this.getAttribute('name')) {
-      this.task = this.label.textContent = this.getAttribute('name')
+      this.label.textContent = this.name
     }
 
     this.checkbox.addEventListener('change', this._changeHandler.bind(this))
