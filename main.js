@@ -36,11 +36,19 @@ window.DEBUG_DATA = {
               name: 'listener: readState & store it in local storage',
               done: true,
             },
+            {
+              name: 'make sure custom elements templates aren\'t appended more than once (when element is cloned) -- #attach is being called on top of #clone',
+              done: true,
+            },
           ],
         },
         {
           name: 'ui',
           tasks: [
+            {
+              name: 'add dark/light theme support',
+              done: false,
+            },
             {
               name: 'add support for category colors',
               done: false,

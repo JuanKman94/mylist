@@ -36,8 +36,10 @@ class CustomElement extends HTMLElement {
 
   attach() {
     if (this.template) {
-      this.appendChild(this.template.content.cloneNode(true))
-      this.classList.add(this.constructor.TAG)
+      if (this.children.length < this.template.content.children.length) {
+        this.appendChild(this.template.content.cloneNode(true))
+        this.classList.add(this.constructor.TAG)
+      }
     } else {
       console.error(`Could not attach ${this.constructor}: template with id '${this.constructor.TEMPLATE_ID}' not found`)
     }
@@ -72,8 +74,10 @@ class TaskElement extends HTMLLIElement {
 
   attach() {
     if (this.template) {
-      this.appendChild(this.template.content.cloneNode(true))
-      this.classList.add(this.constructor.TAG)
+      if (this.children.length < this.template.content.children.length) {
+        this.appendChild(this.template.content.cloneNode(true))
+        this.classList.add(this.constructor.TAG)
+      }
     } else {
       console.error(`Could not attach ${this.constructor}: template not found`)
     }
