@@ -51,6 +51,10 @@ class CustomElement extends HTMLElement {
     }
   }
 
+  remove() {
+    this.parentElement.removeChild(this)
+  }
+
   get template() { return document.getElementById(this.constructor.TEMPLATE_ID) }
 }
 
@@ -93,6 +97,10 @@ class TaskElement extends HTMLLIElement {
     } else {
       console.error(`Could not attach ${this.constructor}: template not found`)
     }
+  }
+
+  remove() {
+    this.parentElement.removeChild(this)
   }
 
   get template() { return document.getElementById(this.constructor.TEMPLATE_ID) }
@@ -171,10 +179,6 @@ class TaskItem extends TaskElement {
 
   get task() { return this.getAttribute('name') }
 
-  remove() {
-    this.parentElement.removeChild(this)
-  }
-
   setup() {
     if (this.hasAttribute('done') && this.getAttribute('done') !== 'false') {
       this.done = true
@@ -206,6 +210,8 @@ class TaskCategory extends CustomElement {
   static EXTENDED_ELEMENT = 'article'
   static TEMPLATE_ID = 'category-template'
 
+  get deleteButton() { return this.querySelector('.delete') }
+
   get name() { return this.getAttribute('name').trim() }
 
   get nameLabel() { return this.querySelector('.category--name') }
@@ -216,10 +222,16 @@ class TaskCategory extends CustomElement {
 
   setup() {
     this.nameLabel.textContent = this.name
+    this.deleteButton.addEventListener('click', this._deleteHandler.bind(this))
   }
 
   addTask(taskItem) {
     this.ul.insertBefore(taskItem, this.taskControl)
+  }
+
+  _deleteHandler() {
+    this.remove()
+    dispatchTaskEvent(TASK_EVENTS.DELETE, this.name)
   }
 }
 

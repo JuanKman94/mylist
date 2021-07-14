@@ -169,6 +169,15 @@ task-category:not(:first-child),
   border-radius: 10px;
   padding: 0.75rem;
 }
+.task-category .task-category--title {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+.category--name {
+  flex-grow: 1;
+  padding: 0 1rem;
+}
 
 .task-category input[type=checkbox] { margin-right: 0; }
 
@@ -188,6 +197,8 @@ task-item label,
   flex-grow: 1;
 }
 
+task-category .delete,
+.task-category .delete,
 task-item .delete,
 .task-item .delete {
   align-self: baseline;

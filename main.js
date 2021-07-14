@@ -32,7 +32,7 @@ window.DEBUG_DATA = {
             },
             {
               name: 'add controls to delete category',
-              done: false,
+              done: true,
             },
             {
               name: 'add controls to create new list',
