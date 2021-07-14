@@ -24,37 +24,46 @@ window.DEBUG_DATA = {
       context: 'mylist',
       projects: [
         {
-          name: 'js',
+          name: 'ux',
           tasks: [
             {
-              name: 'dispatch custom event when checkbox changes',
-              done: true,
-            },
-            {
-              name: 'add event listener for said event',
-              done: true,
-            },
-            {
-              name: 'listener: reset sortable instances',
+              name: 'add controls to delete task',
               done: false,
             },
             {
-              name: 'listener: readState & store it in local storage',
-              done: true,
+              name: 'add controls to delete category',
+              done: false,
             },
             {
-              name: 'make sure custom elements templates aren\'t appended more than once (when element is cloned) -- #attach is being called on top of #clone',
-              done: true,
+              name: 'add controls to create new list',
+              done: false,
+            },
+            {
+              name: 'add controls to delete list',
+              done: false,
+            },
+          ],
+        },
+        {
+          name: 'js',
+          tasks: [
+            {
+              name: 'persist lists across reloads',
+              done: false,
+            },
+            {
+              name: 'load state correctly: tasks, colors, order',
+              done: false,
+            },
+            {
+              name: 'create color picker component',
+              done: false,
             },
           ],
         },
         {
           name: 'ui',
           tasks: [
-            {
-              name: 'add dark/light theme support',
-              done: false,
-            },
             {
               name: 'add support for category colors',
               done: false,
