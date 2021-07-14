@@ -174,10 +174,26 @@ task-category:not(:first-child),
 
 .task-category ul { list-style-type: none; }
 
+task-item,
+.task-item,
 .task-category ul li {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
+  justify-content: space-between;
   margin: 0.5rem 0;
+}
+
+task-item label,
+.task-item label {
+  flex-grow: 1;
+}
+
+task-item .delete,
+.task-item .delete {
+  align-self: baseline;
+  color: var(--red);
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .grabber { cursor: grab; }

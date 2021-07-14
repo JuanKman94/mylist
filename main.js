@@ -27,8 +27,8 @@ window.DEBUG_DATA = {
           name: 'ux',
           tasks: [
             {
-              name: 'add controls to delete task',
-              done: false,
+              name: ' add controls to delete task add controls to delete task add controls to delete task add controls to delete task',
+              done: true,
             },
             {
               name: 'add controls to delete category',
@@ -97,17 +97,20 @@ function init(ev) {
   if (window.DEBUG_MODE)
     setupDebugControls()
 
-  document.addEventListener(TASK_EVENTS.CHANGE, (ev) => {
-    const { isDone, task } = ev.detail
-    const newState = readState()
-
-    //console.debug(`[${TASK_EVENTS.CHANGE}] isDone = ${isDone}, task = ${task}`)
-    //persistState(newState)
-    domLog(`state = ${JSON.stringify(newState, null, 2)}`)
-    setupSortable()
-  })
+  document.addEventListener(TASK_EVENTS.CHANGE, updateState)
+  document.addEventListener(TASK_EVENTS.DELETE, updateState)
 
   loadState()
+  setupSortable()
+}
+
+function updateState(ev) {
+  const { isDone, task } = ev.detail
+  const newState = readState()
+
+  //console.debug(`[${TASK_EVENTS.CHANGE}] isDone = ${isDone}, task = ${task}`)
+  //persistState(newState)
+  domLog(`state = ${JSON.stringify(newState, null, 2)}`)
   setupSortable()
 }
 

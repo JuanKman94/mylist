@@ -2,6 +2,7 @@ window.addEventListener('DOMContentLoaded', defineComponents)
 
 window.TASK_EVENTS = {
   CHANGE: 'task:change',
+  DELETE: 'task:delete',
 }
 
 function dispatchTaskEvent(eventName, task, isDone) {
@@ -166,7 +167,13 @@ class TaskItem extends TaskElement {
 
   get name() { return this.getAttribute('name') }
 
+  get deleteButton() { return this.querySelector('.delete') }
+
   get task() { return this.getAttribute('name') }
+
+  remove() {
+    this.parentElement.removeChild(this)
+  }
 
   setup() {
     if (this.hasAttribute('done') && this.getAttribute('done') !== 'false') {
@@ -177,6 +184,7 @@ class TaskItem extends TaskElement {
     }
 
     this.checkbox.addEventListener('change', this._changeHandler.bind(this))
+    this.deleteButton.addEventListener('click', this._deleteHandler.bind(this))
   }
 
   _changeHandler(ev) {
@@ -185,6 +193,11 @@ class TaskItem extends TaskElement {
     // order here is important, bubble up event before changing internal state
     dispatchTaskEvent(TASK_EVENTS.CHANGE, this.name, checked)
     this.done = checked
+  }
+
+  _deleteHandler() {
+    this.remove()
+    dispatchTaskEvent(TASK_EVENTS.DELETE, this.name)
   }
 }
 
