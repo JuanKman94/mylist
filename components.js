@@ -182,8 +182,9 @@ class TaskItem extends TaskElement {
   _changeHandler(ev) {
     const checked = ev.target.checked
 
-    this.done = checked
+    // order here is important, bubble up event before changing internal state
     dispatchTaskEvent(TASK_EVENTS.CHANGE, this.name, checked)
+    this.done = checked
   }
 }
 
