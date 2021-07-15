@@ -36,7 +36,7 @@ window.DEBUG_DATA = {
             },
             {
               name: 'add controls to create new list',
-              done: false,
+              done: true,
             },
             {
               name: 'add controls to delete list',
@@ -93,12 +93,35 @@ function setupSortable() {
   })
 }
 
+function newList() {
+  const listName = window.prompt('What is this list about?')
+
+  if (listName && listName.length > 0) {
+    document.getElementById('lists')
+      .prepend(createCustomElement(TaskList, { id: listName, name: listName }))
+    addListLink(listName)
+  }
+}
+
+function addListLink(listName) {
+  const li = document.createElement('li')
+  const a = document.createElement('a')
+
+  a.setAttribute('href', `#${listName}`)
+  a.textContent = listName
+  li.classList.add('task-list--link')
+  li.appendChild(a)
+
+  document.querySelector('body > nav ul')?.prepend(li)
+}
+
 function init(ev) {
   if (window.DEBUG_MODE)
     setupDebugControls()
 
   document.addEventListener(TASK_EVENTS.CHANGE, updateState)
   document.addEventListener(TASK_EVENTS.DELETE, updateState)
+  document.querySelector('.new-list')?.addEventListener('click', newList)
 
   loadState()
   setupSortable()
@@ -126,7 +149,6 @@ function loadState() {
 
   //const state = JSON.parse(rawState)
   const state = rawState
-  const navUl = document.querySelector('body > nav ul')
   const listContainer = document.getElementById('lists')
 
   state.lists.forEach(list => {
@@ -143,7 +165,7 @@ function loadState() {
       })
     })
 
-    navUl.innerHTML += `<li><a href="#${list.context}">${list.context}</a></li>`
+    addListLink(list.context)
   })
 
   return state
