@@ -85,6 +85,7 @@ function cleanUpSortable() {
 
 function setupSortable() {
   cleanUpSortable()
+
   document.querySelectorAll(`.${TaskList.TAG}`).forEach(list => {
     list.querySelectorAll(`.${TaskCategory.TAG} ul`).forEach(tasksContainer => {
       SORTABLE_INSTANCES.push(new Sortable(tasksContainer, Object.assign({ group: 'tasks' }, DEFAULT_SORTABLE_CONFIG)))
