@@ -253,7 +253,12 @@ class TaskCategoryForm extends CustomElement {
   get taskList() { return Sortable.utils.closest(this, `.${TaskList.TAG}`) }
 
   setup() {
+    this.addEventListener('click', this._clickHandler.bind(this))
     this.form.addEventListener('submit', this._submitHandler.bind(this))
+  }
+
+  _clickHandler(ev) {
+    this.name.focus()
   }
 
   _submitHandler(ev) {

@@ -237,6 +237,10 @@ task-category-form,
   padding: 0.75rem;
 }
 
+.new-category--title {
+  margin-top: 0;
+}
+
 .text-field {
   background: none;
   border: none;
