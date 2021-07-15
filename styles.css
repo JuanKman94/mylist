@@ -170,6 +170,8 @@ task-category:not(:first-child),
   padding: 0.75rem;
 }
 .task-category .task-category--title {
+  font-size: 1.2rem;
+  font-weight: 600;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;

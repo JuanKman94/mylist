@@ -5,10 +5,6 @@
   <title>My List</title>
 
   <link rel=stylesheet href=styles.css>
-  <!--
-  <script src=dexie.min.js></script>
-  <script src=db.js></script>
-  -->
   <script src=components.js></script>
   <script src=main.js></script>
   <script src=sortable.min.js></script>
@@ -55,15 +51,19 @@
   </template>
 
   <template id="category-template">
-    <h3 class="task-category--title">
-      <span class="icon grabber">=</span>
-      <span class="category--name"></span>
-      <span class="icon delete">x</span>
-    </h3>
+    <details open>
+      <summary class="task-category--title">
+        <span class="icon grabber">=</span>
+        <slot name="category-name">
+          <span class="category--name"></span>
+        </slot>
+        <span class="icon delete">x</span>
+      </summary>
 
-    <ul>
-      <li is="task-control"></li>
-    </ul>
+      <ul>
+        <li is="task-control"></li>
+      </ul>
+    </details>
   </template>
 
   <template id="tasklist-template">
