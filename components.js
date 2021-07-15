@@ -4,6 +4,11 @@ window.TASK_EVENTS = {
   CHANGE: 'task:change',
   DELETE: 'task:delete',
 }
+window.LIST_EVENTS = {
+  CHANGE: 'list:change',
+  DELETE: 'list:delete',
+}
+
 
 function dispatchTaskEvent(eventName, task, isDone) {
   const taskChangeEvent = new CustomEvent(eventName, { detail: { task, isDone } })
@@ -269,6 +274,10 @@ class TaskList extends CustomElement {
   static EXTENDED_ELEMENT = 'section'
   static TEMPLATE_ID = 'tasklist-template'
 
+  get deleteButton() { return this.querySelector('.delete') }
+
+  get details() { return this.querySelector('details') }
+
   get name() { return this.getAttribute('name')?.trim() }
 
   get nameLabel() { return this.querySelector('.list--name') }
@@ -277,10 +286,16 @@ class TaskList extends CustomElement {
 
   setup() {
     this.nameLabel.textContent = this.name
+    this.deleteButton.addEventListener('click', this._deleteHandler.bind(this))
   }
 
   addCategory(taskCategory) {
-    this.insertBefore(taskCategory, this.taskCategoryForm)
+    this.details.insertBefore(taskCategory, this.taskCategoryForm)
+  }
+
+  _deleteHandler() {
+    document.dispatchEvent(new CustomEvent(LIST_EVENTS.DELETE, { detail: { name: this.name } }))
+    this.remove()
   }
 }
 

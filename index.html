@@ -39,21 +39,18 @@
     <ul id=log_messages></ul>
   </footer>
 
-  <template id="task-category-form-template">
-    <h4>New category</h4>
+  <template id="tasklist-template">
+    <details open>
+      <summary class="task-list--title">
+        <span class="icon grabber">=</span>
+        <slot name="list-name">
+          <span class="list--name"></span>
+        </slot>
+        <span class="icon delete">x</span>
+      </summary>
 
-    <form action="#" class="new-category--form">
-      <label for="name">
-        <span class="icon mr-1">+</span>
-        <span class="sr-only">Name</span>
-
-        <input
-          name="name"
-          class="text-field"
-          type="text"
-        />
-      </label>
-    </form>
+      <article is="task-category-form"></article>
+    </details>
   </template>
 
   <template id="category-template">
@@ -72,10 +69,21 @@
     </details>
   </template>
 
-  <template id="tasklist-template">
-    <h2 class="list--name"></h2>
+  <template id="task-category-form-template">
+    <h4>New category</h4>
 
-    <article is="task-category-form"></article>
+    <form action="#" class="new-category--form">
+      <label for="name">
+        <span class="icon mr-1">+</span>
+        <span class="sr-only">Name</span>
+
+        <input
+          name="name"
+          class="text-field"
+          type="text"
+        />
+      </label>
+    </form>
   </template>
 
   <template id="taskitem-template">

@@ -154,11 +154,12 @@ task-control {
 
 .task-list:not(:first-child) {
   border-top: 2px solid var(--border-color-dark, #bbb);
-  margin-top: 2rem;
   padding-top: 2rem;
 }
 
-.task-list {}
+.task-list {
+  margin-bottom: 2rem;
+}
 
 task-category:not(:first-child),
 .task-category:not(:first-child) {
@@ -169,6 +170,7 @@ task-category:not(:first-child),
   border-radius: 10px;
   padding: 0.75rem;
 }
+.task-list .task-list--title,
 .task-category .task-category--title {
   font-size: 1.2rem;
   font-weight: 600;
@@ -176,6 +178,7 @@ task-category:not(:first-child),
   flex-flow: row nowrap;
   justify-content: space-between;
 }
+.list--name,
 .category--name {
   flex-grow: 1;
   padding: 0 1rem;
@@ -199,6 +202,8 @@ task-item label,
   flex-grow: 1;
 }
 
+task-list .delete,
+.task-list .delete,
 task-category .delete,
 .task-category .delete,
 task-item .delete,

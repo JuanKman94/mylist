@@ -40,7 +40,7 @@ window.DEBUG_DATA = {
             },
             {
               name: 'add controls to delete list',
-              done: false,
+              done: true,
             },
           ],
         },
@@ -110,9 +110,18 @@ function addListLink(listName) {
   a.setAttribute('href', `#${listName}`)
   a.textContent = listName
   li.classList.add('task-list--link')
+  li.dataset.list = listName
   li.appendChild(a)
 
   document.querySelector('body > nav ul')?.prepend(li)
+}
+
+function removeListLink(ev) {
+  const link = document.querySelector(`li[data-list="${ev.detail.name}"]`)
+
+  if (link) {
+    link.parentElement.removeChild(link)
+  }
 }
 
 function init(ev) {
@@ -121,6 +130,7 @@ function init(ev) {
 
   document.addEventListener(TASK_EVENTS.CHANGE, updateState)
   document.addEventListener(TASK_EVENTS.DELETE, updateState)
+  document.addEventListener(LIST_EVENTS.DELETE, removeListLink)
   document.querySelector('.new-list')?.addEventListener('click', newList)
 
   loadState()
