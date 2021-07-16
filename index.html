@@ -40,33 +40,29 @@
   </footer>
 
   <template id="tasklist-template">
-    <details open>
-      <summary class="task-list--title">
-        <span class="icon grabber">=</span>
-        <slot name="list-name">
-          <span class="list--name"></span>
-        </slot>
-        <span class="icon delete">x</span>
-      </summary>
+    <h2 class="task-list--title">
+      <span class="icon grabber">=</span>
+      <slot name="list-name">
+        <span class="list--name"></span>
+      </slot>
+      <span class="icon delete">x</span>
+    </h2>
 
-      <article is="task-category-form"></article>
-    </details>
+    <article is="task-category-form"></article>
   </template>
 
   <template id="category-template">
-    <details open>
-      <summary class="task-category--title">
-        <span class="icon grabber">=</span>
-        <slot name="category-name">
-          <span class="category--name"></span>
-        </slot>
-        <span class="icon delete">x</span>
-      </summary>
+    <h3 class="task-category--title">
+      <span class="icon grabber">=</span>
+      <slot name="category-name">
+        <span class="category--name"></span>
+      </slot>
+      <span class="icon delete">x</span>
+    </h3>
 
-      <ul>
-        <li is="task-control"></li>
-      </ul>
-    </details>
+    <ul>
+      <li is="task-control"></li>
+    </ul>
   </template>
 
   <template id="task-category-form-template">

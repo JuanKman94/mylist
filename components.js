@@ -281,8 +281,6 @@ class TaskList extends CustomElement {
 
   get deleteButton() { return this.querySelector('.delete') }
 
-  get details() { return this.querySelector('details') }
-
   get name() { return this.getAttribute('name')?.trim() }
 
   get nameLabel() { return this.querySelector('.list--name') }
@@ -295,7 +293,7 @@ class TaskList extends CustomElement {
   }
 
   addCategory(taskCategory) {
-    this.details.insertBefore(taskCategory, this.taskCategoryForm)
+    this.insertBefore(taskCategory, this.taskCategoryForm)
   }
 
   _deleteHandler() {
