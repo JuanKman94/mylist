@@ -1,5 +1,6 @@
 // https://javascript.info/mixins
 
+// Object.assign(ComponentClass, CustomElementStaticMixin)
 const CustomElementStaticMixin = {
   create(attrs = {}) {
     const elem = document.createElement(this.EXTENDED_ELEMENT, { is: this.TAG })
@@ -12,6 +13,7 @@ const CustomElementStaticMixin = {
   },
 }
 
+// Object.assign(ComponentClass.prototype, CustomElementMixin)
 const CustomElementMixin = {
   connectedCallback() {
     this.events = this.events || []
@@ -58,6 +60,9 @@ const CustomElementMixin = {
   },
 }
 
+// for (let k in CustomElementGetSetMixin) {
+//   Object.defineProperty(ComponentClass.prototype, k, CustomElementGetSetMixin[k])
+// }
 const CustomElementGetSetMixin = {
   template: {
     get: function() {
