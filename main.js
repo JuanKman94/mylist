@@ -53,8 +53,16 @@ window.DEBUG_DATA = {
               done: false,
             },
             {
-              name: 'create color picker component',
-              done: true,
+              name: 'think of a better check for CustomElement#attach, maybe adding a custom object-DOM ID',
+              done: false,
+            },
+            {
+              name: 'remove event listeners inside disconnectedCallback',
+              done: false,
+            },
+            {
+              name: 'figure out if we can use CustomElement instead of duplicating code \'cuz of different parent class',
+              done: false,
             },
           ],
         },

@@ -15,102 +15,6 @@ function dispatchTaskEvent(eventName, task, isDone) {
   document.dispatchEvent(taskChangeEvent)
 }
 
-// TODO: remove event listeners inside disconnectedCallback
-class CustomElement extends HTMLElement {
-  static EXTENDED_ELEMENT = ''
-  static TAG = ''
-  static TEMPLATE_ID = ''
-
-  static create(attrs = {}) {
-    const elem = document.createElement(this.EXTENDED_ELEMENT, { is: this.TAG })
-
-    for (let attrName in attrs) {
-      elem.setAttribute(attrName, attrs[attrName])
-    }
-
-    return elem
-  }
-
-  constructor() {
-    super()
-  }
-
-  connectedCallback() {
-    if (this.attach) this.attach()
-    if (this.setup) this.setup()
-  }
-
-  disconnectedCallback() {
-    //Array.from(this.children).forEach(el => this.removeChild(el))
-  }
-
-  attach() {
-    if (this.template) {
-      // TODO: think of a better check for this, maybe adding a custom object-DOM ID
-      if (this.children.length < this.template.content.children.length) {
-        this.appendChild(this.template.content.cloneNode(true))
-      }
-      this.classList.add(this.constructor.TAG)
-    } else {
-      console.error(`Could not attach ${this.constructor}: template with id '${this.constructor.TEMPLATE_ID}' not found`)
-    }
-  }
-
-  remove() {
-    this.parentElement.removeChild(this)
-  }
-
-  get template() { return document.getElementById(this.constructor.TEMPLATE_ID) }
-}
-
-// TODO: figure out if we can use CustomElement instead of duplicating code 'cuz of different parent class
-class TaskElement extends HTMLLIElement {
-  static EXTENDED_ELEMENT = 'li'
-  static TAG = ''
-  static TEMPLATE_ID = ''
-
-  static create(attrs = {}) {
-    const elem = document.createElement(this.EXTENDED_ELEMENT, { is: this.TAG })
-
-    for (let attrName in attrs) {
-      elem.setAttribute(attrName, attrs[attrName])
-    }
-
-    return elem
-  }
-
-  constructor() {
-    super()
-  }
-
-  connectedCallback() {
-    if (this.attach) this.attach()
-    if (this.setup) this.setup()
-  }
-
-  disconnectedCallback() {
-    //Array.from(this.children).forEach(el => this.removeChild(el))
-  }
-
-  attach() {
-    if (this.template) {
-      // TODO: think of a better check for this, maybe adding a custom object-DOM ID
-      if (this.children.length < this.template.content.children.length) {
-        this.appendChild(this.template.content.cloneNode(true))
-      }
-      this.classList.add(this.constructor.TAG)
-    } else {
-      console.error(`Could not attach ${this.constructor}: template not found`)
-    }
-  }
-
-  remove() {
-    this.parentElement.removeChild(this)
-  }
-
-  get template() { return document.getElementById(this.constructor.TEMPLATE_ID) }
-}
-
 /**
  * An element to represent a task, showing the task description & its state
  *
@@ -121,7 +25,8 @@ class TaskElement extends HTMLLIElement {
  *
  * @typedef {HTMLElement} TaskControl
  */
-class TaskControl extends TaskElement {
+class TaskControl extends HTMLLIElement {
+  static EXTENDED_ELEMENT = 'li'
   static TAG = 'task-control'
   static TEMPLATE_ID = 'newtask-template'
 
@@ -157,7 +62,8 @@ class TaskControl extends TaskElement {
   }
 }
 
-class TaskItem extends TaskElement {
+class TaskItem extends HTMLLIElement {
+  static EXTENDED_ELEMENT = 'li'
   static TAG = 'task-item'
   static TEMPLATE_ID = 'taskitem-template'
 
@@ -210,7 +116,7 @@ class TaskItem extends TaskElement {
   }
 }
 
-class TaskCategory extends CustomElement {
+class TaskCategory extends HTMLElement {
   static TAG = 'task-category'
   static EXTENDED_ELEMENT = 'article'
   static TEMPLATE_ID = 'category-template'
@@ -256,7 +162,7 @@ class TaskCategory extends CustomElement {
   }
 }
 
-class TaskCategoryForm extends CustomElement {
+class TaskCategoryForm extends HTMLElement {
   static EXTENDED_ELEMENT = 'article'
   static TAG = 'task-category-form'
   static TEMPLATE_ID = 'task-category-form-template'
@@ -290,7 +196,7 @@ class TaskCategoryForm extends CustomElement {
   }
 }
 
-class TaskList extends CustomElement {
+class TaskList extends HTMLElement {
   static TAG = 'task-list'
   static EXTENDED_ELEMENT = 'section'
   static TEMPLATE_ID = 'tasklist-template'
@@ -398,13 +304,14 @@ function defineComponents() {
     TaskList,
   ]
 
-  Object.assign(ColorPicker.prototype, CustomElementStaticMixin)
-  Object.assign(ColorPicker.prototype, CustomElementMixin)
-  for (let k in CustomElementGetSetMixin) {
-    Object.defineProperty(ColorPicker.prototype, k, CustomElementGetSetMixin[k])
-  }
 
   for (let component of components) {
+    Object.assign(component, CustomElementStaticMixin)
+    Object.assign(component.prototype, CustomElementMixin)
+    for (let k in CustomElementGetSetMixin) {
+      Object.defineProperty(component.prototype, k, CustomElementGetSetMixin[k])
+    }
+
     customElements.define(component.TAG, component, { extends: component.EXTENDED_ELEMENT })
   }
 }
