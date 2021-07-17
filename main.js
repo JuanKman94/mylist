@@ -37,7 +37,7 @@ window.DEBUG_DATA = {
             },
             {
               name: 'get list of colors via property or keep it in template?',
-              done: false,
+              done: true,
             },
           ],
         },
@@ -58,11 +58,11 @@ window.DEBUG_DATA = {
             },
             {
               name: 'remove event listeners inside disconnectedCallback',
-              done: false,
+              done: true,
             },
             {
               name: 'figure out if we can use CustomElement instead of duplicating code \'cuz of different parent class',
-              done: false,
+              done: true,
             },
           ],
         },

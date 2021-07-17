@@ -14,11 +14,20 @@ const CustomElementStaticMixin = {
 
 const CustomElementMixin = {
   connectedCallback() {
+    this.events = this.events || []
+
     if (this.attach) this.attach()
     if (this.setup) this.setup()
   },
 
   disconnectedCallback() {
+    let evt = null
+
+    if (this.events?.length > 0) {
+      for (evt of this.events) {
+        evt.target.removeEventListener(evt.name, evt.handler)
+      }
+    }
     //Array.from(this.children).forEach(el => this.removeChild(el))
   },
 
@@ -31,6 +40,16 @@ const CustomElementMixin = {
     } else {
       console.error(`Could not attach ${this.constructor.name}: template with id '${this.constructor.TEMPLATE_ID}' not found or null`)
     }
+  },
+
+  on(target, eventName, handler) {
+    target.addEventListener(eventName, handler)
+
+    this.events.push({
+      target: target,
+      name: eventName,
+      handler: handler,
+    })
   },
 
   remove() {

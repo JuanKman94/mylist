@@ -98,8 +98,8 @@ class TaskItem extends HTMLLIElement {
       this.label.textContent = this.name
     }
 
-    this.checkbox.addEventListener('change', this._changeHandler.bind(this))
-    this.deleteButton.addEventListener('click', this._deleteHandler.bind(this))
+    this.on(this.checkbox, 'change', this._changeHandler.bind(this))
+    this.on(this.deleteButton, 'click', this._deleteHandler.bind(this))
   }
 
   _changeHandler(ev) {
@@ -146,8 +146,8 @@ class TaskCategory extends HTMLElement {
       this.classList.add(this.color)
       this.colorPicker.setAttribute('color', this.color)
     }
-    this.colorPicker.addEventListener('change', this._colorChangeHandler.bind(this))
-    this.deleteButton.addEventListener('click', this._deleteHandler.bind(this))
+    this.on(this.colorPicker, 'change', this._colorChangeHandler.bind(this))
+    this.on(this.deleteButton, 'click', this._deleteHandler.bind(this))
   }
 
   addTask(taskItem) {
@@ -175,8 +175,8 @@ class TaskCategoryForm extends HTMLElement {
   get taskList() { return Sortable.utils.closest(this, `.${TaskList.TAG}`) }
 
   setup() {
-    this.addEventListener('click', this._clickHandler.bind(this))
-    this.form.addEventListener('submit', this._submitHandler.bind(this))
+    this.on(this, 'click', this._clickHandler.bind(this))
+    this.on(this.form, 'submit', this._submitHandler.bind(this))
   }
 
   _clickHandler(ev) {
@@ -211,7 +211,7 @@ class TaskList extends HTMLElement {
 
   setup() {
     this.nameLabel.textContent = this.name
-    this.deleteButton.addEventListener('click', this._deleteHandler.bind(this))
+    this.on(this.deleteButton, 'click', this._deleteHandler.bind(this))
   }
 
   addCategory(taskCategory) {
@@ -265,8 +265,8 @@ class ColorPicker extends HTMLSpanElement {
       this.addOption(`color-${i}`)
     }
 
-    this.current.addEventListener('click', this._toggleOpen.bind(this))
-    this.options.forEach(option => option.addEventListener('click', this._optionClickHandler.bind(this)))
+    this.on(this.current, 'click', this._toggleOpen.bind(this))
+    this.options.forEach(option => this.on(option, 'click', this._optionClickHandler.bind(this)))
   }
 
   // a bit hackish but it's fine
