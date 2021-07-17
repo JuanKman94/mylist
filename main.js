@@ -24,23 +24,19 @@ window.DEBUG_DATA = {
       context: 'mylist',
       projects: [
         {
-          name: 'ux',
+          name: 'colorpicker',
           tasks: [
             {
-              name: ' add controls to delete task add controls to delete task add controls to delete task add controls to delete task',
-              done: true,
+              name: 'make it extend span or div',
+              done: false,
             },
             {
-              name: 'add controls to delete category',
-              done: true,
+              name: 'ensure it does not break flow for list/category titles',
+              done: false,
             },
             {
-              name: 'add controls to create new list',
-              done: true,
-            },
-            {
-              name: 'add controls to delete list',
-              done: true,
+              name: 'get list of colors via property or keep it in template?',
+              done: false,
             },
           ],
         },

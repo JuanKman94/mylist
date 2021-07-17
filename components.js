@@ -9,13 +9,13 @@ window.LIST_EVENTS = {
   DELETE: 'list:delete',
 }
 
-
 function dispatchTaskEvent(eventName, task, isDone) {
   const taskChangeEvent = new CustomEvent(eventName, { detail: { task, isDone } })
 
   document.dispatchEvent(taskChangeEvent)
 }
 
+// TODO: remove event listeners inside disconnectedCallback
 class CustomElement extends HTMLElement {
   static EXTENDED_ELEMENT = ''
   static TAG = ''
@@ -302,9 +302,64 @@ class TaskList extends CustomElement {
   }
 }
 
+class ColorPicker extends CustomElement {
+  static TAG = 'color-picker'
+  static EXTENDED_ELEMENT = 'aside'
+  static TEMPLATE_ID = 'colorpicker-template'
+
+  get color() { return this.getAttribute('color') }
+  set color(newColor) {
+    this.current.classList.remove(this.color)
+    this.setAttribute('color', newColor)
+    this.current.classList.add(newColor)
+    this.currentLabel.textContent = newColor
+  }
+
+  get current() { return this.querySelector('.color-picker--current') }
+
+  get currentLabel() { return this.querySelector('.color-picker--current span') }
+
+  get open() { return this.hasAttribute('open') && this.getAttribute('open') !== 'false' }
+  set open(isOpen) {
+    this.setAttribute('open', isOpen)
+    if (isOpen) {
+      this.classList.add('open')
+    } else {
+      this.classList.remove('open')
+    }
+  }
+
+  get optionsContainer() { return this.querySelector('.color-picker--options') }
+
+  get options() { return this.optionsContainer.querySelectorAll('.color-picker--option') }
+
+  setup() {
+    this.current.classList.add(this.color)
+    this.currentLabel.textContent = this.color
+
+    this.current.addEventListener('click', this._toggleOpen.bind(this))
+    this.options.forEach(option => option.addEventListener('click', this._optionClickHandler.bind(this)))
+  }
+
+  toggle() {
+    this.open = !this.open
+  }
+
+  _optionClickHandler(ev) {
+    const newColor = ev.target.dataset.color
+
+    this.color = newColor
+    this.toggle()
+  }
+
+  _toggleOpen(ev) {
+    this.toggle()
+  }
+}
 
 function defineComponents() {
   const components = [
+    ColorPicker,
     TaskCategoryForm,
     TaskCategory,
     TaskControl,
