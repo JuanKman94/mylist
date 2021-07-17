@@ -215,6 +215,15 @@ class TaskCategory extends CustomElement {
   static EXTENDED_ELEMENT = 'article'
   static TEMPLATE_ID = 'category-template'
 
+  get color() { return this.getAttribute('color') }
+  set color(newColor) {
+    this.classList.remove(this.color)
+    this.setAttribute('color', newColor)
+    this.classList.add(newColor)
+  }
+
+  get colorPicker() { return this.querySelector(`.${ColorPicker.TAG}`) }
+
   get deleteButton() { return this.querySelector('.delete') }
 
   get name() { return this.getAttribute('name').trim() }
@@ -227,12 +236,19 @@ class TaskCategory extends CustomElement {
 
   setup() {
     this.nameLabel.textContent = this.name
+    if (this.color) {
+      this.classList.add(this.color)
+      this.colorPicker.setAttribute('color', this.color)
+    }
+    this.colorPicker.addEventListener('change', this._colorChangeHandler.bind(this))
     this.deleteButton.addEventListener('click', this._deleteHandler.bind(this))
   }
 
   addTask(taskItem) {
     this.ul.insertBefore(taskItem, this.taskControl)
   }
+
+  _colorChangeHandler(ev) { this.color = ev.detail.color }
 
   _deleteHandler() {
     this.remove()
@@ -302,9 +318,9 @@ class TaskList extends CustomElement {
   }
 }
 
-class ColorPicker extends CustomElement {
+class ColorPicker extends HTMLSpanElement {
   static TAG = 'color-picker'
-  static EXTENDED_ELEMENT = 'aside'
+  static EXTENDED_ELEMENT = 'span'
   static TEMPLATE_ID = 'colorpicker-template'
 
   get color() { return this.getAttribute('color') }
@@ -334,11 +350,25 @@ class ColorPicker extends CustomElement {
   get options() { return this.optionsContainer.querySelectorAll('.color-picker--option') }
 
   setup() {
+    let i = 1
+
     this.current.classList.add(this.color)
     this.currentLabel.textContent = this.color
 
+    for (i = 1; i <= 16; ++i) {
+      this.addOption(`color-${i}`)
+    }
+
     this.current.addEventListener('click', this._toggleOpen.bind(this))
     this.options.forEach(option => option.addEventListener('click', this._optionClickHandler.bind(this)))
+  }
+
+  // a bit hackish but it's fine
+  addOption(color) {
+    this.optionsContainer.innerHTML += `<button data-color="${color}" type="button" class="color-picker--option ${color}">
+      <span class="sr-only">${color}</span>
+    </button>
+    `
   }
 
   toggle() {
@@ -350,6 +380,7 @@ class ColorPicker extends CustomElement {
 
     this.color = newColor
     this.toggle()
+    this.dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { color: newColor } }))
   }
 
   _toggleOpen(ev) {
@@ -366,6 +397,12 @@ function defineComponents() {
     TaskItem,
     TaskList,
   ]
+
+  Object.assign(ColorPicker.prototype, CustomElementStaticMixin)
+  Object.assign(ColorPicker.prototype, CustomElementMixin)
+  for (let k in CustomElementGetSetMixin) {
+    Object.defineProperty(ColorPicker.prototype, k, CustomElementGetSetMixin[k])
+  }
 
   for (let component of components) {
     customElements.define(component.TAG, component, { extends: component.EXTENDED_ELEMENT })

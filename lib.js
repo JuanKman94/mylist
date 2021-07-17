@@ -34,7 +34,7 @@ const CustomElementMixin = {
       }
       this.classList.add(this.constructor.TAG)
     } else {
-      console.error(`Could not attach ${this.constructor}: template with id '${this.constructor.TEMPLATE_ID}' not found`)
+      console.error(`Could not attach ${this.constructor.name}: template with id '${this.constructor.TEMPLATE_ID}' not found or null`)
     }
   },
 
@@ -44,5 +44,11 @@ const CustomElementMixin = {
 }
 
 const CustomElementGetSetMixin = {
-  get template() { return document.getElementById(this.constructor.TEMPLATE_ID) }
+  template: {
+    get: function() {
+      return document.getElementById(this.constructor.TEMPLATE_ID)
+    },
+    enumerable: true,
+    configurable: true,
+  },
 }

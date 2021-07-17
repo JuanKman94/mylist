@@ -67,6 +67,10 @@
 .color-15 { background-color: var(--cyan-1); --feat-color: var(--cyan-1); }
 .color-16 { background-color: var(--white-1); --feat-color: var(--white-1); }
 
+.ml-1 { margin-left: 0.25rem !important; }
+.ml-2 { margin-left: 0.5rem !important; }
+.ml-3 { margin-left: 0.75rem !important; }
+.ml-4 { margin-left: 1rem !important; }
 .mr-1 { margin-right: 0.25rem !important; }
 .mr-2 { margin-right: 0.5rem !important; }
 .mr-3 { margin-right: 0.75rem !important; }
@@ -191,11 +195,11 @@ task-category:not(:first-child),
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  align-items: center;
 }
 .list--name,
 .category--name {
   flex-grow: 1;
-  padding: 0 1rem;
 }
 
 .task-category input[type=checkbox] { margin-right: 0; }
@@ -266,13 +270,22 @@ task-category-form,
   --picker-padding: 0.125rem;
   position: relative;
 }
+.color-picker.open {
+  display: block;
+}
 
 .color-picker--current {
+}
+
+.color-picker.open > .color-picker--current {
+  background-color: transparent;
+  border-color: transparent;
 }
 
 .color-picker.open > .color-picker--options {
   max-height: 2.5rem;
   max-width: 10rem;
+  width: 10rem;
   border: 1px solid var(--border-color-dark);
   border-radius: 5px;
   margin-top: -1px;

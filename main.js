@@ -25,14 +25,15 @@ window.DEBUG_DATA = {
       projects: [
         {
           name: 'colorpicker',
+          color: 'color-6',
           tasks: [
             {
               name: 'make it extend span or div',
-              done: false,
+              done: true,
             },
             {
               name: 'ensure it does not break flow for list/category titles',
-              done: false,
+              done: true,
             },
             {
               name: 'get list of colors via property or keep it in template?',
@@ -53,7 +54,7 @@ window.DEBUG_DATA = {
             },
             {
               name: 'create color picker component',
-              done: false,
+              done: true,
             },
           ],
         },
@@ -62,7 +63,7 @@ window.DEBUG_DATA = {
           tasks: [
             {
               name: 'add support for category colors',
-              done: false,
+              done: true,
             },
           ],
         },
@@ -163,7 +164,7 @@ function loadState() {
     listContainer.appendChild(taskList)
 
     list.projects.forEach(project => {
-      const taskCategory = createCustomElement(TaskCategory, { name: project.name })
+      const taskCategory = createCustomElement(TaskCategory, { color: project.color, name: project.name })
       taskList.addCategory(taskCategory)
 
       project.tasks.forEach(task => {
