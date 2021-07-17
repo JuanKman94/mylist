@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>My List</title>
 
   <link rel=stylesheet href=styles.css>
@@ -29,6 +31,10 @@
   <section id="lists">
   </section>
 
+  <aside>
+    <ul id=log_messages></ul>
+  </aside>
+
   <footer id=debug_controls class=hidden>
     <button type=button id=print_state_btn>
       print state
@@ -36,8 +42,6 @@
     <button type=button id=reset_log>
       reset log
     </button>
-
-    <ul id=log_messages></ul>
   </footer>
 
   <template id="tasklist-template">
