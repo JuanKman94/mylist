@@ -1,15 +1,18 @@
 /**
  * Task
  *
+ * @see https://todotxt.org/
+ *
  * @typedef {Object} Task
  * @property {string} task Task description
  * @property {boolean} done Task completion
- * @property {string} category Task category
+ * @property {string} project Task project
+ * @property {string} context Task context
  * @property {string} color Task color ID
  */
 
 window.addEventListener('DOMContentLoaded', init)
-window.DEBUG_MODE = true
+window.DEBUG_MODE = false
 window.SORTABLE_INSTANCES = []
 window.STORAGE_NAME = 'todoState'
 window.DEFAULT_SORTABLE_CONFIG = {
@@ -18,67 +21,7 @@ window.DEFAULT_SORTABLE_CONFIG = {
   chosenClass: 'dragging',
   handle: '.grabber',
 }
-window.DEBUG_DATA = {
-  lists: [
-    {
-      context: 'mylist',
-      projects: [
-        {
-          name: 'colorpicker',
-          color: 'color-6',
-          tasks: [
-            {
-              name: 'make it extend span or div',
-              done: true,
-            },
-            {
-              name: 'ensure it does not break flow for list/category titles',
-              done: true,
-            },
-            {
-              name: 'get list of colors via property or keep it in template?',
-              done: true,
-            },
-          ],
-        },
-        {
-          name: 'js',
-          tasks: [
-            {
-              name: 'persist lists across reloads',
-              done: false,
-            },
-            {
-              name: 'load state correctly: tasks, colors, order',
-              done: false,
-            },
-            {
-              name: 'think of a better check for CustomElement#attach, maybe adding a custom object-DOM ID',
-              done: false,
-            },
-            {
-              name: 'remove event listeners inside disconnectedCallback',
-              done: true,
-            },
-            {
-              name: 'figure out if we can use CustomElement instead of duplicating code \'cuz of different parent class',
-              done: true,
-            },
-          ],
-        },
-        {
-          name: 'ui',
-          tasks: [
-            {
-              name: 'add support for category colors',
-              done: true,
-            },
-          ],
-        },
-      ],
-    },
-  ],
-}
+window.NEW_LIST_PROMPT = 'What is this list about?'
 
 function cleanUpSortable() {
   let sortable = null
@@ -88,6 +31,7 @@ function cleanUpSortable() {
   }
 }
 
+// TODO: call persistState after an element is moved
 function setupSortable() {
   cleanUpSortable()
 
@@ -100,7 +44,7 @@ function setupSortable() {
 }
 
 function newList() {
-  const listName = window.prompt('What is this list about?')
+  const listName = window.prompt(NEW_LIST_PROMPT)
 
   if (listName && listName.length > 0) {
     document.getElementById('lists')
@@ -134,9 +78,10 @@ function init(ev) {
   if (window.DEBUG_MODE)
     setupDebugControls()
 
+  document.addEventListener(LIST_EVENTS.CHANGE, updateState)
+  document.addEventListener(LIST_EVENTS.DELETE, removeListLink)
   document.addEventListener(TASK_EVENTS.CHANGE, updateState)
   document.addEventListener(TASK_EVENTS.DELETE, updateState)
-  document.addEventListener(LIST_EVENTS.DELETE, removeListLink)
   document.querySelector('.new-list')?.addEventListener('click', newList)
 
   loadState()
@@ -148,8 +93,8 @@ function updateState(ev) {
   const newState = readState()
 
   //console.debug(`[${TASK_EVENTS.CHANGE}] isDone = ${isDone}, task = ${task}`)
-  //persistState(newState)
   domLog(`state = ${JSON.stringify(newState, null, 2)}`)
+  persistState(newState)
   setupSortable()
 }
 
@@ -158,13 +103,11 @@ function persistState(newState) {
 }
 
 function loadState() {
-  //const rawState = localStorage.getItem(STORAGE_NAME)
-  const rawState = window.DEBUG_DATA
+  const rawState = localStorage.getItem(STORAGE_NAME)
 
   if (!rawState) return
 
-  //const state = JSON.parse(rawState)
-  const state = rawState
+  const state = JSON.parse(rawState)
   const listContainer = document.getElementById('lists')
 
   state.lists.forEach(list => {
@@ -188,6 +131,62 @@ function loadState() {
 }
 
 function readState() {
+  const lists = document.querySelectorAll(`.${TaskList.TAG}`)
+  const state = {
+    lists: [],
+  }
+  let todoList = null,
+    project = null,
+    task = null,
+    ul = null
+
+  lists.forEach(list => {
+    todoList = {
+      context: list.querySelector('.list--name')?.textContent.trim(),
+      projects: [],
+    }
+
+    list.querySelectorAll(`.${TaskCategory.TAG}`).forEach(categoryEl => {
+      project = {
+        name: categoryEl.querySelector('.category--name')?.textContent.trim(),
+        color: categoryEl.getAttribute('color') || null,
+        tasks: [],
+      }
+      ul = categoryEl.querySelector('ul')
+
+      Array.from(ul.children).forEach(item => {
+        task = {
+          done: item.querySelector('input[type=checkbox]')?.checked,
+          name: item.querySelector('.task-item--name')?.textContent.trim(),
+        }
+
+        if (task.name)
+          project.tasks.push(task)
+      })
+
+      todoList.projects.push(project)
+    })
+
+    state.lists.push(todoList)
+  })
+
+  return state
+}
+
+function createCustomElement(elementType, attrs) {
+  const elem = document.createElement(elementType.EXTENDED_ELEMENT, { is: elementType.TAG })
+
+  for (let attrName in attrs) {
+    elem.setAttribute(attrName, attrs[attrName])
+  }
+
+  return elem
+}
+
+/**
+ * Parse tasks from DOM into todo.txt-compatible data structure
+ */
+function readStateTxt() {
   const lists = document.querySelectorAll(`.${TaskList.TAG}`)
   const state = {
     tasks: [],
@@ -226,18 +225,6 @@ function serializeString(str) {
     .replace(/[^A-Za-z_]/g, '-')
 }
 
-/**
- * Read task state & description from item control element
- *
- * @param {TaskControl} item
- */
-function item2json(itemControl) {
-  return {
-    done: itemControl?.querySelector('input[type=checkbox]')?.checked,
-    task: itemControl?.querySelector('.task-item--name')?.textContent.trim(),
-  }
-}
-
 function setupDebugControls() {
   document.querySelector('#debug_controls')?.classList.remove('hidden')
   document.querySelector('#print_state_btn')?.addEventListener('click', (ev) => {
@@ -254,17 +241,8 @@ function saneDateStr() {
   return `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}.${now.getMilliseconds()}`
 }
 
-function createCustomElement(elementType, attrs) {
-  const elem = document.createElement(elementType.EXTENDED_ELEMENT, { is: elementType.TAG })
-
-  for (let attrName in attrs) {
-    elem.setAttribute(attrName, attrs[attrName])
-  }
-
-  return elem
-}
-
 function domLog(msg) {
+  if (!window.DEBUG_MODE) return
   msg = `[${saneDateStr()}] ${msg}`
 
   //console.debug(msg)

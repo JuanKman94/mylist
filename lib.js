@@ -33,6 +33,7 @@ const CustomElementMixin = {
 
   attach() {
     if (this.template) {
+      // TODO: think of a better check for this check, maybe adding a custom object-DOM ID
       if (this.children.length < this.template.content.children.length) {
         this.appendChild(this.template.content.cloneNode(true))
       }

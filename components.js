@@ -146,6 +146,7 @@ class TaskCategory extends HTMLElement {
       this.classList.add(this.color)
       this.colorPicker.setAttribute('color', this.color)
     }
+
     this.on(this.colorPicker, 'change', this._colorChangeHandler.bind(this))
     this.on(this.deleteButton, 'click', this._deleteHandler.bind(this))
   }
@@ -154,7 +155,10 @@ class TaskCategory extends HTMLElement {
     this.ul.insertBefore(taskItem, this.taskControl)
   }
 
-  _colorChangeHandler(ev) { this.color = ev.detail.color }
+  _colorChangeHandler(ev) {
+    this.color = ev.detail.color
+    dispatchTaskEvent(LIST_EVENTS.CHANGE, null, false)
+  }
 
   _deleteHandler() {
     this.remove()
