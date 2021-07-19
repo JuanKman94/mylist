@@ -52,22 +52,22 @@
       <span class="icon delete">x</span>
     </h2>
 
-    <article is="task-category-form"></article>
+    <task-category-form></task-category-form>
   </template>
 
   <template id="category-template">
     <h3 class="task-category--title">
-      <span class="icon grabber">=</span>
-      <span class="ml-2" is="color-picker" color="color-4"></span>
+      <span class="icon grabber category-grabber">=</span>
+      <color-picker class="ml-2" color="color-4"></color-picker>
       <slot name="category-name">
         <span class="category--name ml-2"></span>
       </slot>
       <span class="icon delete">x</span>
     </h3>
 
-    <ul>
-      <li is="task-control"></li>
-    </ul>
+    <div class="tasks-container">
+      <task-control></task-control>
+    </div>
   </template>
 
   <template id="task-category-form-template">
@@ -88,7 +88,7 @@
   </template>
 
   <template id="taskitem-template">
-    <span class="icon grabber">=</span>
+    <span class="icon grabber task-grabber">=</span>
     <label>
       <input type=checkbox />
       <span class="task-item--name"></span>
@@ -114,9 +114,9 @@
   </template>
 
   <template id="colorpicker-template">
-    <button type="button" class="color-picker--current color-picker--option">
+    <div role="button" type="button" class="color-picker--current color-picker--option">
       <span class="sr-only">current color</span>
-    </button>
+    </div>
 
     <div class="color-picker--options">
     </div>

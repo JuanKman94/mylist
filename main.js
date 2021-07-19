@@ -19,7 +19,6 @@ window.DEFAULT_SORTABLE_CONFIG = {
   animation: 150,
   ghostClass: 'zoom-in-out',
   chosenClass: 'dragging',
-  handle: '.grabber',
 }
 window.NEW_LIST_PROMPT = 'What is this list about?'
 
@@ -36,10 +35,14 @@ function setupSortable() {
   cleanUpSortable()
 
   document.querySelectorAll(`.${TaskList.TAG}`).forEach(list => {
-    list.querySelectorAll(`.${TaskCategory.TAG} ul`).forEach(tasksContainer => {
-      SORTABLE_INSTANCES.push(new Sortable(tasksContainer, Object.assign({ group: 'tasks' }, DEFAULT_SORTABLE_CONFIG)))
+    list.querySelectorAll(`.${TaskCategory.TAG} .tasks-container`).forEach(tasksContainer => {
+      SORTABLE_INSTANCES.push(new Sortable(
+        tasksContainer,
+        Object.assign({ group: 'tasks', handle: '.task-grabber' }, DEFAULT_SORTABLE_CONFIG)))
     })
-    SORTABLE_INSTANCES.push(new Sortable(list, Object.assign({ group: 'categories' }, DEFAULT_SORTABLE_CONFIG)))
+    SORTABLE_INSTANCES.push(new Sortable(
+      list,
+      Object.assign({ group: 'categories', handle: '.category-grabber' }, DEFAULT_SORTABLE_CONFIG)))
   })
 }
 
@@ -93,7 +96,7 @@ function updateState(ev) {
   const newState = readState()
 
   //console.debug(`[${TASK_EVENTS.CHANGE}] isDone = ${isDone}, task = ${task}`)
-  domLog(`state = ${JSON.stringify(newState, null, 2)}`)
+  //domLog(`state = ${JSON.stringify(newState, null, 2)}`)
   persistState(newState)
   setupSortable()
 }
@@ -138,7 +141,7 @@ function readState() {
   let todoList = null,
     project = null,
     task = null,
-    ul = null
+    tasksContainer = null
 
   lists.forEach(list => {
     todoList = {
@@ -152,9 +155,9 @@ function readState() {
         color: categoryEl.getAttribute('color') || null,
         tasks: [],
       }
-      ul = categoryEl.querySelector('ul')
+      tasksContainer = categoryEl.querySelector('.tasks-container')
 
-      Array.from(ul.children).forEach(item => {
+      Array.from(tasksContainer.children).forEach(item => {
         task = {
           done: item.querySelector('input[type=checkbox]')?.checked,
           name: item.querySelector('.task-item--name')?.textContent.trim(),
@@ -174,7 +177,7 @@ function readState() {
 }
 
 function createCustomElement(elementType, attrs) {
-  const elem = document.createElement(elementType.EXTENDED_ELEMENT, { is: elementType.TAG })
+  const elem = document.createElement(elementType.TAG)
 
   for (let attrName in attrs) {
     elem.setAttribute(attrName, attrs[attrName])
@@ -193,15 +196,15 @@ function readStateTxt() {
   }
   let taskContext = null,
     project = null,
-    ul = null
+    tasksContainer = null
 
   lists.forEach(list => {
     list.querySelectorAll(`.${TaskCategory.TAG}`).forEach(categoryEl => {
       taskContext = serializeString(list.querySelector('.list--name')?.textContent.trim())
       project = serializeString(categoryEl.querySelector('.category--name')?.textContent.trim())
-      ul = categoryEl.querySelector('ul')
+      tasksContainer = categoryEl.querySelector('.tasks-container')
 
-      Array.from(ul.children).forEach(item => {
+      Array.from(tasksContainer.children).forEach(item => {
         const task = item2json(item.querySelector('label'))
         task.context = taskContext
         task.project = project
@@ -242,7 +245,6 @@ function saneDateStr() {
 }
 
 function domLog(msg) {
-  if (!window.DEBUG_MODE) return
   msg = `[${saneDateStr()}] ${msg}`
 
   //console.debug(msg)

@@ -25,7 +25,7 @@ function dispatchTaskEvent(eventName, task, isDone) {
  *
  * @typedef {HTMLElement} TaskControl
  */
-class TaskControl extends HTMLLIElement {
+class TaskControl extends HTMLElement {
   static EXTENDED_ELEMENT = 'li'
   static TAG = 'task-control'
   static TEMPLATE_ID = 'newtask-template'
@@ -62,7 +62,7 @@ class TaskControl extends HTMLLIElement {
   }
 }
 
-class TaskItem extends HTMLLIElement {
+class TaskItem extends HTMLElement {
   static EXTENDED_ELEMENT = 'li'
   static TAG = 'task-item'
   static TEMPLATE_ID = 'taskitem-template'
@@ -138,7 +138,7 @@ class TaskCategory extends HTMLElement {
 
   get taskControl() { return this.querySelector('.task-control') }
 
-  get ul() { return this.querySelector('ul') }
+  get tasksContainer() { return this.querySelector('.tasks-container') }
 
   setup() {
     this.nameLabel.textContent = this.name
@@ -152,7 +152,7 @@ class TaskCategory extends HTMLElement {
   }
 
   addTask(taskItem) {
-    this.ul.insertBefore(taskItem, this.taskControl)
+    return this.tasksContainer.insertBefore(taskItem, this.taskControl)
   }
 
   _colorChangeHandler(ev) {
@@ -228,7 +228,7 @@ class TaskList extends HTMLElement {
   }
 }
 
-class ColorPicker extends HTMLSpanElement {
+class ColorPicker extends HTMLElement {
   static TAG = 'color-picker'
   static EXTENDED_ELEMENT = 'span'
   static TEMPLATE_ID = 'colorpicker-template'
@@ -275,9 +275,9 @@ class ColorPicker extends HTMLSpanElement {
 
   // a bit hackish but it's fine
   addOption(color) {
-    this.optionsContainer.innerHTML += `<button data-color="${color}" type="button" class="color-picker--option ${color}">
+    this.optionsContainer.innerHTML += `<div role="button" data-color="${color}" type="button" class="color-picker--option ${color}">
       <span class="sr-only">${color}</span>
-    </button>
+    </div>
     `
   }
 
@@ -316,6 +316,6 @@ function defineComponents() {
       Object.defineProperty(component.prototype, k, CustomElementGetSetMixin[k])
     }
 
-    customElements.define(component.TAG, component, { extends: component.EXTENDED_ELEMENT })
+    customElements.define(component.TAG, component)
   }
 }

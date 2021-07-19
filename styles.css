@@ -53,7 +53,7 @@
 .color-1  { background-color: var(--black); --feat-color: var(--black); }
 .color-2  { background-color: var(--red); --feat-color: var(--red); }
 .color-3  { background-color: var(--green); --feat-color: var(--green); }
-.color-4  { background-color: var(--yellow); --feat-color: var(--yellow); }
+.color-4  { background-color: var(--yellow); color: var(--black-1); ; --feat-color: var(--yellow); }
 .color-5  { background-color: var(--blue); --feat-color: var(--blue); }
 .color-6  { background-color: var(--magenta); --feat-color: var(--magenta); }
 .color-7  { background-color: var(--cyan); --feat-color: var(--cyan); }
@@ -61,7 +61,7 @@
 .color-9  { background-color: var(--black-1); --feat-color: var(--black-1); }
 .color-10 { background-color: var(--red-1); --feat-color: var(--red-1); }
 .color-11 { background-color: var(--green-1); --feat-color: var(--green-1); }
-.color-12 { background-color: var(--yellow-1); --feat-color: var(--yellow-1); }
+.color-12 { background-color: var(--yellow-1); color: var(--black); --feat-color: var(--yellow-1); }
 .color-13 { background-color: var(--blue-1); --feat-color: var(--blue-1); }
 .color-14 { background-color: var(--magenta-1); --feat-color: var(--magenta-1); }
 .color-15 { background-color: var(--cyan-1); --feat-color: var(--cyan-1); }
@@ -96,6 +96,19 @@ a:visited {
 
 ul {
   padding-left: 0.5rem;
+}
+
+task-list,
+.task-list,
+task-category,
+.task-category,
+task-category-form,
+.task-category-form {
+  display: block;
+}
+
+#log_messages {
+  overflow-x: scroll;
 }
 
 nav ul li {
@@ -212,7 +225,13 @@ task-item,
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  margin: 0.5rem 0;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+task-item .grabber,
+.task-item .grabber {
+  padding: 0.25rem 0.5rem;
 }
 
 task-item label,
@@ -267,11 +286,8 @@ task-category-form,
 
 /******* color picker *******/
 .color-picker {
-  --picker-padding: 0.125rem;
+  --picker-padding: 2px;
   position: relative;
-}
-.color-picker.open {
-  display: block;
 }
 
 .color-picker--current {
@@ -283,24 +299,28 @@ task-category-form,
 }
 
 .color-picker.open > .color-picker--options {
-  max-height: 2.5rem;
-  max-width: 10rem;
-  width: 10rem;
-  border: 1px solid var(--border-color-dark);
-  border-radius: 5px;
+  position: absolute;
+  top: var(--picker-padding);
   margin-top: -1px;
   margin-left: -1px;
-}
-.color-picker--options {
+
   display: flex;
   flex-flow: row wrap;
-  position: absolute;
-  top: calc(var(--picker-padding) * 2);
-  /* transition: all .75s ease-in-out; */
 
-  overflow: hidden;
+  height: 4rem;
+  min-height: 3rem;
+  width: auto;
+  min-width: 12rem;
+
+  border: 1px solid var(--border-color-dark);
+  border-radius: 5px;
+}
+.color-picker--options {
+  /* transition: all .75s ease-in-out; */
   max-height: 0;
   max-width: 0;
+
+  overflow: hidden;
 }
 
 .color-picker--option {

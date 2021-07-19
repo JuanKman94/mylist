@@ -3,7 +3,7 @@
 // Object.assign(ComponentClass, CustomElementStaticMixin)
 const CustomElementStaticMixin = {
   create(attrs = {}) {
-    const elem = document.createElement(this.EXTENDED_ELEMENT, { is: this.TAG })
+    const elem = document.createElement(this.TAG)
 
     for (let attrName in attrs) {
       elem.setAttribute(attrName, attrs[attrName])
