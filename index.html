@@ -25,23 +25,69 @@
           New list
         </a>
       </li>
+      <li><a href="#about">About</a></li>
     </ul>
   </nav>
 
   <section id="lists">
   </section>
 
+  <section id="about">
+    <details>
+      <summary class="h3 my-4">FAQ</summary>
+      <dl>
+        <dt>Where is my data stored?</dt>
+        <dd>By default it is stored only in the web browser's local storage.</dd>
+
+        <dt>Can I share my lists?</dt>
+        <dd>Not yet.</dd>
+
+        <dt>I need to scroll too long to see my lists, can you do something about it?</dt>
+        <dd>If you're done with the task, delete it.</dd>
+      </dl>
+    </details>
+
+    <details>
+      <summary class="h3 my-4">Back-End config</summary>
+
+      <div class="field username">
+        <input type="text" class="config-field" name="backend_username" />
+        <div class="hint">
+          An email, a pseudonym or whatever &mdash; you control the back-end so
+          validate as you please!
+        </div>
+      </div>
+
+      <div class="field passphrase">
+        <textarea rows="3" class="config-field" name="backend_passphrase"></textarea>
+        <div class="hint">
+          A poem you like or the lyrics for your favorite song!
+        </div>
+      </div>
+    </details>
+  </section>
+
   <aside>
     <ul id=log_messages></ul>
   </aside>
 
-  <footer id=debug_controls class=hidden>
+  <aside id=debug_controls class=hidden>
     <button type=button id=print_state_btn>
       print state
     </button>
     <button type=button id=reset_log>
       reset log
     </button>
+  </aside>
+
+  <footer>
+    <p class="text-center mb-0">
+      Written with curiosity by
+      <a href="https://juankman94.github.io">juankman94</a>.
+    </p>
+    <p class="small text-center mt-0">
+      Check the link, there may be another privacy-focused web app there.
+    </p>
   </footer>
 
   <template id="tasklist-template">
@@ -75,7 +121,7 @@
 
     <form action="#" class="new-category--form">
       <label for="name">
-        <span class="icon mr-1">+</span>
+        <span class="icon mr-2">+</span>
         <span class="sr-only">Name</span>
 
         <input
@@ -99,7 +145,7 @@
   <template id="newtask-template">
     <form action="#" class="new-task--form">
       <label for="task">
-        <span class="icon">+</span>
+        <span class="icon mr-2">+</span>
         <span class="sr-only">Task</span>
 
         <input

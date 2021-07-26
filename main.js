@@ -17,8 +17,11 @@ window.SORTABLE_INSTANCES = []
 window.STORAGE_NAME = 'todoState'
 window.DEFAULT_SORTABLE_CONFIG = {
   animation: 150,
-  ghostClass: 'zoom-in-out',
   chosenClass: 'dragging',
+  ghostClass: 'zoom-in-out',
+  onSort: function(ev) {
+    console.debug('onSort: ev', ev)
+  },
 }
 window.NEW_LIST_PROMPT = 'What is this list about?'
 
