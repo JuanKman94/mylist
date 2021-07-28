@@ -34,6 +34,31 @@
 
   <section id="about">
     <details>
+      <summary class="h3 my-4">Export</summary>
+
+      <div class="flex flex-wrap justify-around">
+        <aside class="card mb-4">
+          <h4>todo.txt</h4>
+          <p>
+            Export in well-known
+            <a href="https://github.com/todotxt/todo.txt">todo.txt format</a>
+          </p>
+          <footer class="actions text-right">
+            <button type="button" id="export_todotxt">Download</button>
+          </footer>
+        </aside>
+
+        <aside class="card mb-4">
+          <h4>JSON</h4>
+          <p>Export in JSON format</p>
+          <footer class="actions text-right">
+            <button type="button" id="export_json">Download</button>
+          </footer>
+        </aside>
+      </div>
+    </details>
+
+    <details>
       <summary class="h3 my-4">FAQ</summary>
       <dl>
         <dt>Where is my data stored?</dt>
@@ -49,9 +74,28 @@
 
     <details>
       <summary class="h3 my-4">Back-End config</summary>
+      <div class="field backend-url">
+        <label for="backend_url" hidden>URL</label>
+        <input
+          type="url"
+          class="config-field"
+          name="backend_url"
+          placeholder="https://example.com/personal/mylist"
+        />
+        <div class="hint">
+          URL where a POST request is sent whenever a task changes.
+          The payload is the whole page state, i.e., all the lists with their tasks.
+        </div>
+      </div>
 
       <div class="field username">
-        <input type="text" class="config-field" name="backend_username" />
+        <label for="backend_username" hidden>Username</label>
+        <input
+          type="text"
+          class="config-field"
+          name="backend_username"
+          placeholder="Username"
+        />
         <div class="hint">
           An email, a pseudonym or whatever &mdash; you control the back-end so
           validate as you please!
@@ -59,7 +103,13 @@
       </div>
 
       <div class="field passphrase">
-        <textarea rows="3" class="config-field" name="backend_passphrase"></textarea>
+        <label for="backend_passphrase" hidden>Passphrase</label>
+        <textarea
+          rows="3"
+          class="config-field"
+          name="backend_passphrase"
+          placeholder="Passphrase: One flew over the coocoo's nest"
+        ></textarea>
         <div class="hint">
           A poem you like or the lyrics for your favorite song!
         </div>

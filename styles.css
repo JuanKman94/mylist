@@ -21,6 +21,8 @@
   --border-color: #CCCCCC;
   --border-color-dark: #AAAAAA;
   --link-color: var(--yellow);
+
+  --card-padding: 0.75rem;
 }
 
 @media (prefers-color-scheme: light) {
@@ -107,9 +109,8 @@ body {
   max-width: 80vw;
 }
 
-h2,
-h3 {
-  margin: 0.5rem 0;
+h1, h2, h3, h4, h5, h6 {
+  margin: 0.25rem 0 0.5rem;
 }
 
 h2, .h2 { font-size: 1.25rem; font-weight: 600; }
@@ -125,7 +126,19 @@ ul {
 }
 
 dt { font-style: italic; }
-dd { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+dt:not(:first-child) { padding-top: 1rem; border-top: 3px dotted var(--border-color); }
+dd { margin-top: 0.5rem; margin-bottom: 1rem; }
+
+.card {
+  padding: var(--card-padding);
+  border-radius: 6px;
+  border: 1px solid var(--border-color-dark);
+}
+
+.card footer, .card .actions {
+  padding-top: var(--card-padding);
+  border-top: 1px solid var(--border-color);
+}
 
 task-list,
 .task-list,
@@ -318,10 +331,13 @@ task-item .delete,
 .task-category-form .text-field,
 .task-control .text-field {
   min-width: 80%;
-  max-width: 90%;
+  max-width: 85%;
   flex-grow: 1;
 }
 
+.field {
+  margin-bottom: 0.75rem;
+}
 .hint {
   font-size: 0.825rem;
   padding: 0.5rem 0;
