@@ -213,6 +213,16 @@ class TaskList extends HTMLElement {
 
   get taskCategoryForm() { return this.querySelector(`.${TaskCategoryForm.TAG}`) }
 
+  static addList(target) {
+    const listName = window.prompt(NEW_LIST_PROMPT)
+
+    if (listName && listName.length > 0) {
+      target.prepend(TaskList.create({ id: listName, name: listName }))
+    }
+
+    return listName
+  }
+
   setup() {
     this.nameLabel.textContent = this.name
     this.on(this.deleteButton, 'click', this._deleteHandler.bind(this))

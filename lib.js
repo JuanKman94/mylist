@@ -72,3 +72,71 @@ const CustomElementGetSetMixin = {
     configurable: true,
   },
 }
+
+function utf8_to_b64( str ) {
+  return window.btoa(unescape(encodeURIComponent( str )));
+}
+
+function b64_to_utf8( str ) {
+  return decodeURIComponent(escape(window.atob( str )));
+}
+
+class BackendClient {
+  constructor(url, user, password) {
+    this.url = new URL(url)
+    this.user = user
+    this.password = password
+  }
+
+  get shouldReport() { return !!this.user && !!this.password }
+
+  put(payload) {
+    if (!this.shouldReport)
+      return
+
+    return fetch(this.url, { method: 'put', payload: payload })
+      .then(resp => {
+        console.info('Successfully sent to back-end.', resp)
+        return resp.data
+      })
+      .catch(err => {
+        console.error('Back-end storage failed.', err)
+      })
+  }
+
+  get() {
+    return fetch(this.url)
+      .then(resp => resp.data)
+      .catch(err => {
+        console.error('Could not fetch from back-end.', err)
+      })
+  }
+
+  // private
+  _authHeader() {
+    return utf8_to_b64(`${this.user}:${this.password}`)
+  }
+}
+
+function serializeString(str) {
+  if (!str)
+    return ''
+
+  return str
+    .replace(/\s+/g, '_')
+    .replace(/[^A-Za-z_]/g, '-')
+}
+
+function saneDateStr() {
+  const now = new Date()
+
+  return `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}.${now.getMilliseconds()}`
+}
+
+function domLog(msg) {
+  msg = `[${saneDateStr()}] ${msg}`
+
+  //console.debug(msg)
+  document.querySelector('#log_messages')
+    .innerHTML = `<li><pre>${msg}</pre></li>` + document.querySelector('#log_messages').innerHTML
+}
