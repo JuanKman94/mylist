@@ -82,17 +82,38 @@ function b64_to_utf8( str ) {
 }
 
 class BackendClient {
+  /**
+   * Create a client to comunicate with back-end
+   *
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/URL/protocol
+   *
+   * @param {URL} url This will be forced to HTTPS
+   * @param {string} user Used for authentication
+   * @param {string} password Used for authentication
+   */
   constructor(url, user, password) {
+    if (!url)
+      return
+
     this.url = new URL(url)
     this.user = user
     this.password = password
+
+    this.url.protocol = 'https:' // force HTTPS
   }
 
-  get shouldReport() { return !!this.user && !!this.password }
+  get shouldReport() { return !!this.url }
 
   put(payload) {
     if (!this.shouldReport)
       return
+
+    console.debug('BackendClient#put: url =', this.url)
+    console.debug('BackendClient#put: user =', this.user)
+    console.debug('BackendClient#put: password =', this.password)
+    console.debug('BackendClient#put: authorization =', this._authHeader())
+    console.debug('BackendClient#put: payload =', payload)
 
     return fetch(this.url, { method: 'put', payload: payload })
       .then(resp => {
@@ -169,6 +190,8 @@ class StateManager {
     const newState = this.readState()
 
     this.persistState(newState)
+
+    return newState
   }
 
   static persistState(newState) {

@@ -22,7 +22,8 @@ window.DEFAULT_SORTABLE_CONFIG = {
   ghostClass: 'zoom-in-out',
   sort: true,
   onSort: function(ev) {
-    StateManager.updateState()
+    const newState = StateManager.updateState()
+    postToBackend(newState)
   },
 }
 window.NEW_LIST_PROMPT = 'What is this list about?'
@@ -84,13 +85,24 @@ function setupConfigFields() {
   })
 }
 
+function postToBackend(newState) {
+  new BackendClient(
+      localStorage.getItem('backend_url'),
+      localStorage.getItem('backend_username'),
+      localStorage.getItem('backend_passphrase')
+    )
+    .put(newState)
+}
+
 function init(ev) {
   if (window.DEBUG_MODE)
     setupDebugControls()
 
   function stateUpdated() {
-    StateManager.updateState()
+    const newState = StateManager.updateState()
     setupSortable()
+
+    postToBackend(newState)
   }
 
   document.addEventListener(LIST_EVENTS.CHANGE, stateUpdated)
