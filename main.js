@@ -18,9 +18,11 @@ window.STORAGE_NAME = 'todoState'
 window.DEFAULT_SORTABLE_CONFIG = {
   animation: 150,
   chosenClass: 'dragging',
+  fallbackOnBody: false,
   ghostClass: 'zoom-in-out',
+  sort: true,
   onSort: function(ev) {
-    console.debug('onSort: ev', ev)
+    StateManager.updateState()
   },
 }
 window.NEW_LIST_PROMPT = 'What is this list about?'
