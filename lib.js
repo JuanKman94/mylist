@@ -118,6 +118,92 @@ class BackendClient {
   }
 }
 
+class StateManager {
+  constructor() {
+  }
+
+  static readState() {
+    const lists = document.querySelectorAll(`.${TaskList.TAG}`)
+    const state = {
+      lists: [],
+    }
+    let todoList = null,
+      project = null,
+      task = null,
+      tasksContainer = null
+
+    lists.forEach(list => {
+      todoList = {
+        context: list.querySelector('.list--name')?.textContent.trim(),
+        projects: [],
+      }
+
+      list.querySelectorAll(`.${TaskCategory.TAG}`).forEach(categoryEl => {
+        project = {
+          name: categoryEl.querySelector('.category--name')?.textContent.trim(),
+          color: categoryEl.getAttribute('color') || null,
+          tasks: [],
+        }
+        tasksContainer = categoryEl.querySelector('.tasks-container')
+
+        Array.from(tasksContainer.children).forEach(item => {
+          task = {
+            done: item.querySelector('input[type=checkbox]')?.checked,
+            name: item.querySelector('.task-item--name')?.textContent.trim(),
+          }
+
+          if (task.name)
+            project.tasks.push(task)
+        })
+
+        todoList.projects.push(project)
+      })
+
+      state.lists.push(todoList)
+    })
+
+    return state
+  }
+
+  static updateState() {
+    const newState = this.readState()
+
+    this.persistState(newState)
+  }
+
+  static persistState(newState) {
+    localStorage.setItem(STORAGE_NAME, JSON.stringify(newState))
+  }
+
+  static loadState() {
+    const rawState = localStorage.getItem(STORAGE_NAME)
+
+    if (!rawState) return
+
+    const state = JSON.parse(rawState)
+    const listContainer = document.getElementById('lists')
+
+    state.lists.forEach(list => {
+      const taskList = TaskList.create({ id: list.context, name: list.context })
+      listContainer.appendChild(taskList)
+
+      list.projects.forEach(project => {
+        const taskCategory = TaskCategory.create({ color: project.color, name: project.name })
+        taskList.addCategory(taskCategory)
+
+        project.tasks.forEach(task => {
+          const taskItem = TaskItem.create({ done: task.done, name: task.name })
+          taskCategory.addTask(taskItem)
+        })
+      })
+
+      addListLink(list.context)
+    })
+
+    return state
+  }
+}
+
 function serializeString(str) {
   if (!str)
     return ''

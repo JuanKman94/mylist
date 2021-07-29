@@ -20,6 +20,7 @@
   --fg: var(--white);
   --border-color: #CCCCCC;
   --border-color-dark: #AAAAAA;
+  --danger: #bf2e2e;
   --link-color: var(--yellow);
 
   --card-padding: 0.75rem;
@@ -310,7 +311,7 @@ task-category .delete,
 task-item .delete,
 .task-item .delete {
   align-self: baseline;
-  color: var(--red);
+  color: var(--danger);
   cursor: pointer;
   font-weight: 600;
 }
