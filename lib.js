@@ -86,9 +86,9 @@ class BackendClient {
    * Create a client to comunicate with back-end
    *
    *
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/URL/protocol
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/URL
    *
-   * @param {URL} url This will be forced to HTTPS
+   * @param {string} url Will be cast to URL
    * @param {string} user Used for authentication
    * @param {string} password Used for authentication
    */
@@ -100,7 +100,7 @@ class BackendClient {
     this.user = user
     this.password = password
 
-    this.url.protocol = 'https:' // force HTTPS
+    //this.url.protocol = 'https:' // force HTTPS
   }
 
   get shouldReport() { return !!this.url }
@@ -109,16 +109,19 @@ class BackendClient {
     if (!this.shouldReport)
       return
 
-    console.debug('BackendClient#put: url =', this.url)
-    console.debug('BackendClient#put: user =', this.user)
-    console.debug('BackendClient#put: password =', this.password)
-    console.debug('BackendClient#put: authorization =', this._authHeader())
-    console.debug('BackendClient#put: payload =', payload)
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
 
-    return fetch(this.url, { method: 'put', payload: payload })
+    return fetch(this.url, options)
       .then(resp => {
         console.info('Successfully sent to back-end.', resp)
-        return resp.data
+        return resp.json()
       })
       .catch(err => {
         console.error('Back-end storage failed.', err)
