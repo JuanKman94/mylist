@@ -110,12 +110,13 @@ class BackendClient {
       return
 
     const options = {
-      method: 'PUT',
+      method: 'post',
       body: JSON.stringify(payload),
       mode: 'cors',
-      headers: {
+      headers: new Headers({
         'Content-Type': 'application/json',
-      },
+        'Authorization': `Basic ${this._authHeader()}`,
+      }),
     }
 
     return fetch(this.url, options)
