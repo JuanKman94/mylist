@@ -12,6 +12,7 @@
  */
 
 window.addEventListener('DOMContentLoaded', init)
+window.APP_NAME = 'MyList'
 window.DEBUG_MODE = false
 window.SORTABLE_INSTANCES = []
 window.STORAGE_NAME = 'todoState'
@@ -116,6 +117,11 @@ function init(ev) {
     if (listName)
       addListLink(listName)
   })
+  document.querySelector('#export_json')?
+    .addEventListener(
+      'click',
+      ev => downloadUsingBrowser(`${APP_NAME}.json`, JSON.stringify(StateManager.readState()))
+    )
 
   StateManager.loadState()
   setupSortable()
