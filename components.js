@@ -85,6 +85,10 @@ class TaskItem extends HTMLElement {
   get label() { return this.querySelector('.task-item--name') }
 
   get name() { return this.getAttribute('name') }
+  set name(newName) {
+    this.label.textContent = newName
+    this.setAttribute('name', newName)
+  }
 
   get deleteButton() { return this.querySelector('.delete') }
 

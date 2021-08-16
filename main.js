@@ -54,6 +54,9 @@ function setupSortable() {
 }
 
 function addListLink(listName) {
+  if (document.querySelector(`a[href="#${listName}"]`))
+    return
+
   const li = document.createElement('li')
   const a = document.createElement('a')
 
@@ -117,15 +120,34 @@ function init(ev) {
     if (listName)
       addListLink(listName)
   })
-  document.querySelector('#export_json')?
-    .addEventListener(
-      'click',
-      ev => downloadUsingBrowser(`${APP_NAME}.json`, JSON.stringify(StateManager.readState()))
-    )
+  document.querySelector('#export_json')?.addEventListener(
+    'click',
+    ev => downloadUsingBrowser(`${APP_NAME}.json`, JSON.stringify(StateManager.readState()))
+  )
+  document.querySelector('#import_json')?.addEventListener('change', importJson)
 
   StateManager.loadState()
   setupSortable()
   setupConfigFields()
+}
+
+function importJson(importEv) {
+  if (importEv.target.files.length === 0)
+    return
+
+  const reader = new FileReader()
+
+  reader.addEventListener('load', ev => {
+    const data = JSON.parse(ev.target.result)
+    const currentState = StateManager.readState()
+    const newState = Object.assign(currentState, data)
+
+    console.debug('importJson: newState =', newState)
+    StateManager.persistState(newState)
+    StateManager.loadState()
+  })
+
+  reader.readAsBinaryString(importEv.target.files.item(0))
 }
 
 function setupDebugControls() {

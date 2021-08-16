@@ -240,16 +240,30 @@ class StateManager {
     const listContainer = document.getElementById('lists')
 
     state.lists.forEach(list => {
-      const taskList = TaskList.create({ id: list.context, name: list.context })
-      listContainer.appendChild(taskList)
+      let taskList = document.querySelector(`.task-list[name="${list.context}"]`)
+
+      if (!taskList) {
+        taskList = TaskList.create({ id: list.context, name: list.context })
+        listContainer.appendChild(taskList)
+      }
 
       list.projects.forEach(project => {
-        const taskCategory = TaskCategory.create({ color: project.color, name: project.name })
-        taskList.addCategory(taskCategory)
+        let taskCategory = document.querySelector(`.task-category[name="${project.name}"]`)
+
+        if (!taskCategory) {
+          taskCategory = TaskCategory.create({ color: project.color, name: project.name })
+          taskList.addCategory(taskCategory)
+        }
 
         project.tasks.forEach(task => {
-          const taskItem = TaskItem.create({ done: task.done, name: task.name })
-          taskCategory.addTask(taskItem)
+          let taskItem = document.querySelector(`.task-item[name="${task.name}"]`)
+
+          if (!taskItem) {
+            taskItem = TaskItem.create({ done: task.done, name: task.name })
+            taskCategory.addTask(taskItem)
+          }
+
+          taskItem.done = task.done
         })
       })
 
