@@ -73,7 +73,7 @@
 body {
   background: var(--bg);
   color: var(--fg);
-  font: normal 16px/20px 'xkcd', sans-serif;
+  font: normal 16px/20px sans-serif;
   margin: 2rem auto;
   max-width: 80vw;
 }
@@ -176,6 +176,8 @@ input[type="datetime-local"] {
   width: 100%;
 }
 
+.xkcd { font-family: 'xkcd'; }
+
 .text-left { text-align: left; }
 .text-center { text-align: center; }
 .text-right { text-align: right; }
@@ -198,6 +200,8 @@ input[type="datetime-local"] {
 .justify-start {  justify-content: start; }
 .flex-grow-1 { flex-grow: 1; }
 .flex-wrap { flex-wrap: wrap; }
+.align-baseline { align-items: center; }
+.align-center { align-items: baseline; }
 
 .hidden { display: none; }
 .sr-only {

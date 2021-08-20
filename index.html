@@ -22,11 +22,17 @@
   <meta name="theme-color" content="#353535">
 </head>
 <body>
-  <header>
-    <h1>mylist</h1>
+  <header class="flex justify-start align-baseline xkcd">
+    <img
+      class="inline-block"
+      style="max-height: 4rem;"
+      src="assets/images/check.svg"
+      alt="check mark logo"
+    />
+    <div class="title larger">mylist</div>
   </header>
 
-  <nav>
+  <nav class="xkcd">
     <ul class="flex flex-wrap justify-between">
       <li>
         <a href="#" class="new-list">
@@ -38,7 +44,7 @@
     </ul>
   </nav>
 
-  <section id="lists">
+  <section id="lists" class="xkcd">
   </section>
 
   <section id="about">
@@ -72,14 +78,18 @@
       </div>
     </details>
 
-    <details>
+    <details open>
       <summary class="h3 my-4">FAQ</summary>
       <dl>
         <dt>Where is my data stored?</dt>
         <dd>By default it is stored only in the web browser's local storage.</dd>
 
         <dt>Can I share my lists?</dt>
-        <dd>Not yet.</dd>
+        <dd>
+          Yes, you can export the JSON model &amp; share it with someone else to
+          import. You can also setup a back-end and share the settings with someone
+          else to fetch your lists.
+        </dd>
 
         <dt>I need to scroll too long to see my lists, can you do something about it?</dt>
         <dd>If you're done with the task, delete it.</dd>
