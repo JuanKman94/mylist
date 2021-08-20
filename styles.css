@@ -73,7 +73,7 @@
 body {
   background: var(--bg);
   color: var(--fg);
-  font: normal 16px/20px sans-serif;
+  font: normal 16px/20px 'xkcd', sans-serif;
   margin: 2rem auto;
   max-width: 80vw;
 }
@@ -187,6 +187,8 @@ input[type="datetime-local"] {
 .smaller { font-size: smaller !important; }
 .large, .big { font-size: large !important; }
 .larger, .bigger { font-size: larger !important; }
+
+.italic { font-style: italic; }
 
 .flex { display: flex; }
 .justify-around {  justify-content: space-around; }
@@ -422,3 +424,14 @@ input#import_json {
 
 /***** width *****/
 .max-w-10r { max-width: 10rem; }
+
+.block { display: block; }
+.inline-block { display: inline-block; }
+.white-space-none { white-space: none; }
+
+@font-face {
+  font-family: 'xkcd';
+  src: url('https://www.geckox.mx/assets/fonts/xkcd.otf');
+  font-weight: normal;
+  font-style: normal;
+}
