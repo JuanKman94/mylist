@@ -60,15 +60,15 @@
 .color-5  { background-color: var(--blue); --feat-color: var(--blue); }
 .color-6  { background-color: var(--magenta); --feat-color: var(--magenta); }
 .color-7  { background-color: var(--cyan); --feat-color: var(--cyan); }
-.color-8  { background-color: var(--white); --feat-color: var(--white); }
+.color-8  { background-color: var(--white); color: var(--black); --feat-color: var(--white); }
 .color-9  { background-color: var(--black-1); --feat-color: var(--black-1); }
-.color-10 { background-color: var(--red-1); --feat-color: var(--red-1); }
-.color-11 { background-color: var(--green-1); --feat-color: var(--green-1); }
+.color-10 { background-color: var(--red-1); color: var(--black); --feat-color: var(--red-1); }
+.color-11 { background-color: var(--green-1); color: var(--black); --feat-color: var(--green-1); }
 .color-12 { background-color: var(--yellow-1); color: var(--black); --feat-color: var(--yellow-1); }
 .color-13 { background-color: var(--blue-1); --feat-color: var(--blue-1); }
 .color-14 { background-color: var(--magenta-1); --feat-color: var(--magenta-1); }
 .color-15 { background-color: var(--cyan-1); --feat-color: var(--cyan-1); }
-.color-16 { background-color: var(--white-1); --feat-color: var(--white-1); }
+.color-16 { background-color: var(--white-1); color: var(--black); --feat-color: var(--white-1); }
 
 body {
   background: var(--bg);
@@ -303,6 +303,7 @@ task-item .delete,
 .icon {
   margin: 0;
   padding: 0;
+  font-size: 1.5em;
 }
 
 .task-category-form .text-field,
