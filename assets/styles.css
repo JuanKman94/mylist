@@ -431,7 +431,7 @@ input#import_json {
 
 @font-face {
   font-family: 'xkcd';
-  src: url('https://www.geckox.mx/assets/fonts/xkcd.otf');
+  src: url('fonts/xkcd.otf');
   font-weight: normal;
   font-style: normal;
 }

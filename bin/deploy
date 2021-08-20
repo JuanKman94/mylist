@@ -1,0 +1,29 @@
+#!/bin/sh
+# Get a list of files by running:
+#
+# $ ls *.{html,ico,png,xml,svg,webmanifest} >> bin/deploy
+
+if [ -z "$DEPLOY_HOST" -o -z "$DEPLOY_PATH" ]; then
+    echo 1>&2 "ERROR: deploy host or path not set"
+    exit 1
+fi
+
+scp -r \
+    android-chrome-192x192.png \
+    android-chrome-512x512.png \
+    apple-touch-icon.png \
+    assets/ \
+    browserconfig.xml \
+    favicon-16x16.png \
+    favicon-32x32.png \
+    favicon.ico \
+    index.html \
+    mstile-144x144.png \
+    mstile-150x150.png \
+    mstile-310x150.png \
+    mstile-310x310.png \
+    mstile-70x70.png \
+    safari-pinned-tab.svg \
+    site.webmanifest \
+    styles.css \
+    $DEPLOY_HOST:"$DEPLOY_PATH"
