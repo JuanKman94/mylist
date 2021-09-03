@@ -35,7 +35,7 @@ class TaskControl extends HTMLElement {
   get taskCategory() { return Sortable.utils.closest(this, `.${TaskCategory.TAG}`) }
 
   setup() {
-    this.form.addEventListener('submit', this._submitHandler.bind(this))
+    this.on(this.form, 'submit', this._submitHandler.bind(this))
   }
 
   createTask(task) {

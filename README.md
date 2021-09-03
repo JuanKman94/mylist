@@ -4,12 +4,16 @@ Privacy-focused, [todotxt] compatible, categorized TODO lists, powered with [Sor
 
 ## To Do
 
-* [ ] add about/questions section
-* [ ] add icon
-* [ ] add [service worker/a2hs]
+* [x] add about/questions section
+* [x] add [Logo icon]
+* [x] add [service worker/a2hs]
 * [ ] add export controls: JSON & todotxt
-* [ ] add controls to specify a back-end
-* [ ] come up with a snapshot payload for back-end
+* [x] add controls to specify a back-end
+* [x] come up with a snapshot payload for back-end
+* [x] bottom nav
+  * [List icon]
+  * [Info icon]
+  * [Loop icon]
 
 ## References
 
@@ -17,7 +21,7 @@ Privacy-focused, [todotxt] compatible, categorized TODO lists, powered with [Sor
 or Vue, HTML Custom Elements are used
 * [Javascript Mixins]
 * [JS Class Getters]
-* [Logo] candidate
+* Icons bundled with [svgeez]
 
 [todotxt]: https://todotxt.org/
 [SortableJS]: https://github.com/SortableJS/Sortable
@@ -26,3 +30,7 @@ or Vue, HTML Custom Elements are used
 [JS Class Getters]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
 [Logo]: https://search.creativecommons.org/photos/cb8db7d0-d6f8-4477-8450-2fd9ed4f8dd9
 [service worker/a2hs]: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Add_to_home_screen
+[svgeez]: https://github.com/jgarber623/svgeez
+[List icon]: https://search.creativecommons.org/photos/c51671ce-9cb3-4b15-bb47-529c3cb77875
+[Info icon]: https://search.creativecommons.org/photos/4e947e1f-86de-404a-a96d-274b4be47aa9
+[Loop icon]: https://search.creativecommons.org/photos/4afbff60-da05-4250-8c3c-ec69ae30f7e9

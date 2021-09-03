@@ -132,10 +132,10 @@ class BackendClient {
     //this.url.protocol = 'https:' // force HTTPS
   }
 
-  get shouldReport() { return !!this.url }
+  get hasUrl() { return !!this.url }
 
   put(payload) {
-    if (!this.shouldReport)
+    if (!this.hasUrl)
       return
 
     const options = {
@@ -155,14 +155,19 @@ class BackendClient {
       })
       .catch(err => {
         console.error('Back-end storage failed.', err)
+        throw err
       })
   }
 
   get() {
+    if (!this.hasUrl)
+      return
+
     return fetch(this.url)
-      .then(resp => resp.data)
+      .then(resp => resp.json())
       .catch(err => {
         console.error('Could not fetch from back-end.', err)
+        throw err
       })
   }
 
@@ -271,6 +276,19 @@ class StateManager {
     })
 
     return state
+  }
+
+  /**
+   * Update state without deleting entries.
+   *
+   * @return {object} Lists state
+   */
+  static mergeState(data) {
+    const currentState = StateManager.readState()
+    const newState = Object.assign(currentState, data)
+
+    StateManager.persistState(newState)
+    return StateManager.loadState()
   }
 }
 

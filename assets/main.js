@@ -96,6 +96,35 @@ function postToBackend(newState) {
       localStorage.getItem('backend_passphrase')
     )
     .put(newState)
+    .then(() => logMessage('OK'))
+    .catch(err => logMessage(err, 'error'))
+}
+
+function syncBackend() {
+  const client = new BackendClient(
+    localStorage.getItem('backend_url'),
+    localStorage.getItem('backend_username'),
+    localStorage.getItem('backend_passphrase')
+  )
+
+  client
+    .get()
+    .then(resp => {
+      const data = JSON.parse(resp.data)
+      return StateManager.mergeState(data)
+    })
+    .then(state => client.put(state))
+    .then(() => logMessage('OK'))
+    .catch(err => logMessage(err, 'error'))
+}
+
+function logMessage(msg, cssClass) {
+  const li = document.createElement('li')
+
+  li.className = cssClass
+  li.textContent = msg
+
+  document.querySelector('#log_messages')?.prepend(li)
 }
 
 function init(ev) {
@@ -120,6 +149,7 @@ function init(ev) {
     if (listName)
       addListLink(listName)
   })
+  document.querySelector('#sync_btn')?.addEventListener('click', syncBackend)
   document.querySelector('#export_json')?.addEventListener(
     'click',
     ev => downloadUsingBrowser(`${APP_NAME}.json`, JSON.stringify(StateManager.readState()))
@@ -139,12 +169,7 @@ function importJson(importEv) {
 
   reader.addEventListener('load', ev => {
     const data = JSON.parse(ev.target.result)
-    const currentState = StateManager.readState()
-    const newState = Object.assign(currentState, data)
-
-    console.debug('importJson: newState =', newState)
-    StateManager.persistState(newState)
-    StateManager.loadState()
+    StateManager.mergeState(data)
   })
 
   reader.readAsBinaryString(importEv.target.files.item(0))
