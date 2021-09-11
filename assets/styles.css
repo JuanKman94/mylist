@@ -17,7 +17,9 @@
   --white-1: #e6ffff;
 
   --bg: var(--black);
+  --bg-dark: var(--black-1);
   --fg: var(--white);
+  --fg-dark: var(--white-1);
   --border-color: #CCCCCC;
   --border-color-dark: #AAAAAA;
 
@@ -32,7 +34,9 @@
 @media (prefers-color-scheme: light) {
   :root {
     --bg: var(--white);
+    --bg-dark: var(--white-1);
     --fg: var(--black);
+    --fg-dark: var(--black-1);
     --border-color: #CCCCCC;
     --border-color-dark: #AAAAAA;
 
@@ -41,20 +45,20 @@
   }
 }
 
-.color-1  { background-color: var(--black); --feat-color: var(--black); }
-.color-2  { background-color: var(--red); --feat-color: var(--red); }
-.color-3  { background-color: var(--green); --feat-color: var(--green); }
+.color-1  { background-color: var(--black); color: var(--white); --feat-color: var(--black); }
+.color-2  { background-color: var(--red); color: var(--white); --feat-color: var(--red); }
+.color-3  { background-color: var(--green); color: var(--white); --feat-color: var(--green); }
 .color-4  { background-color: var(--yellow); color: var(--black-1); ; --feat-color: var(--yellow); }
-.color-5  { background-color: var(--blue); --feat-color: var(--blue); }
-.color-6  { background-color: var(--magenta); --feat-color: var(--magenta); }
-.color-7  { background-color: var(--cyan); --feat-color: var(--cyan); }
+.color-5  { background-color: var(--blue); color: var(--white); --feat-color: var(--blue); }
+.color-6  { background-color: var(--magenta); color: var(--white); --feat-color: var(--magenta); }
+.color-7  { background-color: var(--cyan); color: var(--white); --feat-color: var(--cyan); }
 .color-8  { background-color: var(--white); color: var(--black); --feat-color: var(--white); }
-.color-9  { background-color: var(--black-1); --feat-color: var(--black-1); }
+.color-9  { background-color: var(--black-1); color: var(--white-1); --feat-color: var(--black-1); }
 .color-10 { background-color: var(--red-1); color: var(--black); --feat-color: var(--red-1); }
-.color-11 { background-color: var(--green-1); color: var(--black); --feat-color: var(--green-1); }
+.color-11 { background-color: var(--green-1); color: var(--black-2); --feat-color: var(--green-1); }
 .color-12 { background-color: var(--yellow-1); color: var(--black); --feat-color: var(--yellow-1); }
-.color-13 { background-color: var(--blue-1); --feat-color: var(--blue-1); }
-.color-14 { background-color: var(--magenta-1); --feat-color: var(--magenta-1); }
+.color-13 { background-color: var(--blue-1); color: var(--white); --feat-color: var(--blue-1); }
+.color-14 { background-color: var(--magenta-1); color: var(--white); --feat-color: var(--magenta-1); }
 .color-15 { background-color: var(--cyan-1); --feat-color: var(--cyan-1); }
 .color-16 { background-color: var(--white-1); color: var(--black); --feat-color: var(--white-1); }
 
@@ -156,11 +160,11 @@ task-category-form,
   filter: drop-shadow(0.25rem 0.25rem 1rem var(--bg-navbar));
 }
 .bottomnav a {
-  color: var(--white);
+  color: var(--fg);
   text-decoration: none;
 }
 .bottomnav svg {
-  fill: var(--white-1);
+  fill: var(--fg-dark);
   background: transparent;
   max-height: 1.5rem;
   max-width: 1.5rem;

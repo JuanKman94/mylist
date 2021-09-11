@@ -97,7 +97,7 @@ function postToBackend(newState) {
     )
     .put(newState)
     .then(() => logMessage('OK'))
-    .catch(err => logMessage(err, 'error'))
+    .catch(err => logMessage(err, 'error', err.stack))
 }
 
 function syncBackend() {
@@ -115,14 +115,24 @@ function syncBackend() {
     })
     .then(state => client.put(state))
     .then(() => logMessage('OK'))
-    .catch(err => logMessage(err, 'error'))
+    .catch(err => logMessage(err, 'error', err.stack))
 }
 
-function logMessage(msg, cssClass) {
+function logMessage(title, cssClass, message) {
+  const details = document.createElement('details')
   const li = document.createElement('li')
+  const summary = document.createElement('summary')
 
   li.className = cssClass
-  li.textContent = msg
+  summary.textContent = title
+  details.append(summary)
+  li.append(details)
+
+  if (message) {
+    const p = document.createElement('p')
+    p.textContent = message
+    details.append(p)
+  }
 
   document.querySelector('#log_messages')?.prepend(li)
 }

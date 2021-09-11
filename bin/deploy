@@ -3,6 +3,8 @@
 #
 # $ ls *.{html,ico,png,xml,svg,webmanifest} >> bin/deploy
 
+[[ -f .env ]] && source .env
+
 if [ -z "$DEPLOY_HOST" -o -z "$DEPLOY_PATH" ]; then
     echo 1>&2 "ERROR: deploy host or path not set"
     exit 1
@@ -25,5 +27,4 @@ scp -r \
     mstile-70x70.png \
     safari-pinned-tab.svg \
     site.webmanifest \
-    styles.css \
     $DEPLOY_HOST:"$DEPLOY_PATH"

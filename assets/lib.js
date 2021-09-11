@@ -139,13 +139,13 @@ class BackendClient {
       return
 
     const options = {
-      method: 'post',
       body: JSON.stringify(payload),
-      mode: 'cors',
       headers: new Headers({
         'Content-Type': 'application/json',
         'Authorization': `Basic ${this._authHeader()}`,
       }),
+      method: 'post',
+      mode: 'cors',
     }
 
     return fetch(this.url, options)
@@ -163,7 +163,16 @@ class BackendClient {
     if (!this.hasUrl)
       return
 
-    return fetch(this.url)
+    const options = {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${this._authHeader()}`,
+      }),
+      method: 'get',
+      mode: 'cors',
+    }
+
+    return fetch(this.url, options)
       .then(resp => resp.json())
       .catch(err => {
         console.error('Could not fetch from back-end.', err)
