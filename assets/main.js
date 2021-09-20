@@ -28,6 +28,11 @@ window.DEFAULT_SORTABLE_CONFIG = {
   },
 }
 window.NEW_LIST_PROMPT = 'What is this list about?'
+window.backendClient = new BackendClient(
+  localStorage.getItem('backend_url'),
+  localStorage.getItem('backend_username'),
+  localStorage.getItem('backend_passphrase')
+)
 
 function cleanUpSortable() {
   let sortable = null
@@ -77,43 +82,19 @@ function removeListLink(ev) {
   }
 }
 
-function setupConfigFields() {
-  document.querySelectorAll('.config-field')?.forEach(el => {
-    if (!el.name) return
-
-    el.value = localStorage.getItem(el.name)
-
-    el.addEventListener('input', ev => {
-      localStorage.setItem(ev.target.name, ev.target.value)
-    })
-  })
-}
-
 function postToBackend(newState) {
-  new BackendClient(
-      localStorage.getItem('backend_url'),
-      localStorage.getItem('backend_username'),
-      localStorage.getItem('backend_passphrase')
-    )
-    .put(newState)
+  window.backendClient?.put(newState)
     .then(() => logMessage('OK'))
     .catch(err => logMessage(err, 'error', err.stack))
 }
 
 function syncBackend() {
-  const client = new BackendClient(
-    localStorage.getItem('backend_url'),
-    localStorage.getItem('backend_username'),
-    localStorage.getItem('backend_passphrase')
-  )
-
-  client
-    .get()
+  window.backendClient?.get()
     .then(resp => {
       const data = JSON.parse(resp.data)
       return StateManager.mergeState(data)
     })
-    .then(state => client.put(state))
+    .then(state => window.backendClient.put(state))
     .then(() => logMessage('OK'))
     .catch(err => logMessage(err, 'error', err.stack))
 }
@@ -124,12 +105,14 @@ function logMessage(title, cssClass, message) {
   const summary = document.createElement('summary')
 
   li.className = cssClass
+  summary.classList.add('bold')
   summary.textContent = title
   details.append(summary)
   li.append(details)
 
   if (message) {
     const p = document.createElement('p')
+    p.classList.add('pre-line')
     p.textContent = message
     details.append(p)
   }
@@ -153,6 +136,10 @@ function init(ev) {
   document.addEventListener(TASK_EVENTS.CHANGE, stateUpdated)
   document.addEventListener(TASK_EVENTS.DELETE, stateUpdated)
 
+  document.addEventListener(BackendSettings.BACKEND_CHANGE_EVENT, (ev) => {
+    window.backendClient = new BackendClient(ev.detail.url, ev.detail.username, ev.detail.passphrase)
+  })
+
   document.querySelector('.new-list')?.addEventListener('click', ev => {
     const listName = TaskList.addList(document.getElementById('lists'))
 
@@ -168,7 +155,6 @@ function init(ev) {
 
   StateManager.loadState()
   setupSortable()
-  setupConfigFields()
 }
 
 function importJson(importEv) {

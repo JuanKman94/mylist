@@ -312,8 +312,77 @@ class ColorPicker extends HTMLElement {
   }
 }
 
+class BackendSettings extends HTMLElement {
+  static EXTENDED_ELEMENT = 'article'
+  static TAG = 'backend-settings'
+  static TEMPLATE_ID = 'backendsettings-template'
+  static BACKEND_CHANGE_EVENT = 'backend:change'
+
+  get form() { return this.querySelector('form') }
+
+  get url() { return this.querySelector('form input[name=backend_url]') }
+  set url(newVal) { this.querySelector('form input[name=backend_url]').value = newVal }
+
+  get username() { return this.querySelector('form input[name=backend_username]') }
+  set username(newVal) { this.querySelector('form input[name=backend_username]').value = newVal }
+
+  get passphrase() { return this.querySelector('form textarea[name=backend_passphrase]') }
+  set passphrase(newVal) { this.querySelector('form textarea[name=backend_passphrase]').value = newVal }
+
+  /**
+   * Setup controls reactivity:
+   *
+   * * When component is bootstrapped, load values from LocalStorage
+   * * When a config field changes, dispatch config event.
+   * * When form submits, do nothing
+   *
+   * NOTE: dispatching the config event from here does not work during page
+   * load 'cuz the custom event is not triggered by an user event.
+   */
+  setup() {
+    this.setupAutoStorage()
+    this.on(this.url, 'input', this._inputHandler.bind(this))
+    this.on(this.username, 'input', this._inputHandler.bind(this))
+    this.on(this.passphrase, 'input', this._inputHandler.bind(this))
+    this.on(this.form, 'submit', this._submitHandler.bind(this))
+  }
+
+  setupAutoStorage() {
+    this.form.querySelectorAll('.config-field')?.forEach(el => {
+      if (!el.name) return
+
+      el.value = localStorage.getItem(el.name)
+
+      el.addEventListener('input', ev => {
+        localStorage.setItem(ev.target.name, ev.target.value)
+      })
+    })
+  }
+
+  emitConfig() {
+    const payload = {
+      url: this.url.value,
+      username: this.username.value,
+      passphrase: this.passphrase.value,
+    }
+    const newEv = new CustomEvent(this.constructor.BACKEND_CHANGE_EVENT, { detail: payload })
+
+    document.dispatchEvent(newEv)
+  }
+
+  _inputHandler(ev) {
+    this.emitConfig()
+  }
+
+  _submitHandler(ev) {
+    ev.preventDefault()
+    ev.stopPropagation()
+  }
+}
+
 function defineComponents() {
   const components = [
+    BackendSettings,
     ColorPicker,
     TaskCategoryForm,
     TaskCategory,

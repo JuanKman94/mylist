@@ -225,6 +225,7 @@ input[type="datetime-local"] {
 .large, .big { font-size: large !important; }
 .larger, .bigger { font-size: larger !important; }
 
+.bold { font-weight: bold; }
 .italic { font-style: italic; }
 
 .flex { display: flex; }
@@ -238,6 +239,8 @@ input[type="datetime-local"] {
 .flex-wrap { flex-wrap: wrap; }
 .align-baseline { align-items: baseline; }
 .align-center { align-items: center; }
+
+.pre-line { white-space: pre-line; }
 
 .hidden { display: none; }
 .sr-only {

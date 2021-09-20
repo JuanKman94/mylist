@@ -136,7 +136,7 @@ class BackendClient {
 
   put(payload) {
     if (!this.hasUrl)
-      return
+      return Promise.reject(new Error(`Invalid url: '${this.url}'`))
 
     const options = {
       body: JSON.stringify(payload),
