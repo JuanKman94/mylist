@@ -115,13 +115,15 @@ task-category-form,
   padding: 0;
   max-width: 95vw;
   max-height: 200px;
+  box-shadow: inset 0 0 10px var(--border-color, #aaaaaa);
+  border-radius: 8px;
 }
 
 #log_messages li {
   background-color: var(--message-bg, inherit);
   color: var(--message-fg, inherit);
   padding: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin: 0.75rem 0.5rem;
   border-radius: 8px;
   border: 1px solid var(--message-border, #aaaaaa);
 }
@@ -171,6 +173,7 @@ task-category-form,
 }
 body > footer {
   padding-bottom: 3rem; /* this should be equal to bottom nav's height */
+  border-top: 1px solid var(--border-color-dark);
 }
 
 input:focus,

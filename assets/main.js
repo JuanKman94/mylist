@@ -104,11 +104,13 @@ function logMessage(title, cssClass, message) {
   const li = document.createElement('li')
   const summary = document.createElement('summary')
 
-  li.className = cssClass
   summary.classList.add('bold')
   summary.textContent = title
   details.append(summary)
   li.append(details)
+
+  if (cssClass)
+    li.className = cssClass
 
   if (message) {
     const p = document.createElement('p')
@@ -154,6 +156,7 @@ function init(ev) {
   document.querySelector('#import_json')?.addEventListener('change', importJson)
 
   StateManager.loadState()
+  window.backendClient.get()
   setupSortable()
 }
 
