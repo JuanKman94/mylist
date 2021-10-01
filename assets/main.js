@@ -84,8 +84,8 @@ function removeListLink(ev) {
 
 function postToBackend(newState) {
   window.backendClient?.put(newState)
-    .then(() => logMessage('OK'))
-    .catch(err => logMessage(err, 'error', err.stack))
+    .then(() => logMessage({ title: 'OK', timeout: 3000 }))
+    .catch(err => logMessage({ title: err, type: 'error', message: err.stack }))
 }
 
 function syncBackend() {
@@ -95,31 +95,12 @@ function syncBackend() {
       return StateManager.mergeState(data)
     })
     .then(state => window.backendClient.put(state))
-    .then(() => logMessage('OK'))
-    .catch(err => logMessage(err, 'error', err.stack))
+    .then(() => logMessage({ title: 'OK', timeout: 3000 }))
+    .catch(err => logMessage({ title: err, type: 'error', message: err.stack }))
 }
 
-function logMessage(title, cssClass, message) {
-  const details = document.createElement('details')
-  const li = document.createElement('li')
-  const summary = document.createElement('summary')
-
-  summary.classList.add('bold')
-  summary.textContent = title
-  details.append(summary)
-  li.append(details)
-
-  if (cssClass)
-    li.className = cssClass
-
-  if (message) {
-    const p = document.createElement('p')
-    p.classList.add('pre-line')
-    p.textContent = message
-    details.append(p)
-  }
-
-  document.querySelector('#log_messages')?.prepend(li)
+function logMessage(attrs) {
+  document.querySelector('#log_messages')?.prepend(LogMessage.create(attrs))
 }
 
 function init(ev) {
@@ -180,6 +161,6 @@ function setupDebugControls() {
     domLog(`state = ${JSON.stringify(StateManager.readState(), null, 2)}`)
   })
   document.querySelector('#reset_log')?.addEventListener('click', (ev) => {
-    document.querySelector('#log_messages').innerHTML = ''
+    document.querySelector('#debug_messages').innerHTML = ''
   })
 }

@@ -2,6 +2,16 @@
 
 // Object.assign(ComponentClass, CustomElementStaticMixin)
 const CustomElementStaticMixin = {
+  /**
+   * Create custom element with provided attributes
+   *
+   * Example:
+   *
+   *   MyComponent.create({message: "hello, world"})
+   *   => <my-component message="hello, world" />
+   *
+   * @return {object}
+   */
   create(attrs = {}) {
     const elem = document.createElement(this.TAG)
 
@@ -190,6 +200,9 @@ class StateManager {
   constructor() {
   }
 
+  /**
+   * Read To Do lists state from the DOM.
+   */
   static readState() {
     const lists = document.querySelectorAll(`.${TaskList.TAG}`)
     const state = {
@@ -318,8 +331,8 @@ function saneDateStr() {
 
 function domLog(msg) {
   msg = `[${saneDateStr()}] ${msg}`
+  target = document.querySelector('#debug_messages')
 
   //console.debug(msg)
-  document.querySelector('#log_messages')
-    .innerHTML = `<li><pre>${msg}</pre></li>` + document.querySelector('#log_messages').innerHTML
+  target.innerHTML = `<li><pre>${msg}</pre></li>` + target.innerHTML
 }

@@ -74,9 +74,7 @@
   <section id="lists" class="xkcd container">
   </section>
 
-  <aside class="container">
-    <ul id="log_messages">
-    </ul>
+  <aside id="log_messages" class="container">
   </aside>
 
   <section id="settings" class="container">
@@ -321,6 +319,13 @@
 
     <div class="color-picker--options">
     </div>
+  </template>
+
+  <template id="logmessage-template">
+    <details>
+      <summary class="bold title"></summary>
+      <p class="pre-line message"></p>
+    </details>
   </template>
 
   <!--

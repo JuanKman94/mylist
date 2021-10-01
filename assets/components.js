@@ -380,10 +380,58 @@ class BackendSettings extends HTMLElement {
   }
 }
 
+/**
+ * Create a detailed LogMessage element.
+ *
+ * @param {string} title Message title, set to a `<summary>` element
+ * @param {string} type Assigned as a CSS class to the LogMessage element
+ * @param {string} message Message body, set to a `<p>` element
+ * @param {number} timeout Time in milliseconds after which the component is
+ *   automatically removed. If not specified, element is not autoremoved.
+ */
+class LogMessage extends HTMLElement {
+  static EXTENDED_ELEMENT = 'details'
+  static TAG = 'log-message'
+  static TEMPLATE_ID = 'logmessage-template'
+
+  get message() { return this.attributes.message }
+  get messageTag() { return this.querySelector('.message') }
+
+  get timeout() { return this.attributes.timeout }
+
+  get title() { return this.attributes.title }
+  get titleTag() { return this.querySelector('.title') }
+
+  get type() { return this.attributes.type }
+
+  get hasMessage() { return this.message?.length > 0 }
+  get hasTimeout() { return !!this.timeout }
+  get hasType() { return !!this.type }
+
+  setup() {
+    this.titleTag.textContent = this.title.value
+
+    if (this.hasType) {
+      this.classList.add(this.type.value)
+    }
+
+    if (this.hasMessage) {
+      this.messageTag.textContent = this.message.value
+    } else {
+      this.messageTag.parentElement.removeChild(this.messageTag)
+    }
+
+    if (this.hasTimeout) {
+      window.setTimeout(() => this.remove(), this.timeout.value)
+    }
+  }
+}
+
 function defineComponents() {
   const components = [
     BackendSettings,
     ColorPicker,
+    LogMessage,
     TaskCategoryForm,
     TaskCategory,
     TaskControl,
