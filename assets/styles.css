@@ -33,7 +33,7 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-    --bg: var(--white);
+    --bg: #fffae5;
     --bg-dark: var(--white-1);
     --fg: var(--black);
     --fg-dark: var(--black-1);
@@ -41,7 +41,7 @@
     --border-color-dark: #AAAAAA;
 
     --link-color: var(--blue);
-    --bg-navbar: #d7d7d7;
+    --bg-navbar: #fff1b8;
   }
 }
 
