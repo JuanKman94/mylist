@@ -33,6 +33,7 @@ window.backendClient = new BackendClient(
   localStorage.getItem('backend_username'),
   localStorage.getItem('backend_passphrase')
 )
+window.AUTO_REMOVE_TIMEOUT = 6500
 
 function cleanUpSortable() {
   let sortable = null
@@ -84,7 +85,7 @@ function removeListLink(ev) {
 
 function postToBackend(newState) {
   window.backendClient?.put(newState)
-    .then(() => logMessage({ title: 'OK', timeout: 3000 }))
+    .then(() => logMessage({ title: 'OK', timeout: AUTO_REMOVE_TIMEOUT }))
     .catch(err => logMessage({ title: err, type: 'error', message: err.stack }))
 }
 
@@ -95,11 +96,20 @@ function syncBackend() {
       return StateManager.mergeState(data)
     })
     .then(state => window.backendClient.put(state))
-    .then(() => logMessage({ title: 'OK', timeout: 3000 }))
+    .then(() => logMessage({ title: 'OK', timeout: AUTO_REMOVE_TIMEOUT }))
     .catch(err => logMessage({ title: err, type: 'error', message: err.stack }))
 }
 
 function logMessage(attrs) {
+  switch (attrs.type) {
+    case 'error':
+      attrs.icon = 'X'
+      break
+    default:
+      attrs.icon = '&#10004;'
+      break
+  }
+
   document.querySelector('#log_messages')?.prepend(LogMessage.create(attrs))
 }
 

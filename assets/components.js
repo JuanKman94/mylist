@@ -394,6 +394,8 @@ class LogMessage extends HTMLElement {
   static TAG = 'log-message'
   static TEMPLATE_ID = 'logmessage-template'
 
+  get icon() { return this.attributes.icon }
+
   get message() { return this.attributes.message }
   get messageTag() { return this.querySelector('.message') }
 
@@ -404,6 +406,7 @@ class LogMessage extends HTMLElement {
 
   get type() { return this.attributes.type }
 
+  get hasIcon() { return !!this.icon }
   get hasMessage() { return this.message?.length > 0 }
   get hasTimeout() { return !!this.timeout }
   get hasType() { return !!this.type }
@@ -421,9 +424,24 @@ class LogMessage extends HTMLElement {
       this.messageTag.parentElement.removeChild(this.messageTag)
     }
 
+    if (this.hasIcon) {
+      this.attachIcon()
+    }
+
     if (this.hasTimeout) {
       window.setTimeout(() => this.remove(), this.timeout.value)
     }
+  }
+
+  attachIcon() {
+    let a = document.createElement('a')
+
+    a.className = 'log-message--icon no-link small xkcd rounded inline-block mr-1 px-1'
+    a.style = 'border: 2px solid var(--border-color);'
+    a.innerHTML = `${this.icon.value} `
+    a.href = '#log_messages'
+
+    this.titleTag.prepend(a)
   }
 }
 
@@ -438,7 +456,6 @@ function defineComponents() {
     TaskItem,
     TaskList,
   ]
-
 
   for (let component of components) {
     Object.assign(component, CustomElementStaticMixin)

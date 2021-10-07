@@ -26,6 +26,7 @@
   --danger: #D54F4F;
   --link-color: var(--yellow);
 
+  --bottomnav-height: 3rem;
   --bg-navbar: #404040;
 
   --card-padding: 0.75rem;
@@ -80,6 +81,12 @@ a:visited {
   color: var(--link-color, blue);
 }
 
+.no-link,
+.no-link:visited {
+  color: var(--fg);
+  text-decoration: none;
+}
+
 ul {
   padding-left: 0.5rem;
 }
@@ -128,6 +135,11 @@ task-category-form,
   border: 1px solid var(--message-border, #aaaaaa);
 }
 
+.log-message--icon {
+  background: var(--message-bg, var(--bg));
+  animation: 5s ease-in-out 0s 1 icon_arc;
+}
+
 .log-message.error {
   --message-bg: var(--danger);
   --message-fg: var(--white);
@@ -170,7 +182,7 @@ task-category-form,
   position: fixed;
   bottom: 0;
   left: 0;
-  height: 3rem;
+  height: var(--bottomnav-height);
   width: 100%;
   z-index: 10;
 
@@ -233,6 +245,8 @@ input[type="datetime-local"] {
 }
 
 .xkcd { font-family: 'xkcd'; }
+
+.rounded { border-radius: 6px; }
 
 .text-left { text-align: left; }
 .text-center { text-align: center; }
@@ -454,7 +468,36 @@ input#import_json {
   100% { transform: scale(1); }
 }
 
+@keyframes icon_arc {
+  0% {
+    position: static;
+  }
+  1% {
+    position: fixed;
+    bottom: 0;
+    right: 1rem;
+  }
+  10% {
+    position: fixed;
+    transform: translateY(calc(-1 * calc(var(--bottomnav-height) + 2rem)));
+  }
+  50% {
+    position: fixed;
+    transform: scale(0.75) translateY(calc(-1 * var(--bottomnav-height)));
+  }
+  100% {
+    position: fixed;
+    transform: scale(1) translateY(calc(-1 * var(--bottomnav-height)));
+  }
+}
+
 /***** margin *****/
+.m-0 { margin: 0 !important; }
+.m-1 { margin: 0.25rem !important; }
+.m-2 { margin: 0.5rem !important; }
+.m-3 { margin: 0.75rem !important; }
+.m-4 { margin: 1rem !important; }
+
 .my-0 { margin-top: 0 !important; margin-bottom: 0 !important; }
 .my-1 { margin-top: 0.25rem !important; margin-bottom: 0.25rem !important; }
 .my-2 { margin-top: 0.5rem !important; margin-bottom: 0.5rem !important; }
@@ -488,6 +531,12 @@ input#import_json {
 .ml-4 { margin-left: 1rem !important; }
 
 /***** padding *****/
+.p-0 { padding: 0 !important; }
+.p-1 { padding: 0.25rem !important; }
+.p-2 { padding: 0.5rem !important; }
+.p-3 { padding: 0.75rem !important; }
+.p-4 { padding: 1rem !important; }
+
 .py-0 { padding-top: 0 !important; padding-bottom: 0 !important; }
 .py-1 { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
 .py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
