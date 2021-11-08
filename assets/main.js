@@ -31,7 +31,8 @@ window.NEW_LIST_PROMPT = 'What is this list about?'
 window.backendClient = new BackendClient(
   localStorage.getItem('backend_url'),
   localStorage.getItem('backend_username'),
-  localStorage.getItem('backend_passphrase')
+  localStorage.getItem('backend_passphrase'),
+  !!localStorage.getItem('backend_enabled')
 )
 window.AUTO_REMOVE_TIMEOUT = 6500
 
@@ -85,15 +86,20 @@ function removeListLink(ev) {
 
 function postToBackend(newState) {
   window.backendClient?.put(newState)
-    .then(() => logMessage({ title: 'OK', timeout: AUTO_REMOVE_TIMEOUT }))
+    .then((resp) => {
+      if (resp)
+        logMessage({ title: 'OK', timeout: AUTO_REMOVE_TIMEOUT })
+    })
     .catch(err => logMessage({ title: err, type: 'error', message: err.stack }))
 }
 
 function syncBackend() {
   window.backendClient?.get()
     .then(resp => {
-      const data = JSON.parse(resp.data)
-      return StateManager.mergeState(data)
+      if (resp?.data) {
+        const data = JSON.parse(resp.data)
+        return StateManager.mergeState(data)
+      }
     })
     .then(state => window.backendClient.put(state))
     .then(() => logMessage({ title: 'OK', timeout: AUTO_REMOVE_TIMEOUT }))
@@ -130,7 +136,7 @@ function init(ev) {
   document.addEventListener(TASK_EVENTS.DELETE, stateUpdated)
 
   document.addEventListener(BackendSettings.BACKEND_CHANGE_EVENT, (ev) => {
-    window.backendClient = new BackendClient(ev.detail.url, ev.detail.username, ev.detail.passphrase)
+    window.backendClient = new BackendClient(ev.detail.url, ev.detail.username, ev.detail.passphrase, ev.detail.enabled)
   })
 
   document.querySelector('.new-list')?.addEventListener('click', ev => {

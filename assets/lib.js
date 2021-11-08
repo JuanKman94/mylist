@@ -130,14 +130,16 @@ class BackendClient {
    * @param {string} url Will be cast to URL
    * @param {string} user Used for authentication
    * @param {string} password Used for authentication
+   * @param {boolean} enabled If false, requests will not be dispatched
    */
-  constructor(url, user, password) {
+  constructor(url, user, password, enabled) {
     if (!url)
       return
 
     this.url = new URL(url)
     this.user = user
     this.password = password
+    this.enabled = enabled
 
     //this.url.protocol = 'https:' // force HTTPS
   }
@@ -145,6 +147,9 @@ class BackendClient {
   get hasUrl() { return !!this.url }
 
   put(payload) {
+    if (!this.enabled)
+      return Promise.resolve(null)
+
     if (!this.hasUrl)
       return Promise.reject(new Error(`Invalid url: '${this.url}'`))
 
@@ -170,6 +175,9 @@ class BackendClient {
   }
 
   get() {
+    if (!this.enabled)
+      return Promise.resolve(null)
+
     if (!this.hasUrl)
       return
 

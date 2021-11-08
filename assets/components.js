@@ -320,6 +320,9 @@ class BackendSettings extends HTMLElement {
 
   get form() { return this.querySelector('form') }
 
+  get enabled() { return this.querySelector('form input[name=backend_enabled]') }
+  set enabled(newVal) { this.querySelector('form input[name=backend_enabled]').checked = !!newVal }
+
   get url() { return this.querySelector('form input[name=backend_url]') }
   set url(newVal) { this.querySelector('form input[name=backend_url]').value = newVal }
 
@@ -344,6 +347,7 @@ class BackendSettings extends HTMLElement {
     this.on(this.url, 'input', this._inputHandler.bind(this))
     this.on(this.username, 'input', this._inputHandler.bind(this))
     this.on(this.passphrase, 'input', this._inputHandler.bind(this))
+    this.on(this.enabled, 'input', this._inputHandler.bind(this))
     this.on(this.form, 'submit', this._submitHandler.bind(this))
   }
 
@@ -352,6 +356,9 @@ class BackendSettings extends HTMLElement {
       if (!el.name) return
 
       el.value = localStorage.getItem(el.name)
+      if (el.type === 'checkbox') {
+        el.checked = !!localStorage.getItem(el.name)
+      }
 
       el.addEventListener('input', ev => {
         localStorage.setItem(ev.target.name, ev.target.value)
@@ -364,6 +371,7 @@ class BackendSettings extends HTMLElement {
       url: this.url.value,
       username: this.username.value,
       passphrase: this.passphrase.value,
+      enabled: !!this.enabled.checked,
     }
     const newEv = new CustomEvent(this.constructor.BACKEND_CHANGE_EVENT, { detail: payload })
 

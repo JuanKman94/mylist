@@ -79,6 +79,11 @@
 
   <section id="settings" class="container">
     <details>
+      <summary class="h3 my-4">Back-End config (click for details)</summary>
+      <backend-settings></backend-settings>
+    </details>
+
+    <details>
       <summary class="h3 my-4">Export (click for details)</summary>
 
       <div class="flex flex-wrap justify-around">
@@ -106,11 +111,6 @@
           </footer>
         </aside>
       </div>
-    </details>
-
-    <details>
-      <summary class="h3 my-4">Back-End config (click for details)</summary>
-      <backend-settings></backend-settings>
     </details>
   </section>
 
@@ -269,6 +269,18 @@
 
   <template id="backendsettings-template">
     <form action="#" class="new-task--form">
+      <div class="field backend-url">
+        <label for="backend_enabled">Enabled?</label>
+        <input
+          type="checkbox"
+          class="config-field"
+          name="backend_enabled"
+        />
+        <div class="hint">
+          Requests will be sent <b>only</b> if this is enabled.
+        </div>
+      </div>
+
       <div class="field backend-url">
         <label for="backend_url" hidden>URL</label>
         <input
