@@ -264,11 +264,11 @@ input[type="datetime-local"] {
 
 .flex { display: flex; }
 .flex-col { display: flex; flex-direction: column; }
-.justify-around {  justify-content: space-around; }
-.justify-between {  justify-content: space-between; }
-.justify-evenly {  justify-content: space-evenly; }
-.justify-end {  justify-content: end; }
-.justify-start {  justify-content: start; }
+.justify-around { justify-content: space-around; }
+.justify-between { justify-content: space-between; }
+.justify-evenly { justify-content: space-evenly; }
+.justify-end { justify-content: end; }
+.justify-start { justify-content: start; }
 .flex-grow-1 { flex-grow: 1; }
 .flex-wrap { flex-wrap: wrap; }
 .align-baseline { align-items: baseline; }

@@ -33,10 +33,8 @@ const CustomElementMixin = {
   },
 
   disconnectedCallback() {
-    let evt = null
-
     if (this.events?.length > 0) {
-      for (evt of this.events) {
+      for (let evt of this.events) {
         evt.target.removeEventListener(evt.name, evt.handler)
       }
     }
@@ -55,6 +53,13 @@ const CustomElementMixin = {
     }
   },
 
+  /**
+   * Add event listener to HTML element, intended to be a child of CustomElement
+   *
+   * @param {HTMLElement} target
+   * @param {string} eventName E.g., 'click'
+   * @param {Function} handler Event callback
+   */
   on(target, eventName, handler) {
     target.addEventListener(eventName, handler)
 
@@ -94,8 +99,8 @@ function b64_to_utf8( str ) {
 /**
  * Download data with the specified data using browser mechanisms.
  *
- * @param name String
- * @param data Object
+ * @param {string} name
+ * @param {object} data
  * @return void
  */
 function downloadUsingBrowser (name, data) {
@@ -204,6 +209,47 @@ class BackendClient {
   }
 }
 
+function v1ToV2(lists) {
+  const v2 = [];
+
+  lists.forEach(list => {
+    // V1
+    if (list.projects) {
+      list.projects.forEach(project => {
+        v2.push({
+          color: project.color,
+          name: project.name,
+          tasks: project.tasks
+        });
+      });
+    } else {
+      v2.push(list)
+    }
+  });
+
+  return v2;
+}
+
+/**
+ * Interface between UI & browser's local storage API
+ *
+ * ## Format
+ *
+ * The used format to export & import the tasks state is as follows:
+ *
+ *     {
+ *       "lists": [
+ *         {
+ *           "color: "",
+ *           "name": "",
+ *           "tasks": [
+ *             "done": false,
+ *             "name": ""
+ *           ]
+ *         }
+ *       ]
+ *     }
+ */
 class StateManager {
   constructor() {
   }
@@ -212,43 +258,16 @@ class StateManager {
    * Read To Do lists state from the DOM.
    */
   static readState() {
-    const lists = document.querySelectorAll(`.${TaskList.TAG}`)
     const state = {
       lists: [],
     }
-    let todoList = null,
-      project = null,
-      task = null,
-      tasksContainer = null
 
-    lists.forEach(list => {
-      todoList = {
-        context: list.querySelector('.list--name')?.textContent.trim(),
-        projects: [],
-      }
-
-      list.querySelectorAll(`.${TaskCategory.TAG}`).forEach(categoryEl => {
-        project = {
-          name: categoryEl.querySelector('.category--name')?.textContent.trim(),
-          color: categoryEl.getAttribute('color') || null,
-          tasks: [],
-        }
-        tasksContainer = categoryEl.querySelector('.tasks-container')
-
-        Array.from(tasksContainer.children).forEach(item => {
-          task = {
-            done: item.querySelector('input[type=checkbox]')?.checked,
-            name: item.querySelector('.task-item--name')?.textContent.trim(),
-          }
-
-          if (task.name)
-            project.tasks.push(task)
-        })
-
-        todoList.projects.push(project)
+    document.querySelectorAll(`.${TaskCategory.TAG}`).forEach(categoryEl => {
+      state.lists.push({
+        name: categoryEl.name,
+        color: categoryEl.color,
+        tasks: categoryEl.tasks,
       })
-
-      state.lists.push(todoList)
     })
 
     return state
@@ -274,35 +293,26 @@ class StateManager {
     const state = JSON.parse(rawState)
     const listContainer = document.getElementById('lists')
 
-    state.lists.forEach(list => {
-      let taskList = document.querySelector(`.task-list[name="${list.context}"]`)
+    v1ToV2(state.lists).forEach(list => {
+      let taskCategory = document.querySelector(`.task-category[name="${list.name}"]`)
 
-      if (!taskList) {
-        taskList = TaskList.create({ id: list.context, name: list.context })
-        listContainer.appendChild(taskList)
+      if (!taskCategory) {
+        taskCategory = TaskCategory.create({ id: list.name, name: list.name, color: list.color })
+        listContainer.appendChild(taskCategory)
       }
 
-      list.projects.forEach(project => {
-        let taskCategory = document.querySelector(`.task-category[name="${project.name}"]`)
+      list.tasks.forEach(task => {
+        let taskItem = document.querySelector(`.task-item[name="${task.name}"]`)
 
-        if (!taskCategory) {
-          taskCategory = TaskCategory.create({ color: project.color, name: project.name })
-          taskList.addCategory(taskCategory)
+        if (!taskItem) {
+          taskItem = TaskItem.create({ done: !!task.done, name: task.name })
+          taskCategory.addTask(taskItem)
         }
 
-        project.tasks.forEach(task => {
-          let taskItem = document.querySelector(`.task-item[name="${task.name}"]`)
-
-          if (!taskItem) {
-            taskItem = TaskItem.create({ done: task.done, name: task.name })
-            taskCategory.addTask(taskItem)
-          }
-
-          taskItem.done = task.done
-        })
+        taskItem.done = task.done
       })
 
-      addListLink(list.context)
+      addListLink(list.name)
     })
 
     return state
@@ -338,9 +348,10 @@ function saneDateStr() {
 }
 
 function domLog(msg) {
-  msg = `[${saneDateStr()}] ${msg}`
-  target = document.querySelector('#debug_messages')
+  const target = document.querySelector('#debug_messages')
 
-  //console.debug(msg)
-  target.innerHTML = `<li><pre>${msg}</pre></li>` + target.innerHTML
+  console.debug(msg);
+  if (!target) return
+
+  target.innerHTML = `<li><pre>[${saneDateStr()}] ${msg}</pre></li>` + target.innerHTML
 }

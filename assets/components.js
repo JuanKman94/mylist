@@ -10,7 +10,7 @@ window.LIST_EVENTS = {
 }
 
 function dispatchTaskEvent(eventName, task, isDone) {
-  const taskChangeEvent = new CustomEvent(eventName, { detail: { task, isDone } })
+  const taskChangeEvent = new CustomEvent(eventName, { detail: { task: task, done: isDone } })
 
   document.dispatchEvent(taskChangeEvent)
 }
@@ -69,15 +69,15 @@ class TaskItem extends HTMLElement {
 
   get checkbox() { return this.querySelector('input[type=checkbox]') }
 
-  get done() { return this.getAttribute('done') }
+  get done() { return this.checkbox.checked }
   set done(isDone) {
     if (isDone) {
-      this.checkbox.setAttribute('checked', true)
       this.checkbox.checked = true
+      this.checkbox.setAttribute('checked', true)
       this.setAttribute('done', true)
     } else {
-      this.checkbox.removeAttribute('checked')
       this.checkbox.checked = false
+      this.checkbox.removeAttribute('checked')
       this.removeAttribute('done')
     }
   }
@@ -107,7 +107,7 @@ class TaskItem extends HTMLElement {
   }
 
   _changeHandler(ev) {
-    const checked = ev.target.checked
+    const checked = !!ev.target.checked
 
     // order here is important, bubble up event before changing internal state
     dispatchTaskEvent(TASK_EVENTS.CHANGE, this.name, checked)
@@ -120,6 +120,12 @@ class TaskItem extends HTMLElement {
   }
 }
 
+/**
+ * Task list
+ *
+ * @property {string} name
+ * @property {string} color
+ */
 class TaskCategory extends HTMLElement {
   static TAG = 'task-category'
   static EXTENDED_ELEMENT = 'article'
@@ -144,6 +150,26 @@ class TaskCategory extends HTMLElement {
 
   get tasksContainer() { return this.querySelector('.tasks-container') }
 
+  get tasks() {
+    const _tasks = []
+
+    this.querySelectorAll(TaskItem.TAG)
+      .forEach((task) => _tasks.push({ done: !!task.done, name: task.name }))
+
+    return _tasks;
+  }
+
+
+  static addList(target) {
+    const listName = window.prompt(NEW_LIST_PROMPT)
+
+    if (listName && listName.length > 0) {
+      target.prepend(TaskCategory.create({ id: listName, name: listName }))
+    }
+
+    return listName
+  }
+
   setup() {
     this.nameLabel.textContent = this.name
     if (this.color) {
@@ -165,80 +191,10 @@ class TaskCategory extends HTMLElement {
   }
 
   _deleteHandler() {
-    this.remove()
-    dispatchTaskEvent(TASK_EVENTS.DELETE, this.name)
-  }
-}
-
-class TaskCategoryForm extends HTMLElement {
-  static EXTENDED_ELEMENT = 'article'
-  static TAG = 'task-category-form'
-  static TEMPLATE_ID = 'task-category-form-template'
-
-  get form() { return this.querySelector('form') }
-
-  get name() { return this.querySelector('form input[name=name]') }
-  set name(newName) { this.querySelector('form input[name=name]').value = newName }
-
-  get taskList() { return Sortable.utils.closest(this, `.${TaskList.TAG}`) }
-
-  setup() {
-    this.on(this, 'click', this._clickHandler.bind(this))
-    this.on(this.form, 'submit', this._submitHandler.bind(this))
-  }
-
-  _clickHandler(ev) {
-    this.name.focus()
-  }
-
-  _submitHandler(ev) {
-    ev.preventDefault()
-    ev.stopPropagation()
-    const name = ev.target.elements['name']
-
-    if (name.value?.length > 0) {
-      const taskCategory = TaskCategory.create({ name: name.value })
-      this.taskList.addCategory(taskCategory)
-      name.value = ''
+    if (window.confirm('Are you sure?')) {
+      this.remove()
+      document.dispatchEvent(new CustomEvent(LIST_EVENTS.DELETE, { detail: { name: this.name } }))
     }
-  }
-}
-
-class TaskList extends HTMLElement {
-  static TAG = 'task-list'
-  static EXTENDED_ELEMENT = 'section'
-  static TEMPLATE_ID = 'tasklist-template'
-
-  get deleteButton() { return this.querySelector('.delete') }
-
-  get name() { return this.getAttribute('name')?.trim() }
-
-  get nameLabel() { return this.querySelector('.list--name') }
-
-  get taskCategoryForm() { return this.querySelector(`.${TaskCategoryForm.TAG}`) }
-
-  static addList(target) {
-    const listName = window.prompt(NEW_LIST_PROMPT)
-
-    if (listName && listName.length > 0) {
-      target.prepend(TaskList.create({ id: listName, name: listName }))
-    }
-
-    return listName
-  }
-
-  setup() {
-    this.nameLabel.textContent = this.name
-    this.on(this.deleteButton, 'click', this._deleteHandler.bind(this))
-  }
-
-  addCategory(taskCategory) {
-    this.insertBefore(taskCategory, this.taskCategoryForm)
-  }
-
-  _deleteHandler() {
-    document.dispatchEvent(new CustomEvent(LIST_EVENTS.DELETE, { detail: { name: this.name } }))
-    this.remove()
   }
 }
 
@@ -458,11 +414,9 @@ function defineComponents() {
     BackendSettings,
     ColorPicker,
     LogMessage,
-    TaskCategoryForm,
     TaskCategory,
     TaskControl,
     TaskItem,
-    TaskList,
   ]
 
   for (let component of components) {

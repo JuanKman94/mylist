@@ -48,15 +48,10 @@ function cleanUpSortable() {
 function setupSortable() {
   cleanUpSortable()
 
-  document.querySelectorAll(`.${TaskList.TAG}`).forEach(list => {
-    list.querySelectorAll(`.${TaskCategory.TAG} .tasks-container`).forEach(tasksContainer => {
-      SORTABLE_INSTANCES.push(new Sortable(
-        tasksContainer,
-        Object.assign({ group: 'tasks', handle: '.task-grabber' }, DEFAULT_SORTABLE_CONFIG)))
-    })
+  document.querySelectorAll(`.${TaskCategory.TAG} .tasks-container`).forEach(tasksContainer => {
     SORTABLE_INSTANCES.push(new Sortable(
-      list,
-      Object.assign({ group: 'categories', handle: '.category-grabber' }, DEFAULT_SORTABLE_CONFIG)))
+      tasksContainer,
+      Object.assign({ group: 'tasks', handle: '.task-grabber' }, DEFAULT_SORTABLE_CONFIG)))
   })
 }
 
@@ -140,7 +135,7 @@ function init(ev) {
   })
 
   document.querySelector('.new-list')?.addEventListener('click', ev => {
-    const listName = TaskList.addList(document.getElementById('lists'))
+    const listName = TaskCategory.addList(document.getElementById('lists'))
 
     if (listName)
       addListLink(listName)
@@ -173,6 +168,7 @@ function importJson(importEv) {
 
 function setupDebugControls() {
   document.querySelector('#debug_controls')?.classList.remove('hidden')
+  document.querySelector('#debug_messages')?.classList.remove('hidden')
   document.querySelector('#print_state_btn')?.addEventListener('click', (ev) => {
     domLog(`state = ${JSON.stringify(StateManager.readState(), null, 2)}`)
   })

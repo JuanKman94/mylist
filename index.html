@@ -77,6 +77,8 @@
   <aside id="log_messages" class="container">
   </aside>
 
+  <ul id="debug_messages" class="hidden"></ul>
+
   <section id="settings" class="container">
     <details>
       <summary class="h3 my-4">Back-End config (click for details)</summary>
@@ -91,10 +93,12 @@
           <h4>todo.txt</h4>
           <p>
             Export in well-known
-            <a href="https://github.com/todotxt/todo.txt">todo.txt format</a>
+            <a href="https://github.com/todotxt/todo.txt">todo.txt format</a>.
+            <br>
+            <b>Unmaintained</b>: contact me if you want this.
           </p>
           <footer class="actions text-right">
-            <button type="button" id="export_todotxt">Download</button>
+            <button disabled type="button" id="export_todotxt">Download</button>
           </footer>
         </aside>
 
@@ -198,17 +202,6 @@
     </ul>
   </footer>
 
-  <template id="tasklist-template">
-    <h2 class="task-list--title">
-      <slot name="list-name">
-        <span class="list--name"></span>
-      </slot>
-      <span class="icon delete">x</span>
-    </h2>
-
-    <task-category-form></task-category-form>
-  </template>
-
   <template id="category-template">
     <h3 class="task-category--title">
       <span class="icon grabber category-grabber">=</span>
@@ -222,23 +215,6 @@
     <div class="tasks-container">
       <task-control></task-control>
     </div>
-  </template>
-
-  <template id="task-category-form-template">
-    <h4 class="new-category--title">New category</h4>
-
-    <form action="#" class="new-category--form">
-      <label for="name">
-        <span class="icon mr-2">+</span>
-        <span class="sr-only">Name</span>
-
-        <input
-          name="name"
-          class="text-field"
-          type="text"
-        />
-      </label>
-    </form>
   </template>
 
   <template id="taskitem-template">
