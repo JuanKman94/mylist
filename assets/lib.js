@@ -1,5 +1,22 @@
-// https://javascript.info/mixins
+const INITIAL_STATE = {
+  lists: [
+    {
+      name: "Hello!  Let's get started",
+      tasks: [
+        {
+          done: false,
+          name: 'Create your first list',
+        },
+        {
+          done: false,
+          name: 'Add your first to do task',
+        }
+      ]
+    }
+  ]
+}
 
+// https://javascript.info/mixins
 // Object.assign(ComponentClass, CustomElementStaticMixin)
 const CustomElementStaticMixin = {
   /**
@@ -286,11 +303,8 @@ class StateManager {
   }
 
   static loadState() {
-    const rawState = localStorage.getItem(STORAGE_NAME)
-
-    if (!rawState) return
-
-    const state = JSON.parse(rawState)
+    const storageState = localStorage.getItem(STORAGE_NAME)
+    const state = storageState ? JSON.parse(storageState) : INITIAL_STATE
     const listContainer = document.getElementById('lists')
 
     v1ToV2(state.lists).forEach(list => {
