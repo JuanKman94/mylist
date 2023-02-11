@@ -306,15 +306,26 @@ task-control {
   margin-bottom: 2rem;
 }
 
+.task-category:before {
+  display: block;
+  padding: 0;
+  margin: -1.75rem auto 0;
+
+  background-image: url(sticky-tape.png);
+  width: 8rem;
+  height: 2rem;
+  content: '';
+}
 task-category:not(:first-child),
 .task-category:not(:first-child) {
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 .task-category {
   border: 2px solid var(--border-color, #ccc);
   border-radius: 10px;
   padding: 0.75rem;
 }
+
 .task-list .task-list--title,
 .task-category .task-category--title {
   font-size: 1.2rem;
@@ -381,6 +392,7 @@ task-item .delete,
 
 .task-category-form .text-field,
 .task-control .text-field {
+  font-family: 'xkcd';
   min-width: 80%;
   max-width: 85%;
   flex-grow: 1;
