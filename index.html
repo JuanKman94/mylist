@@ -45,20 +45,20 @@
   </nav>
 
   <nav class="bottomnav flex justify-around align-center">
-    <div class="bottomnav-control text-center">
-      <a href="#" class="flex-col align-center">
-        <svg><use xlink:href="#icons-list"></svg>
-        <span class="inline-block small">
-          Lists
-        </span>
-      </a>
-    </div>
-
     <div class="bottomnav-control">
       <a href="#about" class="flex-col align-center">
         <svg><use xlink:href="#icons-info"></svg>
         <span class="inline-block small">
           About
+        </span>
+      </a>
+    </div>
+
+    <div class="bottomnav-control text-center">
+      <a href="#" class="flex-col align-center">
+        <svg><use xlink:href="#icons-list"></svg>
+        <span class="inline-block small">
+          Lists
         </span>
       </a>
     </div>
@@ -81,8 +81,8 @@
 
   <section id="settings" class="container pt-4">
     <details>
-      <summary class="h3 my-4">Back-End config (click for details)</summary>
-      <backend-settings></backend-settings>
+      <summary class="h3 my-4">Settings (click for details)</summary>
+      <todo-settings></todo-settings>
     </details>
 
     <details>
@@ -208,13 +208,20 @@
 
   <template id="category-template">
     <h3 class="task-category--title">
-      <span class="icon grabber category-grabber">=</span>
-      <color-picker class="ml-2" color="color-4"></color-picker>
+      <color-picker color="color-4"></color-picker>
       <slot name="category-name">
         <span class="category--name ml-2"></span>
       </slot>
       <span class="icon delete">x</span>
     </h3>
+
+    <div class="progress-container">
+      <div class="flex-grow-1">
+        <progress class="w-full" max="100" value="0"></progress>
+      </div>
+
+      <div class="progress-label pl-2">0%</div>
+    </div>
 
     <div class="tasks-container">
       <task-control></task-control>
@@ -247,60 +254,100 @@
     </form>
   </template>
 
-  <template id="backendsettings-template">
+  <template id="todo-settings-template">
     <form action="#" class="new-task--form">
-      <div class="field backend-url">
-        <label for="backend_enabled">Enabled?</label>
-        <input
-          type="checkbox"
-          class="config-field"
-          name="backend_enabled"
-        />
-        <div class="hint">
-          Requests will be sent <b>only</b> if this is enabled.
-        </div>
-      </div>
+      <fieldset class="mt-4">
+        <legend>Tasks</legend>
 
-      <div class="field backend-url">
-        <label for="backend_url" hidden>URL</label>
-        <input
-          type="url"
-          class="config-field"
-          name="backend_url"
-          placeholder="https://example.com/personal/mylist"
-        />
-        <div class="hint">
-          URL where a POST request is sent whenever a task changes.
-          The payload is the whole page state, i.e., all the lists with their tasks.
-        </div>
-      </div>
+        <div class="field">
+          <label for="tasks_progress">Show progress bar?</label>
+          <input
+            class="settings-tasks-progress"
+            id="tasks_progress"
+            name="tasks_progress"
+            type="checkbox"
+          >
 
-      <div class="field username">
-        <label for="backend_username" hidden>Username</label>
-        <input
-          type="text"
-          class="config-field"
-          name="backend_username"
-          placeholder="Username"
-        />
-        <div class="hint">
-          An email, a pseudonym or whatever &mdash; you control the back-end so
-          validate as you please!
+          <div class="hint">
+            Show progress bar &amp; percentage completion.
+          </div>
         </div>
-      </div>
+      </fieldset>
 
-      <div class="field passphrase">
-        <label for="backend_passphrase" hidden>Passphrase</label>
-        <textarea
-          rows="3"
-          class="config-field"
-          name="backend_passphrase"
-          placeholder="Passphrase: One flew over the coocoo's nest"
-        ></textarea>
-        <div class="hint">
-          A poem you like or the lyrics for your favorite song!
+      <fieldset class="mt-4">
+        <legend>Navigation Bar</legend>
+
+        <div class="field">
+          <label for="nav_compact">Compact?</label>
+          <input
+            class="settings-nav-compact"
+            id="nav_compact"
+            name="nav_compact"
+            type="checkbox"
+          >
+
+          <div class="hint">
+            For all-screen phones
+          </div>
         </div>
-      </div>
+      </fieldset>
+
+      <fieldset class="mt-4">
+        <legend>Backend</legend>
+
+        <div class="field backend-url">
+          <label for="backend_enabled">Enabled?</label>
+          <input
+            type="checkbox"
+            class="config-field"
+            name="backend_enabled"
+          />
+          <div class="hint">
+            Requests will be sent <b>only</b> if this is enabled.
+          </div>
+        </div>
+
+        <div class="field backend-url">
+          <label for="backend_url" hidden>URL</label>
+          <input
+            type="url"
+            class="config-field"
+            name="backend_url"
+            placeholder="https://example.com/personal/mylist"
+          />
+          <div class="hint">
+            URL where a POST request is sent whenever a task changes.
+            The payload is the whole page state, i.e., all the lists with their tasks.
+          </div>
+        </div>
+
+        <div class="field username">
+          <label for="backend_username" hidden>Username</label>
+          <input
+            type="text"
+            class="config-field"
+            name="backend_username"
+            placeholder="Username"
+          />
+          <div class="hint">
+            An email, a pseudonym or whatever &mdash; you control the back-end so
+            validate as you please!
+          </div>
+        </div>
+
+        <div class="field passphrase">
+          <label for="backend_passphrase" hidden>Passphrase</label>
+          <textarea
+            rows="3"
+            class="config-field"
+            name="backend_passphrase"
+            placeholder="Passphrase: One flew over the coocoo's nest"
+          ></textarea>
+          <div class="hint">
+            A poem you like or the lyrics for your favorite song!
+          </div>
+        </div>
+      </fieldset>
     </form>
   </template>
 

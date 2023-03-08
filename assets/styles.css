@@ -26,7 +26,7 @@
   --danger: #D54F4F;
   --link-color: var(--yellow);
 
-  --bottomnav-height: 3.5rem;
+  --bottomnav-height: 4.5rem;
   --bg-navbar: #404040;
 
   --card-padding: 0.75rem;
@@ -312,9 +312,14 @@ task-control {
   margin: -1.75rem auto 0;
 
   background-image: url(sticky-tape.png);
+  background-repeat: no-repeat;
   width: 8rem;
   height: 2rem;
   content: '';
+  transform: rotate(-4deg);
+}
+.task-category:nth-child(even)::before {
+  transform: rotate(4deg);
 }
 task-category:not(:first-child),
 .task-category:not(:first-child) {
@@ -324,6 +329,10 @@ task-category:not(:first-child),
   border: 2px solid var(--border-color, #ccc);
   border-radius: 10px;
   padding: 0.75rem;
+}
+
+.task-category .progress-container {
+  display: none;
 }
 
 .task-list .task-list--title,
@@ -396,6 +405,10 @@ task-item .delete,
   min-width: 80%;
   max-width: 85%;
   flex-grow: 1;
+}
+
+fieldset {
+  border-radius: 2px;
 }
 
 .field {
@@ -583,10 +596,24 @@ input#import_json {
 /***** width *****/
 .max-w-10r { max-width: 10rem; }
 .container { margin: 0 auto; max-width: 90vw; }
+.w-full { width: 100%; }
 
 .block { display: block; }
 .inline-block { display: inline-block; }
 .white-space-none { white-space: none; }
+
+/***** settings/config *****/
+
+body.config--nav-compact {
+  --bottomnav-height: 3.5rem;
+}
+
+body.config--tasks-progress task-category .progress-container {
+  display: flex;
+  align-items: align-center;
+}
+
+/***** fonts *****/
 
 @font-face {
   font-family: 'xkcd';

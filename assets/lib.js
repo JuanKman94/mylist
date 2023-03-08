@@ -16,6 +16,21 @@ const INITIAL_STATE = {
   ]
 }
 
+const INITIAL_SETTINGS = {
+  backend: {
+    enabled: false,
+    passphrase: null,
+    username: null,
+    url: null
+  },
+  nav: {
+    compact: false
+  },
+  tasks: {
+    progress: false
+  }
+}
+
 // https://javascript.info/mixins
 // Object.assign(ComponentClass, CustomElementStaticMixin)
 const CustomElementStaticMixin = {
@@ -343,6 +358,17 @@ class StateManager {
 
     StateManager.persistState(newState)
     return StateManager.loadState()
+  }
+
+  static settings() {
+    const storageState = localStorage.getItem('todoSettings')
+    const settings = storageState ? JSON.parse(storageState) : INITIAL_SETTINGS
+
+    return settings
+  }
+
+  static persistSettings(settings) {
+    localStorage.setItem('todoSettings', JSON.stringify(settings))
   }
 }
 

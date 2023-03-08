@@ -118,21 +118,12 @@ function init(ev) {
   if (window.DEBUG_MODE)
     setupDebugControls()
 
-  function stateUpdated() {
-    const newState = StateManager.updateState()
-    setupSortable()
-
-    postToBackend(newState)
-  }
-
   document.addEventListener(LIST_EVENTS.CHANGE, stateUpdated)
   document.addEventListener(LIST_EVENTS.DELETE, ev => { removeListLink(ev) ; stateUpdated() })
   document.addEventListener(TASK_EVENTS.CHANGE, stateUpdated)
   document.addEventListener(TASK_EVENTS.DELETE, stateUpdated)
 
-  document.addEventListener(BackendSettings.BACKEND_CHANGE_EVENT, (ev) => {
-    window.backendClient = new BackendClient(ev.detail.url, ev.detail.username, ev.detail.passphrase, ev.detail.enabled)
-  })
+  document.addEventListener(TodoSettings.SETTINGS_CHANGE_EVENT, (ev) => applySettings(ev.detail))
 
   document.querySelector('.new-list')?.addEventListener('click', ev => {
     const listName = TaskCategory.addList(document.getElementById('lists'))
@@ -147,9 +138,47 @@ function init(ev) {
   )
   document.querySelector('#import_json')?.addEventListener('change', importJson)
 
+  const todoSettings = document.querySelector(TodoSettings.TAG)
+  const config = StateManager.settings()
+
   StateManager.loadState()
+  applySettings(config)
+
   window.backendClient.get()
   setupSortable()
+
+  if (todoSettings) {
+    todoSettings.applyConfig(config)
+  }
+}
+
+function stateUpdated() {
+  const newState = StateManager.updateState()
+  setupSortable()
+
+  postToBackend(newState)
+}
+
+function applySettings(config) {
+  const backend = config.backend
+
+  StateManager.persistSettings(config)
+
+  window.backendClient = new BackendClient(backend.url, backend.username, backend.passphrase, backend.enabled)
+
+  if (config.nav) {
+    if (config.nav.compact)
+      document.body.classList.add('config--nav-compact')
+    else
+      document.body.classList.remove('config--nav-compact')
+  }
+
+  if (config.tasks) {
+    if (config.tasks.progress)
+      document.body.classList.add('config--tasks-progress')
+    else
+      document.body.classList.remove('config--tasks-progress')
+  }
 }
 
 function importJson(importEv) {

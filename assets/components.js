@@ -9,10 +9,11 @@ window.LIST_EVENTS = {
   DELETE: 'list:delete',
 }
 
-function dispatchTaskEvent(eventName, task, isDone) {
+function dispatchTaskEvent(eventName, task, isDone, target) {
+  target = target || document
   const taskChangeEvent = new CustomEvent(eventName, { detail: { task: task, done: isDone } })
 
-  document.dispatchEvent(taskChangeEvent)
+  target.dispatchEvent(taskChangeEvent)
 }
 
 /**
@@ -32,7 +33,7 @@ class TaskControl extends HTMLElement {
 
   get form() { return this.querySelector('form') }
 
-  get taskCategory() { return Sortable.utils.closest(this, `.${TaskCategory.TAG}`) }
+  get taskCategory() { return Sortable.utils.closest(this, TaskCategory.TAG) }
 
   setup() {
     this.on(this.form, 'submit', this._submitHandler.bind(this))
@@ -46,6 +47,7 @@ class TaskControl extends HTMLElement {
 
     taskItem = this.taskCategory.addTask(taskItem)
     dispatchTaskEvent(TASK_EVENTS.CHANGE, task, false)
+    dispatchTaskEvent(TASK_EVENTS.CHANGE, task, false, this.taskCategory)
 
     return taskItem
   }
@@ -94,6 +96,8 @@ class TaskItem extends HTMLElement {
 
   get task() { return this.getAttribute('name') }
 
+  get taskCategory() { return Sortable.utils.closest(this, TaskCategory.TAG) }
+
   setup() {
     if (this.hasAttribute('done') && this.getAttribute('done') !== 'false') {
       this.done = true
@@ -111,12 +115,14 @@ class TaskItem extends HTMLElement {
 
     // order here is important, bubble up event before changing internal state
     dispatchTaskEvent(TASK_EVENTS.CHANGE, this.name, checked)
+    dispatchTaskEvent(TASK_EVENTS.CHANGE, this.name, checked, this.taskCategory)
     this.done = checked
   }
 
   _deleteHandler() {
     this.remove()
     dispatchTaskEvent(TASK_EVENTS.DELETE, this.name)
+    dispatchTaskEvent(TASK_EVENTS.DELETE, this.name, checked, this.taskCategory)
   }
 }
 
@@ -142,6 +148,10 @@ class TaskCategory extends HTMLElement {
 
   get deleteButton() { return this.querySelector('.delete') }
 
+  get progress() { return this.querySelector('progress') }
+
+  get progressLabel() { return this.querySelector('.progress-label') }
+
   get name() { return this.getAttribute('name').trim() }
 
   get nameLabel() { return this.querySelector('.category--name') }
@@ -151,14 +161,9 @@ class TaskCategory extends HTMLElement {
   get tasksContainer() { return this.querySelector('.tasks-container') }
 
   get tasks() {
-    const _tasks = []
-
-    this.querySelectorAll(TaskItem.TAG)
-      .forEach((task) => _tasks.push({ done: !!task.done, name: task.name }))
-
-    return _tasks;
+    return Array.from(this.querySelectorAll(TaskItem.TAG))
+      .map(task => ({ done: !!task.done, name: task.name }))
   }
-
 
   static addList(target) {
     const listName = window.prompt(NEW_LIST_PROMPT)
@@ -179,6 +184,9 @@ class TaskCategory extends HTMLElement {
 
     this.on(this.colorPicker, 'change', this._colorChangeHandler.bind(this))
     this.on(this.deleteButton, 'click', this._deleteHandler.bind(this))
+    this.on(this, TASK_EVENTS.CHANGE, this._updateProgress.bind(this))
+    this.on(this, TASK_EVENTS.DELETE, this._updateProgress.bind(this))
+    this._updateProgress()
   }
 
   addTask(taskItem) {
@@ -195,6 +203,18 @@ class TaskCategory extends HTMLElement {
       this.remove()
       document.dispatchEvent(new CustomEvent(LIST_EVENTS.DELETE, { detail: { name: this.name } }))
     }
+  }
+
+  _updateProgress(ev) {
+    // give a few milliseconds to the browser to update elements
+    window.setTimeout(() => {
+      const _tasks = this.tasks
+      const doneAmount = _tasks.filter(task => task.done).length
+      const percent = (doneAmount / _tasks.length) * 100
+
+      this.progress.value = percent
+      this.progressLabel.textContent = `${percent.toFixed(2)}%`
+    }, 100)
   }
 }
 
@@ -268,11 +288,11 @@ class ColorPicker extends HTMLElement {
   }
 }
 
-class BackendSettings extends HTMLElement {
+class TodoSettings extends HTMLElement {
   static EXTENDED_ELEMENT = 'article'
-  static TAG = 'backend-settings'
-  static TEMPLATE_ID = 'backendsettings-template'
-  static BACKEND_CHANGE_EVENT = 'backend:change'
+  static TAG = 'todo-settings'
+  static TEMPLATE_ID = 'todo-settings-template'
+  static SETTINGS_CHANGE_EVENT = 'settings:change'
 
   get form() { return this.querySelector('form') }
 
@@ -288,6 +308,9 @@ class BackendSettings extends HTMLElement {
   get passphrase() { return this.querySelector('form textarea[name=backend_passphrase]') }
   set passphrase(newVal) { this.querySelector('form textarea[name=backend_passphrase]').value = newVal }
 
+  get navCompact() { return this.querySelector('#nav_compact') }
+  get tasksProgress() { return this.querySelector('#tasks_progress') }
+
   /**
    * Setup controls reactivity:
    *
@@ -300,10 +323,9 @@ class BackendSettings extends HTMLElement {
    */
   setup() {
     this.setupAutoStorage()
-    this.on(this.url, 'input', this._inputHandler.bind(this))
-    this.on(this.username, 'input', this._inputHandler.bind(this))
-    this.on(this.passphrase, 'input', this._inputHandler.bind(this))
-    this.on(this.enabled, 'input', this._inputHandler.bind(this))
+    Array.from(this.querySelectorAll('input')).forEach((el) => {
+      this.on(el, 'input', this._inputHandler.bind(this))
+    })
     this.on(this.form, 'submit', this._submitHandler.bind(this))
   }
 
@@ -324,14 +346,31 @@ class BackendSettings extends HTMLElement {
 
   emitConfig() {
     const payload = {
-      url: this.url.value,
-      username: this.username.value,
-      passphrase: this.passphrase.value,
-      enabled: !!this.enabled.checked,
+      backend: {
+        enabled: !!this.enabled.checked,
+        passphrase: this.passphrase.value,
+        username: this.username.value,
+        url: this.url.value,
+      },
+      nav: {
+        compact: this.navCompact.checked,
+      },
+      tasks: {
+        progress: this.tasksProgress.checked,
+      },
     }
-    const newEv = new CustomEvent(this.constructor.BACKEND_CHANGE_EVENT, { detail: payload })
+    const newEv = new CustomEvent(this.constructor.SETTINGS_CHANGE_EVENT, { detail: payload })
 
     document.dispatchEvent(newEv)
+  }
+
+  applyConfig(config) {
+    this.enabled = config.backend?.enabled
+    this.passphrase = config.backend?.passphrase
+    this.url = config.backend?.url
+    this.username = config.backend?.username
+    this.navCompact.checked = !!config.nav?.compact
+    this.tasksProgress.checked = !!config.tasks?.progress
   }
 
   _inputHandler(ev) {
@@ -411,7 +450,7 @@ class LogMessage extends HTMLElement {
 
 function defineComponents() {
   const components = [
-    BackendSettings,
+    TodoSettings,
     ColorPicker,
     LogMessage,
     TaskCategory,
