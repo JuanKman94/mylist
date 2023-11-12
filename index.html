@@ -6,11 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>My List</title>
 
-  <link rel=stylesheet href=assets/styles.css>
-  <script src=assets/lib.js></script>
-  <script src=assets/components.js></script>
-  <script src=assets/main.js></script>
-  <script src=assets/sortable.min.js></script>
+  <link rel="stylesheet" href="assets/styles.css">
 
   <!-- favicon generated with https://realfavicongenerator.net/ -->
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -163,6 +159,10 @@
       Written with curiosity by
       <a href="https://juankman94.github.io">juankman94</a>
       (<a href="https://github.com/JuanKman94/mylist">source code</a>).
+    </p>
+
+    <p>
+      <code id="app-version">v1.0</code>
     </p>
 
     <ul class="italic text-left">
@@ -366,6 +366,35 @@
       <p class="pre-line message"></p>
     </details>
   </template>
+
+  <script src="assets/lib.js"></script>
+  <script src="assets/components.js"></script>
+  <script src="assets/main.js"></script>
+  <script src="assets/sortable.min.js"></script>
+
+  <script>
+    const registerServiceWorker = async () => {
+      if ('serviceWorker' in navigator) {
+        try {
+          const registration = await navigator
+            .serviceWorker
+            .register('sw.js', { scope: './' });
+
+          if (registration.installing) {
+            console.log('Service worker is installing.');
+          } else if (registration.waiting) {
+            console.log('Service worker successfully installed.');
+          } else if (registration.active) {
+            console.log('Service worker is active!');
+          }
+        } catch (err) {
+          console.error('Service worker cannot be installed.', err);
+        }
+      }
+    };
+
+    registerServiceWorker();
+  </script>
 
   <!--
     SVG icons generated with https://github.com/jgarber623/svgeez and embedded for styling.

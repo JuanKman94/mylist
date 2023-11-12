@@ -183,7 +183,7 @@ task-category-form,
   left: 0;
   height: var(--bottomnav-height);
   width: 100%;
-  z-index: 10;
+  z-index: 1;
 
   background-color: var(--bg-navbar);
   border-top: 1px solid var(--border-color-dark);
