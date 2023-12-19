@@ -1,0 +1,59 @@
+#!/bin/bash
+#
+# @see https://github.com/ruby/un
+
+MYLIST_DIR="$(dirname "$(dirname "$(readlink -f "$0")")")"
+BIND_ADDR="localhost"
+PORT="8080"
+USAGE="Usage:
+    $0 [-b <address>] [-p <port>]
+
+Options:
+
+    -b <address>  Address to bind (default: $BIND_ADDR)
+    -p <port>     Listening port number (default: $PORT)
+"
+
+while getopts ":b:p:h" opt; do
+    case $opt in
+        b)
+            BIND_ADDR=$OPTARG
+            ;;
+        p)
+            PORT=$OPTARG
+            ;;
+        h)
+            echo "$USAGE"
+            exit 0
+            ;;
+        \?)
+            echo "$OPTARG is not a valid option."
+            echo "$USAGE"
+            exit 1
+            ;;
+    esac
+done
+
+# Run WEBrick HTTP server.
+#
+#   ruby -run -e httpd -- [OPTION] [DocumentRoot]
+#
+#   --bind-address=ADDR         address to bind
+#   --port=NUM                  listening port number
+#   --max-clients=MAX           max number of simultaneous clients
+#   --temp-dir=DIR              temporary directory
+#   --do-not-reverse-lookup     disable reverse lookup
+#   --request-timeout=SECOND    request timeout in seconds
+#   --http-version=VERSION      HTTP version
+#   --server-name=NAME          name of the server host
+#   --server-software=NAME      name and version of the server
+#   --ssl-certificate=CERT      The SSL certificate file for the server
+#   --ssl-private-key=KEY       The SSL private key file for the server certificate
+#   -v                          verbose
+ruby -run \
+    -e httpd \
+    -- \
+    --port="$PORT" \
+    --bind-address="$BIND_ADDR" \
+    --server-name="httpd" \
+    "$MYLIST_DIR"

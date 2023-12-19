@@ -55,68 +55,10 @@ function setupSortable() {
   })
 }
 
-function addListLink(listName) {
-  if (document.querySelector(`a[href="#${listName}"]`))
-    return
-
-  const li = document.createElement('li')
-  const a = document.createElement('a')
-
-  a.setAttribute('href', `#${listName}`)
-  a.textContent = listName
-  li.classList.add('task-list--link')
-  li.dataset.list = listName
-  li.appendChild(a)
-
-  document.querySelector('body > nav ul')?.prepend(li)
-}
-
-function removeListLink(ev) {
-  const link = document.querySelector(`li[data-list="${ev.detail.name}"]`)
-
-  if (link) {
-    link.parentElement.removeChild(link)
-  }
-}
-
-function postToBackend(newState) {
-  window.backendClient?.put(newState)
-    .then((resp) => {
-      if (resp)
-        logMessage({ title: 'OK', timeout: AUTO_REMOVE_TIMEOUT })
-    })
-    .catch(err => logMessage({ title: err, type: 'error', message: err.stack }))
-}
-
-function syncBackend() {
-  window.backendClient?.get()
-    .then(resp => {
-      if (resp?.data) {
-        const data = JSON.parse(resp.data)
-        return StateManager.mergeState(data)
-      }
-    })
-    .then(state => window.backendClient.put(state))
-    .then(() => logMessage({ title: 'OK', timeout: AUTO_REMOVE_TIMEOUT }))
-    .catch(err => logMessage({ title: err, type: 'error', message: err.stack }))
-}
-
-function logMessage(attrs) {
-  switch (attrs.type) {
-    case 'error':
-      attrs.icon = 'X'
-      break
-    default:
-      attrs.icon = '&#10004;'
-      break
-  }
-
-  document.querySelector('#log_messages')?.prepend(LogMessage.create(attrs))
-}
-
 function init(ev) {
-  if (window.DEBUG_MODE)
+  if (window.DEBUG_MODE) {
     setupDebugControls()
+  }
 
   document.addEventListener(LIST_EVENTS.CHANGE, stateUpdated)
   document.addEventListener(LIST_EVENTS.DELETE, ev => { removeListLink(ev) ; stateUpdated() })
@@ -137,6 +79,7 @@ function init(ev) {
     ev => downloadUsingBrowser(`${APP_NAME}.json`, JSON.stringify(StateManager.readState()))
   )
   document.querySelector('#import_json')?.addEventListener('change', importJson)
+  document.querySelector('#clear_cache_btn')?.addEventListener('click', requestCacheFlush)
 
   const todoSettings = document.querySelector(TodoSettings.TAG)
   const config = StateManager.settings()
@@ -150,58 +93,4 @@ function init(ev) {
   if (todoSettings) {
     todoSettings.applyConfig(config)
   }
-}
-
-function stateUpdated() {
-  const newState = StateManager.updateState()
-  setupSortable()
-
-  postToBackend(newState)
-}
-
-function applySettings(config) {
-  const backend = config.backend
-
-  StateManager.persistSettings(config)
-
-  window.backendClient = new BackendClient(backend.url, backend.username, backend.passphrase, backend.enabled)
-
-  if (config.nav) {
-    if (config.nav.compact)
-      document.body.classList.add('config--nav-compact')
-    else
-      document.body.classList.remove('config--nav-compact')
-  }
-
-  if (config.tasks) {
-    if (config.tasks.progress)
-      document.body.classList.add('config--tasks-progress')
-    else
-      document.body.classList.remove('config--tasks-progress')
-  }
-}
-
-function importJson(importEv) {
-  if (importEv.target.files.length === 0)
-    return
-
-  const reader = new FileReader()
-
-  reader.addEventListener('load', ev => {
-    const data = JSON.parse(ev.target.result)
-    StateManager.mergeState(data)
-  })
-
-  reader.readAsBinaryString(importEv.target.files.item(0))
-}
-
-function setupDebugControls() {
-  document.querySelector('#debug_controls')?.classList.remove('hidden')
-  document.querySelector('#debug_messages')?.classList.remove('hidden')
-  document.querySelector('#print_state_btn')?.addEventListener('click', (ev) => {
-    domLog(`state = ${JSON.stringify(StateManager.readState(), null, 2)}`)
-  })
-  document.querySelector('#reset_log')?.addEventListener('click', (ev) => {
-    document.querySelector('#debug_messages').innerHTML = ''
-  })
 }

@@ -598,6 +598,10 @@ input#import_json {
 .container { margin: 0 auto; max-width: 90vw; }
 .w-full { width: 100%; }
 
+/***** height *****/
+.h-full { height: 100%; }
+.h-fit { height: fit-content; }
+
 .block { display: block; }
 .inline-block { display: inline-block; }
 .white-space-none { white-space: none; }

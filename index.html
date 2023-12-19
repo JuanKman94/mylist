@@ -348,6 +348,26 @@
           </div>
         </div>
       </fieldset>
+
+      <fieldset class="mt-4">
+        <legend>Cache</legend>
+
+        <div class="flex align-center">
+          <button
+            class="h-fit mr-4 py-2 px-1 block"
+            id="clear_cache_btn"
+            name="clear_cache_btn"
+            type="button"
+            style="flex-basis: 60%;"
+          >
+            Clear cache
+          </button>
+
+          <div class="hint">
+            This will clear the <b>current</b> cache <i>stored by the Service Worker</i>.
+          </div>
+        </div>
+      </fieldset>
     </form>
   </template>
 
@@ -368,6 +388,9 @@
   </template>
 
   <script src="assets/lib.js"></script>
+  <script src="assets/backend_client.js"></script>
+  <script src="assets/state_manager.js"></script>
+  <script src="assets/components_base.js"></script>
   <script src="assets/components.js"></script>
   <script src="assets/main.js"></script>
   <script src="assets/sortable.min.js"></script>
@@ -375,10 +398,12 @@
   <script>
     const registerServiceWorker = async () => {
       if ('serviceWorker' in navigator) {
+        const currentUrl = new URL(window.location);
+
         try {
           const registration = await navigator
             .serviceWorker
-            .register('sw.js', { scope: './' });
+            .register('sw.js', { scope: currentUrl.pathname });
 
           if (registration.installing) {
             console.log('Service worker is installing.');

@@ -12,6 +12,9 @@ const PRECACHED_RESOURCES = [
   "./apple-touch-icon.png",
   "./favicon-32x32.png",
   "./favicon-16x16.png",
+  "./assets/backend_client.js",
+  "./assets/components_base.js",
+  "./assets/state_manager.js",
   "./assets/lib.js",
   "./assets/components.js",
   "./assets/main.js",
@@ -74,7 +77,9 @@ function cacheFirstWithRefresh(request) {
 self.addEventListener("fetch", function(ev) {
   const url = new URL(ev.request.url);
 
-  if (!url.pathname.endsWith(".json")) {
+  if (url.pathname == '/nuke-cache') {
+    caches.delete(CACHE_NAME);
+  } else if (!url.pathname.endsWith(".json")) {
     ev.respondWith( cacheFirstWithRefresh(ev.request) );
   }
 });
