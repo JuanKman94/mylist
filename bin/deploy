@@ -3,7 +3,12 @@
 #
 # $ ls *.{html,ico,png,xml,svg,webmanifest} >> bin/deploy
 
-[[ -f .env ]] && source .env
+MYLIST_DIR="$(dirname "$(dirname "$(readlink -f "$0")")")"
+if [ -f "${MYLIST_DIR}/.env" ]; then
+    set -o allexport
+    source "${MYLIST_DIR}/.env"
+    set +o allexport
+fi
 
 if [ -z "$DEPLOY_HOST" -o -z "$DEPLOY_PATH" ]; then
     echo 1>&2 "ERROR: deploy host or path not set"
@@ -20,6 +25,7 @@ scp -r \
     favicon-32x32.png \
     favicon.ico \
     index.html \
+    sw.js \
     mstile-144x144.png \
     mstile-150x150.png \
     mstile-310x150.png \
@@ -27,4 +33,4 @@ scp -r \
     mstile-70x70.png \
     safari-pinned-tab.svg \
     site.webmanifest \
-    $DEPLOY_HOST:"$DEPLOY_PATH"
+    "$DEPLOY_HOST":"$DEPLOY_PATH"
