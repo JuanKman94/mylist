@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# See: https://github.com/jgarber623/svgeez
+
+MYLIST_DIR="$(dirname "$(dirname "$(readlink -f "$0")")")"
+
+if ! command -v svgeez &> /dev/null
+then
+  echo "Installing svgeez..."
+  gem install svgeez
+fi
+
+svgeez \
+    build \
+    --source "$MYLIST_DIR/assets/icons/" \
+    --destination "$MYLIST_DIR/assets/icons.svg" \
+    --prefix "icons"

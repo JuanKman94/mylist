@@ -372,9 +372,11 @@ task-item,
 
 task-item .grabber,
 .task-item .grabber {
-  padding: 0.25rem 0.5rem;
-  font-weight: 600;
-  font-size: var(--emoticon-font-size);
+  --grabber-size: 16px;
+  fill: var(--fg-dark, #e6ffff);
+  max-height: var(--grabber-size, 16px);
+  max-width: var(--grabber-size, 16px);
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
 }
 
 task-item label,

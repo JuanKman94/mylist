@@ -10,6 +10,10 @@ const INITIAL_STATE = {
         {
           done: false,
           name: 'Add your first to do task',
+        },
+        {
+          done: false,
+          name: 'Place your finger in the icon at the left (=) and move the task up or down',
         }
       ]
     }
