@@ -119,7 +119,9 @@ class TaskItem extends HTMLElement {
     this.done = checked
   }
 
-  _deleteHandler() {
+  _deleteHandler(ev) {
+    const checked = !!ev.target.checked
+
     this.remove()
     dispatchTaskEvent(TASK_EVENTS.DELETE, this.name)
     dispatchTaskEvent(TASK_EVENTS.DELETE, this.name, checked, this.taskList)
@@ -213,7 +215,7 @@ class TaskList extends HTMLElement {
       const percent = (doneAmount / _tasks.length) * 100
 
       this.progress.value = percent
-      this.progressLabel.textContent = `${percent.toFixed(2)}%`
+      this.progressLabel.textContent = `${Math.floor(percent)}% done`
     }, 100)
   }
 }
