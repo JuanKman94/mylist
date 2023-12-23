@@ -16,8 +16,8 @@
   --cyan-1: #4EC5CB;
   --white-1: #e6ffff;
 
-  --bg: var(--black);
-  --bg-dark: var(--black-1);
+  --bg: #242424;
+  --bg-dark: #09020e;
   --fg: var(--white);
   --fg-dark: var(--white-1);
   --border-color: #CCCCCC;
@@ -28,7 +28,7 @@
 
   --bottomnav-height: 4.5rem;
   --bg-navbar: #404040;
-
+  --task-list-bg: var(--black);
   --card-padding: 0.75rem;
 
   --emoticon-font-size: 1.75rem;
@@ -45,25 +45,26 @@
 
     --link-color: var(--blue);
     --bg-navbar: #fff1b8;
+    --task-list-bg: #fbefa8;
   }
 }
 
-.color-1  { background-color: var(--black); color: var(--white); --feat-color: var(--black); }
-.color-2  { background-color: var(--red); color: var(--white); --feat-color: var(--red); }
-.color-3  { background-color: var(--green); color: var(--white); --feat-color: var(--green); }
-.color-4  { background-color: var(--yellow); color: var(--black-1); ; --feat-color: var(--yellow); }
-.color-5  { background-color: var(--blue); color: var(--white); --feat-color: var(--blue); }
-.color-6  { background-color: var(--magenta); color: var(--white); --feat-color: var(--magenta); }
-.color-7  { background-color: var(--cyan); color: var(--white); --feat-color: var(--cyan); }
-.color-8  { background-color: var(--white); color: var(--black); --feat-color: var(--white); }
-.color-9  { background-color: var(--black-1); color: var(--white-1); --feat-color: var(--black-1); }
-.color-10 { background-color: var(--red-1); color: var(--black); --feat-color: var(--red-1); }
-.color-11 { background-color: var(--green-1); color: var(--black-2); --feat-color: var(--green-1); }
-.color-12 { background-color: var(--yellow-1); color: var(--black); --feat-color: var(--yellow-1); }
-.color-13 { background-color: var(--blue-1); color: var(--white); --feat-color: var(--blue-1); }
-.color-14 { background-color: var(--magenta-1); color: var(--white); --feat-color: var(--magenta-1); }
-.color-15 { background-color: var(--cyan-1); --feat-color: var(--cyan-1); }
-.color-16 { background-color: var(--white-1); color: var(--black); --feat-color: var(--white-1); }
+.color-1  { background-color: var(--black) !important; color: var(--white) !important; --feat-color: var(--black) !important; }
+.color-2  { background-color: var(--red) !important; color: var(--white) !important; --feat-color: var(--red) !important; }
+.color-3  { background-color: var(--green) !important; color: var(--white) !important; --feat-color: var(--green) !important; }
+.color-4  { background-color: var(--yellow) !important; color: var(--black-1) !important;  !important; --feat-color: var(--yellow) !important; }
+.color-5  { background-color: var(--blue) !important; color: var(--white) !important; --feat-color: var(--blue) !important; }
+.color-6  { background-color: var(--magenta) !important; color: var(--white) !important; --feat-color: var(--magenta) !important; }
+.color-7  { background-color: var(--cyan) !important; color: var(--white) !important; --feat-color: var(--cyan) !important; }
+.color-8  { background-color: var(--white) !important; color: var(--black) !important; --feat-color: var(--white) !important; }
+.color-9  { background-color: var(--black-1) !important; color: var(--white-1) !important; --feat-color: var(--black-1) !important; }
+.color-10 { background-color: var(--red-1) !important; color: var(--black) !important; --feat-color: var(--red-1) !important; }
+.color-11 { background-color: var(--green-1) !important; color: var(--black-2) !important; --feat-color: var(--green-1) !important; }
+.color-12 { background-color: var(--yellow-1) !important; color: var(--black) !important; --feat-color: var(--yellow-1) !important; }
+.color-13 { background-color: var(--blue-1) !important; color: var(--white) !important; --feat-color: var(--blue-1) !important; }
+.color-14 { background-color: var(--magenta-1) !important; color: var(--white) !important; --feat-color: var(--magenta-1) !important; }
+.color-15 { background-color: var(--cyan-1) !important; --feat-color: var(--cyan-1) !important; }
+.color-16 { background-color: var(--white-1) !important; color: var(--black) !important; --feat-color: var(--white-1) !important; }
 
 body {
   background: var(--bg);
@@ -108,13 +109,6 @@ dd { margin-top: 0.5rem; margin-bottom: 1rem; margin-left: 1rem; }
 .card footer, .card .actions {
   padding-top: var(--card-padding);
   border-top: 1px solid var(--border-color);
-}
-
-task-list,
-.task-list,
-task-list-form,
-.task-list-form {
-  display: block;
 }
 
 #log_messages {
@@ -169,12 +163,12 @@ task-list-form,
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
   margin-bottom: 0.5rem;
+  box-shadow: 0px 0px 1px var(--link-color);
 }
 .topnav ul li:not(:last-child) {
   margin-right: 1.75rem;
 }
 .topnav ul li a {
-  text-decoration: none;
 }
 
 .bottomnav {
@@ -297,15 +291,6 @@ task-control {
 
 #lists {}
 
-.task-list:not(:first-child) {
-  border-top: 2px solid var(--border-color-dark, #bbb);
-  padding-top: 2rem;
-}
-
-.task-list {
-  margin-bottom: 2rem;
-}
-
 .task-list:before {
   display: block;
   padding: 0;
@@ -323,12 +308,16 @@ task-control {
 }
 task-list:not(:first-child),
 .task-list:not(:first-child) {
-  margin-top: 2rem;
+  border-top: 2px solid var(--border-color-dark, #bbb);
 }
+
 .task-list {
+  display: block;
+  margin-bottom: 3rem;
+  padding: 0.75rem;
+  background-color: var(--task-list-bg, #353535);
   border: 2px solid var(--border-color, #ccc);
   border-radius: 10px;
-  padding: 0.75rem;
 }
 
 .task-list .progress-container {
@@ -393,6 +382,7 @@ task-item .delete,
   cursor: pointer;
   font-weight: 600;
   font-size: var(--emoticon-font-size);
+  text-shadow: 1px 1px 2px var(--white-1);
 }
 
 .grabber { cursor: grab; }
@@ -444,11 +434,12 @@ task-list-form,
 
 /******* color picker *******/
 .color-picker {
-  --picker-padding: 2px;
+  --picker-padding: 3px;
   position: relative;
 }
 
 .color-picker--current {
+  box-shadow: 0px 0px 6px 2px var(--white);
 }
 
 .color-picker.open > .color-picker--current {
@@ -461,16 +452,19 @@ task-list-form,
   top: var(--picker-padding);
   margin-top: -1px;
   margin-left: -1px;
+  padding-bottom: calc(2 * var(--picker-padding));
 
   display: flex;
   flex-flow: row wrap;
+  justify-content: space-around;
 
   height: 4rem;
   min-height: 3rem;
   width: auto;
-  min-width: 12rem;
+  min-width: 13rem;
 
-  border: 1px solid var(--border-color-dark);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--border-color-dark);
   border-radius: 5px;
 }
 .color-picker--options {
@@ -489,6 +483,7 @@ task-list-form,
 
   border: 2px solid rgba(127, 127, 127, 0.65);
   border-radius: 50%;
+  box-shadow: 0px 0px 1px 1px var(--white-1);
 }
 
 input#import_json {
