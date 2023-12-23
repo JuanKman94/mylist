@@ -206,8 +206,8 @@
     </ul>
   </footer>
 
-  <template id="category-template">
-    <h3 class="task-category--title">
+  <template id="category-list-template">
+    <h3 class="task-list--title">
       <color-picker color="color-4"></color-picker>
       <slot name="category-name">
         <span class="category--name ml-2"></span>
@@ -399,6 +399,9 @@
     const registerServiceWorker = async () => {
       if ('serviceWorker' in navigator) {
         const currentUrl = new URL(window.location);
+
+        if (currentUrl.hostname == 'localhost')
+          return;
 
         try {
           const registration = await navigator

@@ -33,21 +33,21 @@ class TaskControl extends HTMLElement {
 
   get form() { return this.querySelector('form') }
 
-  get taskCategory() { return Sortable.utils.closest(this, TaskCategory.TAG) }
+  get taskList() { return Sortable.utils.closest(this, TaskList.TAG) }
 
   setup() {
     this.on(this.form, 'submit', this._submitHandler.bind(this))
   }
 
   createTask(task) {
-    if (!this.taskCategory)
+    if (!this.taskList)
       return
 
     let taskItem = TaskItem.create({ name: task })
 
-    taskItem = this.taskCategory.addTask(taskItem)
+    taskItem = this.taskList.addTask(taskItem)
     dispatchTaskEvent(TASK_EVENTS.CHANGE, task, false)
-    dispatchTaskEvent(TASK_EVENTS.CHANGE, task, false, this.taskCategory)
+    dispatchTaskEvent(TASK_EVENTS.CHANGE, task, false, this.taskList)
 
     return taskItem
   }
@@ -96,7 +96,7 @@ class TaskItem extends HTMLElement {
 
   get task() { return this.getAttribute('name') }
 
-  get taskCategory() { return Sortable.utils.closest(this, TaskCategory.TAG) }
+  get taskList() { return Sortable.utils.closest(this, TaskList.TAG) }
 
   setup() {
     if (this.hasAttribute('done') && this.getAttribute('done') !== 'false') {
@@ -115,14 +115,14 @@ class TaskItem extends HTMLElement {
 
     // order here is important, bubble up event before changing internal state
     dispatchTaskEvent(TASK_EVENTS.CHANGE, this.name, checked)
-    dispatchTaskEvent(TASK_EVENTS.CHANGE, this.name, checked, this.taskCategory)
+    dispatchTaskEvent(TASK_EVENTS.CHANGE, this.name, checked, this.taskList)
     this.done = checked
   }
 
   _deleteHandler() {
     this.remove()
     dispatchTaskEvent(TASK_EVENTS.DELETE, this.name)
-    dispatchTaskEvent(TASK_EVENTS.DELETE, this.name, checked, this.taskCategory)
+    dispatchTaskEvent(TASK_EVENTS.DELETE, this.name, checked, this.taskList)
   }
 }
 
@@ -132,10 +132,10 @@ class TaskItem extends HTMLElement {
  * @property {string} name
  * @property {string} color
  */
-class TaskCategory extends HTMLElement {
-  static TAG = 'task-category'
+class TaskList extends HTMLElement {
+  static TAG = 'task-list'
   static EXTENDED_ELEMENT = 'article'
-  static TEMPLATE_ID = 'category-template'
+  static TEMPLATE_ID = 'category-list-template'
 
   get color() { return this.getAttribute('color') }
   set color(newColor) {
@@ -169,7 +169,7 @@ class TaskCategory extends HTMLElement {
     const listName = window.prompt(NEW_LIST_PROMPT)
 
     if (listName && listName.length > 0) {
-      target.prepend(TaskCategory.create({ id: listName, name: listName }))
+      target.prepend(TaskList.create({ id: listName, name: listName }))
     }
 
     return listName
@@ -453,7 +453,7 @@ function defineComponents() {
     TodoSettings,
     ColorPicker,
     LogMessage,
-    TaskCategory,
+    TaskList,
     TaskControl,
     TaskItem,
   ]

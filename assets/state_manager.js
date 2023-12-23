@@ -63,7 +63,7 @@ class StateManager {
       lists: [],
     }
 
-    document.querySelectorAll(`.${TaskCategory.TAG}`).forEach(categoryEl => {
+    document.querySelectorAll(`.${TaskList.TAG}`).forEach(categoryEl => {
       state.lists.push({
         name: categoryEl.name,
         color: categoryEl.color,
@@ -92,19 +92,20 @@ class StateManager {
     const listContainer = document.getElementById('lists')
 
     v1ToV2(state.lists).forEach(list => {
-      let taskCategory = document.querySelector(`.task-category[name="${list.name}"]`)
+      let taskList = document.querySelector(`.task-list[name="${list.name}"]`)
 
-      if (!taskCategory) {
-        taskCategory = TaskCategory.create({ id: list.name, name: list.name, color: list.color })
-        listContainer.appendChild(taskCategory)
+      if (!taskList) {
+        taskList = TaskList.create({ id: list.name, name: list.name, color: list.color })
+        listContainer.appendChild(taskList)
       }
 
       list.tasks.forEach(task => {
-        let taskItem = document.querySelector(`.task-item[name="${task.name}"]`)
+        let taskItem = Array.from(document.querySelectorAll('.task-item'))
+          .find(el => el.name == task.name);
 
         if (!taskItem) {
           taskItem = TaskItem.create({ done: !!task.done, name: task.name })
-          taskCategory.addTask(taskItem)
+          taskList.addTask(taskItem)
         }
 
         taskItem.done = task.done

@@ -48,7 +48,7 @@ function cleanUpSortable() {
 function setupSortable() {
   cleanUpSortable()
 
-  document.querySelectorAll(`.${TaskCategory.TAG} .tasks-container`).forEach(tasksContainer => {
+  document.querySelectorAll(`.${TaskList.TAG} .tasks-container`).forEach(tasksContainer => {
     SORTABLE_INSTANCES.push(new Sortable(
       tasksContainer,
       Object.assign({ group: 'tasks', handle: '.task-grabber' }, DEFAULT_SORTABLE_CONFIG)))
@@ -68,7 +68,7 @@ function init(ev) {
   document.addEventListener(TodoSettings.SETTINGS_CHANGE_EVENT, (ev) => applySettings(ev.detail))
 
   document.querySelector('.new-list')?.addEventListener('click', ev => {
-    const listName = TaskCategory.addList(document.getElementById('lists'))
+    const listName = TaskList.addList(document.getElementById('lists'))
 
     if (listName)
       addListLink(listName)

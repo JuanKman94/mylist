@@ -30,6 +30,8 @@
   --bg-navbar: #404040;
 
   --card-padding: 0.75rem;
+
+  --emoticon-font-size: 1.75rem;
 }
 
 @media (prefers-color-scheme: light) {
@@ -110,10 +112,8 @@ dd { margin-top: 0.5rem; margin-bottom: 1rem; margin-left: 1rem; }
 
 task-list,
 .task-list,
-task-category,
-.task-category,
-task-category-form,
-.task-category-form {
+task-list-form,
+.task-list-form {
   display: block;
 }
 
@@ -306,7 +306,7 @@ task-control {
   margin-bottom: 2rem;
 }
 
-.task-category:before {
+.task-list:before {
   display: block;
   padding: 0;
   margin: -1.75rem auto 0;
@@ -318,25 +318,25 @@ task-control {
   content: '';
   transform: rotate(-4deg);
 }
-.task-category:nth-child(even)::before {
+.task-list:nth-child(even)::before {
   transform: rotate(4deg);
 }
-task-category:not(:first-child),
-.task-category:not(:first-child) {
+task-list:not(:first-child),
+.task-list:not(:first-child) {
   margin-top: 2rem;
 }
-.task-category {
+.task-list {
   border: 2px solid var(--border-color, #ccc);
   border-radius: 10px;
   padding: 0.75rem;
 }
 
-.task-category .progress-container {
+.task-list .progress-container {
   display: none;
 }
 
 .task-list .task-list--title,
-.task-category .task-category--title {
+.task-list .task-list--title {
   font-size: 1.2rem;
   font-weight: 600;
   display: flex;
@@ -346,16 +346,23 @@ task-category:not(:first-child),
 }
 .list--name,
 .category--name {
+  display: block;
   flex-grow: 1;
 }
+.task-list .task-list--title .icon.delete {
+  display: block;
+}
+.task-list .task-list--title .color-picker {
+  display: block;
+}
 
-.task-category input[type=checkbox] { margin-right: 0; }
+.task-list input[type=checkbox] { margin-right: 0; }
 
-.task-category ul { list-style-type: none; }
+.task-list ul { list-style-type: none; }
 
 task-item,
 .task-item,
-.task-category ul li {
+.task-list ul li {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -366,6 +373,8 @@ task-item,
 task-item .grabber,
 .task-item .grabber {
   padding: 0.25rem 0.5rem;
+  font-weight: 600;
+  font-size: var(--emoticon-font-size);
 }
 
 task-item label,
@@ -375,14 +384,13 @@ task-item label,
 
 task-list .delete,
 .task-list .delete,
-task-category .delete,
-.task-category .delete,
 task-item .delete,
 .task-item .delete {
   align-self: baseline;
   color: var(--danger);
   cursor: pointer;
   font-weight: 600;
+  font-size: var(--emoticon-font-size);
 }
 
 .grabber { cursor: grab; }
@@ -399,7 +407,7 @@ task-item .delete,
   font-size: 1.5em;
 }
 
-.task-category-form .text-field,
+.task-list-form .text-field,
 .task-control .text-field {
   font-family: 'xkcd';
   min-width: 80%;
@@ -419,8 +427,8 @@ fieldset {
   padding: 0.5rem 0;
 }
 
-task-category-form,
-.task-category-form,
+task-list-form,
+.task-list-form,
 .new-category {
   border: 2px solid var(--border-color, #ccc);
   border-radius: 10px;
@@ -612,7 +620,7 @@ body.config--nav-compact {
   --bottomnav-height: 3.5rem;
 }
 
-body.config--tasks-progress task-category .progress-container {
+body.config--tasks-progress task-list .progress-container {
   display: flex;
   align-items: align-center;
 }
