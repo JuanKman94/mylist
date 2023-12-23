@@ -49,22 +49,22 @@
   }
 }
 
-.color-1  { background-color: var(--black) !important; color: var(--white) !important; --feat-color: var(--black) !important; }
-.color-2  { background-color: var(--red) !important; color: var(--white) !important; --feat-color: var(--red) !important; }
-.color-3  { background-color: var(--green) !important; color: var(--white) !important; --feat-color: var(--green) !important; }
-.color-4  { background-color: var(--yellow) !important; color: var(--black-1) !important;  !important; --feat-color: var(--yellow) !important; }
-.color-5  { background-color: var(--blue) !important; color: var(--white) !important; --feat-color: var(--blue) !important; }
-.color-6  { background-color: var(--magenta) !important; color: var(--white) !important; --feat-color: var(--magenta) !important; }
-.color-7  { background-color: var(--cyan) !important; color: var(--white) !important; --feat-color: var(--cyan) !important; }
-.color-8  { background-color: var(--white) !important; color: var(--black) !important; --feat-color: var(--white) !important; }
-.color-9  { background-color: var(--black-1) !important; color: var(--white-1) !important; --feat-color: var(--black-1) !important; }
-.color-10 { background-color: var(--red-1) !important; color: var(--black) !important; --feat-color: var(--red-1) !important; }
-.color-11 { background-color: var(--green-1) !important; color: var(--black-2) !important; --feat-color: var(--green-1) !important; }
-.color-12 { background-color: var(--yellow-1) !important; color: var(--black) !important; --feat-color: var(--yellow-1) !important; }
-.color-13 { background-color: var(--blue-1) !important; color: var(--white) !important; --feat-color: var(--blue-1) !important; }
-.color-14 { background-color: var(--magenta-1) !important; color: var(--white) !important; --feat-color: var(--magenta-1) !important; }
-.color-15 { background-color: var(--cyan-1) !important; --feat-color: var(--cyan-1) !important; }
-.color-16 { background-color: var(--white-1) !important; color: var(--black) !important; --feat-color: var(--white-1) !important; }
+.color-1  { background-color: var(--black) !important; color: var(--white) !important; --feat-color: var(--black) !important; --fg: var(--white) !important; }
+.color-2  { background-color: var(--red) !important; color: var(--white) !important; --feat-color: var(--red) !important; --fg: var(--white) !important; }
+.color-3  { background-color: var(--green) !important; color: var(--white) !important; --feat-color: var(--green) !important; --fg: var(--white) !important; }
+.color-4  { background-color: var(--yellow) !important; color: var(--black-1) !important;  !important; --feat-color: var(--yellow) !important; --fg: var(--black-1) !important; }
+.color-5  { background-color: var(--blue) !important; color: var(--white) !important; --feat-color: var(--blue) !important; --fg: var(--white) !important; }
+.color-6  { background-color: var(--magenta) !important; color: var(--white) !important; --feat-color: var(--magenta) !important; --fg: var(--white) !important; }
+.color-7  { background-color: var(--cyan) !important; color: var(--white) !important; --feat-color: var(--cyan) !important; --fg: var(--white) !important; }
+.color-8  { background-color: var(--white) !important; color: var(--black) !important; --feat-color: var(--white) !important; --fg: var(--black) !important; }
+.color-9  { background-color: var(--black-1) !important; color: var(--white-1) !important; --feat-color: var(--black-1) !important; --fg: var(--white-1) !important; }
+.color-10 { background-color: var(--red-1) !important; color: var(--black) !important; --feat-color: var(--red-1) !important; --fg: var(--black) !important; }
+.color-11 { background-color: var(--green-1) !important; color: var(--black-2) !important; --feat-color: var(--green-1) !important; --fg: var(--black-2) !important; }
+.color-12 { background-color: var(--yellow-1) !important; color: var(--black) !important; --feat-color: var(--yellow-1) !important; --fg: var(--black) !important; }
+.color-13 { background-color: var(--blue-1) !important; color: var(--white) !important; --feat-color: var(--blue-1) !important; --fg: var(--white) !important; }
+.color-14 { background-color: var(--magenta-1) !important; color: var(--white) !important; --feat-color: var(--magenta-1) !important; --fg: var(--white) !important; }
+.color-15 { background-color: var(--cyan-1) !important; color: var(--black) !important; --feat-color: var(--cyan) !important; --fg: var(--black) !important; }
+.color-16 { background-color: var(--white-1) !important; color: var(--black) !important; --feat-color: var(--white-1) !important; --fg: var(--black) !important; }
 
 body {
   background: var(--bg);
@@ -362,7 +362,7 @@ task-item,
 task-item .grabber,
 .task-item .grabber {
   --grabber-size: 16px;
-  fill: var(--fg-dark, #e6ffff);
+  fill: var(--fg, #e6ffff);
   max-height: var(--grabber-size, 16px);
   max-width: var(--grabber-size, 16px);
   padding: 0.25rem 0.5rem 0.25rem 0.25rem;
