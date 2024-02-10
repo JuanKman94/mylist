@@ -18,18 +18,18 @@
   <meta name="theme-color" content="#353535">
 </head>
 <body>
-  <header class="xkcd flex justify-start align-center">
+  <header class="theme-font flex justify-start align-center">
     <img
       class="inline-block"
       style="max-height: 4rem;"
       src="assets/icons/check.svg"
       alt="check mark logo"
     />
-    <div class="title larger">mylist</div>
+    <div class="theme-title larger">mylist</div>
   </header>
 
-  <nav class="xkcd topnav container">
-    <ul class="flex flex-wrap justify-between pl-0">
+  <nav class="theme-font topnav container">
+    <ul>
       <li>
         <a href="#" class="new-list">
           <span class="icon">+</span>
@@ -67,7 +67,7 @@
     </div>
   </nav>
 
-  <section id="lists" class="xkcd container">
+  <section id="lists" class="theme-font container">
   </section>
 
   <aside id="log_messages" class="container">
@@ -102,7 +102,7 @@
           <h4>JSON</h4>
           <p>Export in JSON format</p>
           <footer class="actions flex justify-between">
-            <label class="max-w-10r">
+            <label class="max-w-10r link-color">
               <input type="file" id="import_json">
               Import
             </label>
@@ -247,6 +247,7 @@
           name="task"
           class="text-field"
           type="text"
+          placeholder="Task description"
         />
       </label>
 
@@ -256,6 +257,18 @@
 
   <template id="todo-settings-template">
     <form action="#" class="new-task--form">
+      <div class="field">
+        <label for="current_theme">Theme</label>
+        <select class="config-field available-themes" name="current_theme">
+          <option value="">Default</option>
+          <option value="nothing">Nothing</option>
+        </select>
+
+        <div class="hint">
+          Choose how the application looks.
+        </div>
+      </div>
+
       <fieldset class="mt-4">
         <legend>Tasks</legend>
 
@@ -287,7 +300,7 @@
           >
 
           <div class="hint">
-            For all-screen phones
+            For all-screen phones.
           </div>
         </div>
       </fieldset>

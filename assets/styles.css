@@ -25,6 +25,10 @@
 
   --danger: #D54F4F;
   --link-color: var(--yellow);
+  --outline-color: var(--link-color);
+
+  --theme-font: 'xkcd';
+  --theme-title-font: 'xkcd';
 
   --bottomnav-height: 4.5rem;
   --bg-navbar: #404040;
@@ -80,7 +84,8 @@ h2, .h2 { font-size: 1.25rem; font-weight: 600; }
 h3, .h3 { font-size: 1.125rem; font-weight: 600; }
 
 a,
-a:visited {
+a:visited,
+.link-color {
   color: var(--link-color, blue);
 }
 
@@ -157,6 +162,12 @@ dd { margin-top: 0.5rem; margin-bottom: 1rem; margin-left: 1rem; }
   border: 1px solid var(--message-border, #aaaaaa);
 }
 
+.topnav ul {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  padding-left: 0;
+}
 .topnav ul li {
   list-style-type: none;
   border: 1px solid var(--link-color);
@@ -167,8 +178,6 @@ dd { margin-top: 0.5rem; margin-bottom: 1rem; margin-left: 1rem; }
 }
 .topnav ul li:not(:last-child) {
   margin-right: 1.75rem;
-}
-.topnav ul li a {
 }
 
 .bottomnav {
@@ -203,7 +212,7 @@ input:focus,
 input:focus-visible,
 select:focus,
 select:focus-visible {
-  outline: none;
+  outline: var(--outline-color) dotted medium;
 }
 
 /* set font size so safari does NOT zoom */
@@ -217,6 +226,7 @@ input[type="email"],
 input[type="number"],
 input[type="datetime"],
 input[type="datetime-local"],
+select,
 select:focus,
 textarea {
   font-size: 16px;
@@ -237,7 +247,7 @@ input[type="datetime-local"] {
   width: 100%;
 }
 
-.xkcd { font-family: 'xkcd'; }
+.theme-font, .xkcd { font-family: 'xkcd'; }
 
 .rounded { border-radius: 6px; }
 
@@ -251,7 +261,7 @@ input[type="datetime-local"] {
 .small { font-size: small !important; }
 .smaller { font-size: smaller !important; }
 .large, .big { font-size: large !important; }
-.larger, .bigger { font-size: larger !important; }
+.larger, .bigger { font-size: larger; }
 
 .bold { font-weight: bold; }
 .italic { font-style: italic; }
@@ -335,6 +345,7 @@ task-list:not(:first-child),
 }
 .list--name,
 .category--name {
+  font-family: var(--theme-title-font, 'xkcd');
   display: block;
   flex-grow: 1;
 }
@@ -399,9 +410,8 @@ task-item .delete,
   font-size: 1.5em;
 }
 
-.task-list-form .text-field,
 .task-control .text-field {
-  font-family: 'xkcd';
+  font-family: var(--theme-font, 'xkcd');
   min-width: 80%;
   max-width: 85%;
   flex-grow: 1;
@@ -629,4 +639,128 @@ body.config--tasks-progress task-list .progress-container {
   src: url('fonts/xkcd.otf');
   font-weight: normal;
   font-style: normal;
+}
+
+@font-face {
+  font-family: 'ndot';
+  src: url('fonts/Ndot-55.otf');
+  font-weight: normal;
+  font-style: monospace;
+}
+
+@font-face {
+  font-family: 'lettera-mono';
+  src: url('fonts/LetteraMonoLLCondLight-Regular.otf');
+  font-weight: normal;
+  font-style: monospace;
+}
+
+/***** themes *****/
+
+/******** theme: nothing ********/
+
+body.nothing {
+  font-family: 'lettera-mono';
+  background-color: var(--bg-dark);
+
+  --bg: var(--black-1, #222222);
+  --bg-dark: #000000;
+  --fg: var(--white);
+  --fg-dark: var(--white-1);
+  --border-color: #484848;
+  --border-color-dark: #111111;
+
+  --nothing-red: #ff0000;
+  --theme-font: 'lettera-mono';
+  --theme-title-font: 'ndot';
+
+  --danger: var(--nothing-red);
+  --outline-color: var(--nothing-red);
+
+  --bottomnav-height: 4.5rem;
+  --bg-navbar: #181818;
+  --task-list-bg: var(--black);
+  --card-padding: 0.75rem;
+
+  --emoticon-font-size: 1.75rem;
+}
+
+body.nothing .theme-font { font-family: var(--theme-font, 'lettera-mono'); }
+body.nothing .theme-title { font-family: var(--theme-title-font, 'ndot'); }
+body.nothing .theme-title.larger { font-size: 2rem; }
+
+body.nothing .topnav ul {
+  display: block;
+  text-align: right;
+}
+body.nothing .topnav ul li {
+  list-style-type: none;
+  border: none;
+  box-shadow: none;
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.5rem;
+}
+body.nothing .topnav ul li:not(:last-child) {
+  margin-right: initial;
+}
+
+body.nothing a,
+body.nothing a:visited {
+  text-decoration-style: dotted;
+}
+
+body.nothing .topnav ul li a {
+  color: var(--nothing-red);
+}
+
+body.nothing .bottomnav {
+  font-family: var(--theme-title-font);
+  letter-spacing: 3px;
+}
+
+body.nothing .task-list {
+  display: block;
+  margin-bottom: 3rem;
+  padding: 0.25rem;
+  background-color: var(--task-list-bg, #353535);
+  border: 2px solid var(--border-color, #ccc);
+  border-radius: 4px;
+}
+
+body.nothing .category--name {
+  letter-spacing: 2px;
+}
+
+body.nothing .task-list:before {
+  display: none;
+}
+
+body.nothing task-list .delete,
+body.nothing .task-list .delete,
+body.nothing task-item .delete,
+body.nothing .task-item .delete {
+  color: var(--danger);
+  text-shadow: 0px 0px 3px var(--white-1);
+  font-family: 'ndot';
+}
+
+@media (prefers-color-scheme: light) {
+  body.nothing {
+    --blue: #002F6C;
+
+    --bg: #ffffff;
+    --bg-dark: #ffffff;
+    --fg: var(--black-1);
+    --fg-dark: var(--black);
+    --border-color: #CCCCCC;
+    --border-color-dark: #AAAAAA;
+
+    --link-color: var(--blue);
+    --bg-navbar: #f8f8f8;
+    --task-list-bg: #blue;
+  }
+
+  body.nothing .topnav ul li a {
+    color: var(--blue);
+  }
 }

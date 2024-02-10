@@ -298,6 +298,9 @@ class TodoSettings extends HTMLElement {
 
   get form() { return this.querySelector('form') }
 
+  get theme() { return this.querySelector('form select[name=current_theme]').value }
+  set theme(newVal) { this.querySelector('form select[name=current_theme]').value = newVal }
+
   get enabled() { return this.querySelector('form input[name=backend_enabled]') }
   set enabled(newVal) { this.querySelector('form input[name=backend_enabled]').checked = !!newVal }
 
@@ -325,7 +328,7 @@ class TodoSettings extends HTMLElement {
    */
   setup() {
     this.setupAutoStorage()
-    Array.from(this.querySelectorAll('input')).forEach((el) => {
+    Array.from(this.querySelectorAll('input, select')).forEach((el) => {
       this.on(el, 'input', this._inputHandler.bind(this))
     })
     this.on(this.form, 'submit', this._submitHandler.bind(this))
@@ -348,6 +351,7 @@ class TodoSettings extends HTMLElement {
 
   emitConfig() {
     const payload = {
+      theme: this.theme,
       backend: {
         enabled: !!this.enabled.checked,
         passphrase: this.passphrase.value,
@@ -367,6 +371,7 @@ class TodoSettings extends HTMLElement {
   }
 
   applyConfig(config) {
+    this.theme = config.theme
     this.enabled = config.backend?.enabled
     this.passphrase = config.backend?.passphrase
     this.url = config.backend?.url

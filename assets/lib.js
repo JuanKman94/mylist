@@ -166,6 +166,23 @@ function applySettings(config) {
     else
       document.body.classList.remove('config--tasks-progress')
   }
+
+  if (config.theme !== undefined) {
+    const availableThemes = Array.from(document.querySelector('select.available-themes').options)
+      .map(opt => opt.value)
+
+    for (let theme of availableThemes) {
+      if (config.theme == theme) {
+        if (theme != '') {
+          document.body.classList.add(theme)
+        }
+      } else {
+        if (theme != '') {
+          document.body.classList.remove(theme)
+        }
+      }
+    }
+  }
 }
 
 function importJson(importEv) {
