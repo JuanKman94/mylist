@@ -150,7 +150,14 @@ function applySettings(config) {
 
   StateManager.persistSettings(config)
 
-  window.backendClient = new BackendClient(backend.url, backend.username, backend.passphrase, backend.enabled)
+  if (backend != null) {
+    window.backendClient = new BackendClient(
+      backend.url,
+      backend.username,
+      backend.passphrase,
+      backend.enabled
+    );
+  }
 
   if (config.nav) {
     if (config.nav.compact)

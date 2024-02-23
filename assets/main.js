@@ -55,6 +55,26 @@ function setupSortable() {
   })
 }
 
+/**
+ * Apply application settings from query string parameters.
+ *
+ * @param config {object}
+ * @return {object} Passed config with values overriden from query string.
+ */
+function applyQueryStringSettings(config) {
+  const url = new URL(window.location);
+  const theme = url.searchParams.get('theme');
+  const queryStringConfig = Object.assign({}, config);
+
+  if (theme != null) {
+    queryStringConfig.theme = theme;
+  }
+
+  applySettings(queryStringConfig);
+
+  return queryStringConfig;
+}
+
 function init(ev) {
   if (window.DEBUG_MODE) {
     setupDebugControls()
@@ -82,10 +102,10 @@ function init(ev) {
   document.querySelector('#clear_cache_btn')?.addEventListener('click', requestCacheFlush)
 
   const todoSettings = document.querySelector(TodoSettings.TAG)
-  const config = StateManager.settings()
+  let config = StateManager.settings()
 
   StateManager.loadState()
-  applySettings(config)
+  config = applyQueryStringSettings(config);
 
   window.backendClient.get()
   setupSortable()
