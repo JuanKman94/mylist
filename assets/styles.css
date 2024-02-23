@@ -162,6 +162,10 @@ dd { margin-top: 0.5rem; margin-bottom: 1rem; margin-left: 1rem; }
   border: 1px solid var(--message-border, #aaaaaa);
 }
 
+body > header .new-list .icon {
+  font-size: unset;
+}
+
 .topnav ul {
   display: flex;
   flex-flow: row wrap;
@@ -293,6 +297,11 @@ input[type="datetime-local"] {
   border-width: 0;
 }
 
+details > summary:focus,
+details > summary:focus-visible {
+  outline: var(--outline-color) dotted medium;
+}
+
 /********** domain specific classes **********/
 
 task-control {
@@ -333,6 +342,14 @@ task-list:not(:first-child),
 .task-list .progress-container {
   display: none;
 }
+
+/**
+.task-list .progress-container progress::-moz-progress-bar,
+.task-list .progress-container progress::-webkit-progress-value
+{
+  background: var(--outline-color);
+}
+*/
 
 .task-list .task-list--title,
 .task-list .task-list--title {
@@ -627,6 +644,14 @@ body.config--nav-compact {
   --bottomnav-height: 3.5rem;
 }
 
+body.config--nav-compact > header .new-list .text-label {
+  display: none;
+}
+body.config--nav-compact > header .new-list .icon {
+  font-size: 1.5em;
+  line-height: 2.5em;
+}
+
 body.config--tasks-progress task-list .progress-container {
   display: flex;
   align-items: align-center;
@@ -677,7 +702,6 @@ body.nothing {
   --danger: var(--nothing-red);
   --outline-color: var(--nothing-red);
 
-  --bottomnav-height: 4.5rem;
   --bg-navbar: #181818;
   --task-list-bg: var(--black);
   --card-padding: 0.75rem;
@@ -721,7 +745,7 @@ body.nothing .bottomnav {
 body.nothing .task-list {
   display: block;
   margin-bottom: 3rem;
-  padding: 0.25rem;
+  padding: 0.5rem;
   background-color: var(--task-list-bg, #353535);
   border: 2px solid var(--border-color, #ccc);
   border-radius: 4px;

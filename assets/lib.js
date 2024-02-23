@@ -7,7 +7,7 @@ function b64_to_utf8(str) {
 }
 
 /**
- * Download data with the specified data using browser mechanisms.
+ * Download data as plain text using browser API.
  *
  * @param {string} name
  * @param {object} data
@@ -72,12 +72,11 @@ function saneDateStr() {
 }
 
 function domLog(msg) {
-  const target = document.querySelector('#debug_messages')
+  let domTarget = document.querySelector('#debug_messages');
 
-  console.debug(msg);
-  if (!target) return
+  if (!domTarget) return ;
 
-  target.innerHTML = `<li><pre>[${saneDateStr()}] ${msg}</pre></li>` + target.innerHTML
+  domTarget.innerHTML = `<li>[${saneDateStr()}] ${msg}</li>` + domTarget.innerHTML
 }
 
 function postToBackend(newState) {
@@ -186,17 +185,18 @@ function applySettings(config) {
 }
 
 function importJson(importEv) {
+  domLog(`importJson: importEv = ${importEv.target.files.length}`);
   if (importEv.target.files.length === 0)
     return
 
-  const reader = new FileReader()
+  const reader = new FileReader();
 
   reader.addEventListener('load', ev => {
-    const data = JSON.parse(ev.target.result)
-    StateManager.mergeState(data)
+    const data = JSON.parse(ev.target.result);
+    StateManager.mergeState(data);
   })
 
-  reader.readAsBinaryString(importEv.target.files.item(0))
+  reader.readAsText(importEv.target.files.item(0))
 }
 
 function setupDebugControls() {

@@ -124,6 +124,7 @@ class StateManager {
   /**
    * Update state without deleting entries.
    *
+   * @param data {object}
    * @return {object} Lists state
    */
   static mergeState(data) {

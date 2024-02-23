@@ -18,25 +18,25 @@
   <meta name="theme-color" content="#353535">
 </head>
 <body>
-  <header class="theme-font flex justify-start align-center">
-    <img
-      class="inline-block"
-      style="max-height: 4rem;"
-      src="assets/icons/check.svg"
-      alt="check mark logo"
-    />
-    <div class="theme-title larger">mylist</div>
+  <header class="theme-font flex justify-between align-center">
+    <div class="flex align-center">
+      <img
+        class="inline-block"
+        style="max-height: 4rem;"
+        src="assets/icons/check.svg"
+        alt="check mark logo"
+      />
+      <div class="theme-title larger">mylist</div>
+    </div>
+
+    <div class="new-list link-color mr-4 larger">
+      <span class="text-label theme-title">New list</span>
+      <span class="icon">+</span>
+    </div>
   </header>
 
   <nav class="theme-font topnav container">
     <ul>
-      <li>
-        <a href="#" class="new-list">
-          <span class="icon">+</span>
-          New list
-        </a>
-      </li>
-      <li><a href="#settings" class="new-list">Settings</a></li>
     </ul>
   </nav>
 
@@ -59,11 +59,13 @@
       </a>
     </div>
 
-    <div id="sync_btn" class="bottomnav-control pointer flex-col align-center">
-      <svg><use xlink:href="#icons-loop"></svg>
-      <span class="inline-block small">
-        Sync
-      </span>
+    <div class="bottomnav-control pointer flex-col align-center">
+      <a href="#settings" class="flex-col align-center">
+        <svg><use xlink:href="#icons-settings"></svg>
+        <span class="inline-block small">
+          Settings
+        </span>
+      </a>
     </div>
   </nav>
 
@@ -250,7 +252,7 @@
   <template id="newtask-template">
     <form action="#" class="new-task--form">
       <label for="task">
-        <span class="icon mr-2">+</span>
+        <span class="icon mx-2">+</span>
         <span class="sr-only">Task</span>
 
         <input
