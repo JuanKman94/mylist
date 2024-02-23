@@ -16,7 +16,7 @@ function b64_to_utf8(str) {
 function downloadUsingBrowser(name, data) {
   const a = document.createElement('a');
   const blob = new Blob(
-    [ JSON.stringify(data) ],
+    [ data ],
     { type: 'text/plain;charset=utf-8' }
   );
   let uri = null;

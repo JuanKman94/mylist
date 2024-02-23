@@ -34,6 +34,7 @@
   --bg-navbar: #404040;
   --task-list-bg: var(--black);
   --card-padding: 0.75rem;
+  --card-bg: #303030;
 
   --emoticon-font-size: 1.75rem;
 }
@@ -50,6 +51,7 @@
     --link-color: var(--blue);
     --bg-navbar: #fff1b8;
     --task-list-bg: #fbefa8;
+    --card-bg: #fafafa;
   }
 }
 
@@ -107,6 +109,7 @@ dd { margin-top: 0.5rem; margin-bottom: 1rem; margin-left: 1rem; }
 
 .card {
   padding: var(--card-padding);
+  background-color: var(--card-bg);
   border-radius: 6px;
   border: 1px solid var(--border-color-dark);
 }
@@ -740,6 +743,7 @@ body.nothing .topnav ul li a {
 body.nothing .bottomnav {
   font-family: var(--theme-title-font);
   letter-spacing: 3px;
+  text-transform: uppercase;
 }
 
 body.nothing .task-list {
@@ -770,18 +774,19 @@ body.nothing .task-item .delete {
 
 @media (prefers-color-scheme: light) {
   body.nothing {
-    --blue: #002F6C;
+    --blue: #002f6c;
 
     --bg: #ffffff;
     --bg-dark: #ffffff;
     --fg: var(--black-1);
-    --fg-dark: var(--black);
+    --fg-dark: #000000;
     --border-color: #CCCCCC;
     --border-color-dark: #AAAAAA;
 
     --link-color: var(--blue);
     --bg-navbar: #f8f8f8;
-    --task-list-bg: #blue;
+    --task-list-bg: #f0f0f0;
+    --card-bg: #efefef;
   }
 
   body.nothing .topnav ul li a {
