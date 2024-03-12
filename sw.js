@@ -25,6 +25,8 @@ const PRECACHED_RESOURCES = [
   "./assets/icons/info.svg",
   "./assets/icons/list.svg",
   "./assets/icons/loop.svg",
+  "./assets/fonts/LetteraMonoLLCondLight-Regular.otf",
+  "./assets/fonts/Ndot-55.otf",
   "./assets/fonts/xkcd.otf",
 ];
 
