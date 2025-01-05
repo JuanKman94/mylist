@@ -430,11 +430,20 @@ task-item .delete,
   font-size: 1.5em;
 }
 
+.task-control label {
+  width: 100%;
+}
+
+.task-control .icon {
+  margin: 0 0 0 0.5rem;
+  flex: 0 1 auto;
+}
+
 .task-control .text-field {
   font-family: var(--theme-font, 'xkcd');
-  min-width: 80%;
-  max-width: 85%;
+  flex: 1 0 80%;
   flex-grow: 1;
+  width: initial;
 }
 
 fieldset {

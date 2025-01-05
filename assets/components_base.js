@@ -1,5 +1,10 @@
-// https://javascript.info/mixins
-// Object.assign(ComponentClass, CustomElementStaticMixin)
+/**
+ * @example Add mixin to a class
+ *
+ *   Object.assign(ComponentClass, CustomElementStaticMixin)
+ *
+ * @see https://javascript.info/mixins
+ */
 const CustomElementStaticMixin = {
   /**
    * Create custom element with provided attributes
@@ -22,7 +27,11 @@ const CustomElementStaticMixin = {
   },
 }
 
-// Object.assign(ComponentClass.prototype, CustomElementMixin)
+/**
+ * @example Add mixin to a class
+ *
+ *   Object.assign(ComponentClass.prototype, CustomElementMixin)
+ */
 const CustomElementMixin = {
   connectedCallback() {
     this.events = this.events || []
@@ -74,9 +83,13 @@ const CustomElementMixin = {
   },
 }
 
-// for (let k in CustomElementGetSetMixin) {
-//   Object.defineProperty(ComponentClass.prototype, k, CustomElementGetSetMixin[k])
-// }
+/**
+ * @example Add getters and setters to class prototype
+ *
+ *   for (let k in CustomElementGetSetMixin) {
+ *     Object.defineProperty(ComponentClass.prototype, k, CustomElementGetSetMixin[k])
+ *   }
+ */
 const CustomElementGetSetMixin = {
   template: {
     get: function() {

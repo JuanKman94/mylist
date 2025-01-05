@@ -9,6 +9,12 @@ window.LIST_EVENTS = {
   DELETE: 'list:delete',
 }
 
+/**
+ * @param {string} eventName
+ * @param {string} task
+ * @param {boolean} isDone
+ * @param {HTMLElement} target
+ */
 function dispatchTaskEvent(eventName, task, isDone, target) {
   target = target || document
   const taskChangeEvent = new CustomEvent(eventName, { detail: { task: task, done: isDone } })
@@ -31,8 +37,10 @@ class TaskControl extends HTMLElement {
   static TAG = 'task-control'
   static TEMPLATE_ID = 'newtask-template'
 
+  /** @return {HTMLElement} */
   get form() { return this.querySelector('form') }
 
+  /** @return {HTMLElement} */
   get taskList() { return Sortable.utils.closest(this, TaskList.TAG) }
 
   setup() {
@@ -69,6 +77,7 @@ class TaskItem extends HTMLElement {
   static TAG = 'task-item'
   static TEMPLATE_ID = 'taskitem-template'
 
+  /** @return {HTMLElement} */
   get checkbox() { return this.querySelector('input[type=checkbox]') }
 
   get done() { return this.checkbox.checked }
@@ -84,6 +93,7 @@ class TaskItem extends HTMLElement {
     }
   }
 
+  /** @return {HTMLElement} */
   get label() { return this.querySelector('.task-item--name') }
 
   get name() { return this.getAttribute('name') }
